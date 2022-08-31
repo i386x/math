@@ -1,0 +1,171 @@
+%
+% File:    ./notes/logic/notes.tex
+% Author:  Jiří Kučera <sanczes AT gmail.com>
+% Date:    2022-08-22 13:58:30 +0200
+% Project: Math Notes
+% Brief:   Notes about mathematical logic
+%
+% SPDX-License-Identifier: CC-BY-SA-4.0
+%
+
+\input macros/notes
+
+\title\MathNotes%
+\subject{Mathematical Logic}%
+\author{Ji\v r\'i Ku\v cera}%
+
+\frontcover
+\titlepage
+\infopage
+
+\chapter *Preface.
+
+The idea behind \emph{Math Notes} originates from the author's need to organize
+his notes taken from various textbooks, papers, and lectures and provide them
+to the wider audience. The purpose of this document is also to serve as the
+author's external memory. Thus, the structure of the content follows these
+rules:
+\list
+  \item There is no clear border between complex and trivial. What is trivial
+    now may not be trivial after ten years.
+  \item Definitions, theorems, and algorithms are demonstrated on examples
+    whenever it becomes useful.
+  \item Proofs should be as clear and understandable as possible. This often
+    involves an introduction of auxiliary definitions and theorems as well as
+    describing the idea of a proof. All of this aims to elimination of
+    situations like {\it Where this step comes from?}
+\quit
+The reader should be able to read this document from the start to its end
+without being stuck at one place. The rules above should help to fulfill this
+goal. However, since nothing is perfect, the final decision whether the
+author's effort has been successful or not is left to the reader.
+
+\contents
+
+\chapter Introduction (intro).
+
+This document contain a notes related to mathematical logic. The content of the
+document is organized into three chapters.
+
+\refsec{ch:intro}, gives the outline of this document. The structure of
+following chapters are described here.
+
+\refsec{ch:pcalc}, is dedicated to the propositional calculus.
+
+Finally, \refsec{ch:folog}, is dedicated to the first-order logic.
+
+\chapter Propositional Calculus (pcalc).
+
+This chapter summarizes the notes taken about the propositional calculus.
+
+\section Terminology (term).
+
+Let us first define formally some fundamental terminology. We suppose that the
+reader is familiar with the basic notions from algebra (see Chapter 1 in
+\cite{MN-Algebra} for definitions and used notation).
+
+\definition Truth value (truth-value):
+  A \term{truth value} is either 0 or 1. Truth values 0 and 1 are usually
+  called \term{false} and \term{true}, respectively.
+\quit
+
+\definition Atomic sentence (atom):
+  Let $P$ be a countable nonempty set of symbols such that $P \cap \{0, 1\} =
+  \emptyset$. A symbol $p \in P$ is said to be an \term{atomic sentence} if
+  there exists a mapping $v$ such that $v(p) \in \{0, 1\}$. The mapping $v$ is
+  called an \term{evaluation function}.
+\quit
+
+\definition Sentence (sentence):
+  Let $A$ be a set of atomic sentences and $C_1$ and $C_2$ be two sets of
+  symbols such that $A$, $C_1$, $C_2$, and $\{0, 1\}$ are pairwise disjoint.
+  Then a \term{sentence} is defined recursively in the following way:
+  \list{a}
+    \item(1) If $a \in A$, then $a$ is a sentence.
+    \item(2) If $a$ is a sentence and $\sigma \in C_1$, then $(\sigma a)$ is a
+      sentence.
+    \item(3) If $a$ and $b$ are sentences and $\circ \in C_2$, then $(a \circ
+      b)$ is a sentence.
+    \item Every sentence is made only by a finite number of applications of
+      rules \refitem{1}, \refitem{2}, and \refitem{3}.
+  \quit
+  Symbols from $C_1$ and $C_2$ are said to be unary and binary
+  \term{propositional connectives}, respectively. The application of rules
+  \refitem{list/1} and \refitem{list/2} is called a \term{truth-functional
+  combination}. Let $c$ be a propositional connective that appears in the last
+  application of either rule \refitem{list/1} or rule \refitem{list/2}. Then
+  $c$ is said to be the \term{principal connective}.
+\quit
+
+\definition Truth function (truth-function):
+  Let $n$ be a positive integer. A \term{truth function} is a mapping from
+  $\{0, 1\}^n$ to $\{0, 1\}$.
+\quit
+
+\definition Truth table (truth-table):
+  Let $k$ be a positive integer. Let $f_i$ be a truth function of $n_i$
+  arguments, $n_i \ge 1$, $1 \le i \le k$. Set $n_{\rm max} = \max\{n_i \where
+  1 \le i \le k\}$. Let $\pi_i$ be a mapping from $\{j \where 1 \le j \le n_i
+  \}$ to $\{j \where 1 \le j \le n_{\rm max}\}$, $1 \le i \le k$. The
+  \term{truth table} for $f_i$, $1 \le i \le k$, is constructed in the
+  following way:
+  \list{1}
+    \item Let $\tau_{ij}$ denote the value at $i$th row and $j$th column, $1
+      \le i \le 2^{n_{\rm max}}$, $1 \le j \le (n_{\rm max} + k)$.
+    \item $\sum_{j = 1}^{n_{\rm max}} \tau_{ij} 2^{n_{\rm max} - j} = i - 1$,
+      $1 \le i \le 2^{n_{\rm max}}$.
+    \item $f_l(\tau_{i\pi_l(1)}, \tau_{i\pi_l(2)}, \ldots, \tau_{i\pi_l(n_l)})
+      = \tau_{i(l + n_{\rm max})}$, $1 \le l \le k$, $1 \le i \le 2^{n_{\rm
+      max}}$.
+  \quit
+\quit
+
+\definition Propositional connectives (pconns):
+  Let $S$ be a set of sentences and $A \subset S$ be a set of atomic sentences.
+  Define propositional connectives $\lnot$, $\land$, $\lor$, $\imply$, $\iff$,
+  and $\lxor$ and extend evaluation function from $A$ to $S$ in the following
+  way:
+  \list
+    \item For every $x \in S$, $(\lnot x) \in S$ is said to be the
+      \term{negation} of $x$. If $v(x) = 0$, then $v(\lnot x) = 1$. Otherwise,
+      $v(\lnot x) = 0$.
+    \item For every $x, y \in S$, $(x\land y) \in S$ is said to be the
+      \term{conjunction} of $x$ and $y$, where $x$ and $y$ are called
+      \term{conjuncts}. If $v(x) = 1$ and $v(y) = 1$, then $v(x\land y) = 1$.
+      Otherwise, $v(x\land y) = 0$.
+    \item For every $x, y \in S$, $(x\lor y) \in S$ is said to be the
+      \term{disjunction}, or \term{inclusive or}, of $x$ and $y$, where $x$ and
+      $y$ are called \term{disjuncts}. If $v(x) = 0$ and $v(y) = 0$, then $v(x
+      \lor y) = 0$. Otherwise, $v(x\lor y) = 1$.
+    \item For every $x, y \in S$, $(x\imply y) \in S$ is said to be a
+      \term{conditional}, or \term{implication}, where $x$ is called the
+      \term{antecedent} and $y$ is called the \term{consequent}. If $v(x) = 1$
+      and $v(y) = 0$, then $v(x\imply y) = 0$. Otherwise, $v(x\imply y) = 1$.
+    \item For every $x, y \in S$, $(x\iff y) \in S$ is said to be a
+      \term{biconditional} or \term{logical equivalence}. If $v(x) = v(y)$,
+      then $v(x\iff y) = 1$. Otherwise, $v(x\iff y) = 0$.
+    \item For every $x, y \in S$, $(x\lxor y) \in S$ is said to be a
+      \term{exclusive or} or \term{logical non-equivalence}. If $v(x) \neq v(y)
+      $, then $v(x\iff y) = 1$. Otherwise, $v(x\iff y) = 0$.
+  \quit
+\quit
+
+Given an evaluation function, a sentence has a constant value. In the next
+definition, we introduce notions {\it statement letter} and {\it statement
+form} for a symbol that can represent an arbitrary sentence and logical
+expression made upon these symbols, respectively.
+
+\definition Statement form (stmt-form):
+  Let $S$ be a countable nonempty set of symbols. A symbol $A \in S$ is said to
+  be a \term{statement letter} if it can represent an arbitrary sentence. A
+  \term{statement form} is defined recursively in the following way:
+  \list{1}
+    \item(1) For every $A \in S$, $A$ is a statement form.
+    \item(2) For every $A, B \in S$, $(\lnot A)$, $(A\land B)$, $(A\lor B)$,
+      $(A\imply B)$, $(A\iff B)$, and $(A\lxor B)$ are statement forms.
+    \item Every statement form is made only by a finite number of applications
+      of rules \refitem{1} and \refitem{2}.
+  \quit
+\quit
+
+\docend
