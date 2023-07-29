@@ -1,0 +1,240 @@
+%
+% File:    ./macros/notes.tex
+% Author:  Jiří Kučera <sanczes AT gmail.com>
+% Date:    2022-09-05 14:18:54 +0200
+% Project: Math Notes
+% Brief:   Macros for typesetting notes
+%
+% SPDX-License-Identifier: MIT
+%
+% =============================================================================
+% == Auxiliary macros and registers                                          ==
+% =============================================================================
+\def\makeatletter{\catcode`\@=11 }%
+\def\makeatother{\catcode`\@=12 }%
+\makeatletter%
+%
+\newcount\tempcnt@i \temcnt@i=0 %
+% =============================================================================
+% == Text                                                                    ==
+% =============================================================================
+% - Fonts:
+\defaulthyphenchar=`\-%
+\defaultskewchar=-1 %
+\font\tenntxregt=ntx-Regular-tlf-t1\relax%
+\font\tenntxit=ntx-Italic-tlf-t1\relax%
+\font\tentxtt=t1xtt\relax \hyphenchar\tentxtt=-1 %
+\font\ninentxregt=ntx-Regular-tlf-t1 at 8.5pt\relax%
+% - Boxes:
+\boxmaxdepth=\maxdimen%
+% - Spaces:
+\sfcode`\'=0 \sfcode`\)=0 \sfcode`\]=0 \sfcode`\.=1000 \sfcode`\?=1000 %
+\sfcode`\!=1000 \sfcode`\:=1000 \sfcode`\;=1000 \sfcode`\,=1000 %
+\spaceskip=0pt\relax%
+\xspaceskip=0pt\relax%
+% - Hyphenation:
+\uchyph=1 %
+% - Switches:
+\def\normal{%
+  \font\tenntxregt%
+  \baselineskip=12pt\relax%
+  \abovedisplayskip=10pt\relax%
+  \belowdisplayskip=\abovedisplayskip\relax%
+  \abovedisplayshortskip=0pt\relax%
+  \belowdisplayshortskip=6pt\relax%
+}%
+\def\small{%
+  \font\ninentxregt%
+  \baselineskip=10pt\relax%
+  \abovedisplayskip=8.5pt\relax%
+  \belowdisplayskip=\abovedisplayskip\relax%
+  \abovedisplayshortskip=0pt\relax%
+  \belowdisplayshortskip=4pt\relax%
+}%
+\normal%
+% =============================================================================
+% == Alignment                                                               ==
+% =============================================================================
+\tabskip=0pt\relax%
+% =============================================================================
+% == Math                                                                    ==
+% =============================================================================
+% - Fonts:
+\font\tenntxregm=ntx-Regular-tlf-ot1\relax%
+\font\sevenntxregm=ntx-Regular-tlf-ot1 at 7.3pt\relax%
+\font\fiventxregm=ntx-Regular-tlf-ot1 at 5.5pt\relax%
+\font\tenntxmi=ntxmi0\relax%
+\skewchar\tenntxmi=127 %
+\font\sevenntxmi=ntxmi07 at 7.3pt\relax%
+\skewchar\sevenntxmi=127 %
+\font\fiventxmi=ntxmi05 at 5.5pt\relax%
+\skewchar\fiventxmi=127 %
+\font\tenntxsym=ntxsy\relax%
+\skewchar\tenntxsym=120 %
+\font\sevenntxsym=ntxsy7 at 7.3pt\relax%
+\skewchar\sevenntxsym=120 %
+\font\fiventxsym=ntxsy5 at 5.5pt\relax%
+\skewchar\fiventxsym=120 %
+\font\tenntxex=ntxexx\relax%
+\font\sevenntxex=ntxexx at 7.3pt\relax%
+\font\fiventxex=ntxexx at 5.5pt\relax%
+% - Spaces:
+\mathsurround=0pt\relax%
+\scriptspace=0.5pt\relax%
+\thinmuskip=3mu\relax%
+\medmuskip=4mu plus 2mu minus 4mu\relax%
+\thickmuskip=5mu plus 5mu\relax%
+% - Penalties:
+\binoppenalty=700 %
+\relpenalty=500 %
+\displaywidowpenalty=50 %
+\predisplaypenalty=0 %
+\postdisplaypenalty=0 %
+% - Math codes:
+\def\resetmathcodes{%
+  % Reset \mathcodes to their IniTeX values:
+  \count@=0 %
+  \loop%
+    \tmpcnt@i="\ifnum\count@>47 %
+      \ifnum\count@<58 %
+        % Digits:
+        7000 % 48..57
+      \else% >= 58
+        \ifnum\count@>64 %
+          \ifnum\count@<91 %
+            % Upper case letters:
+            7100 % 65..90
+          \else% >= 91
+            \ifnum\count@>96 %
+              \ifnum\count@<123 %
+                % Lower case letters:
+                7100 % 97..122
+              \else% >= 123
+                0000 % 123..127
+              \fi%
+            \else% >= 91 and <= 96
+              0000 % 91..96
+            \fi%
+          \fi%
+        \else% >= 58 and <= 64
+          0000 % 58..64
+        \fi%
+      \fi%
+    \else% >= 0 and <= 47
+      0000 % 0..47
+    \fi%
+    \advance\tempcnt@i\count@%
+    \mathcode\count@=\tempcnt@i%
+    \advance\count@ by 1 %
+    \ifnum\count@<128 %
+  \repeat%
+}%
+\resetmathcodes%
+\mathcode`\ ="8000 \mathcode`\'="8000 \mathcode`\_="8000 %
+% - Delimiters:
+\nulldelimiterspace=1.2pt\relax%
+\delimiterfactor=901 %
+\delimitershortfall=5pt\relax%
+\def\resetdelcodes{%
+  % Reset \delcodes to their IniTeX values:
+  \count@=0 %
+  \loop%
+    \delcode\count@=-1 %
+    \advance\count@ by 1 %
+    \ifnum\count@<128 %
+  \repeat%
+  \delcode`\.=0 %
+}%
+\resetdelcodes%
+% - Math switches:
+\def\normalmath{%
+  \textfont0=\tenntxregm%
+  \scriptfont0=\sevenntxregm%
+  \scriptscriptfont0=\fiventxregm%
+  \textfont1=\tenntxmi%
+  \scriptfont1=\sevenntxmi%
+  \scriptscriptfont1=\fiventxmi%
+  \textfont2=\tenntxsym%
+  \scriptfont2=\sevenntxsym%
+  \scriptscriptfont2=\fiventxsym%
+  \textfont3=\tenntxex%
+  \scriptfont3=\sevenntxex%
+  \scriptscriptfont3=\fiventxex%
+  %
+  \mathcode`\.="013A \mathcode`\\="026E \mathcode`\|="026A %
+  \mathcode`\*="2203 \mathcode`\+="22CF \mathcode`\-="2200 %
+  \mathcode`\:="303A \mathcode`\<="313C \mathcode`\=="343D \mathcode`\>="313E %
+  \mathcode`\(="42B9 \mathcode`\)="52BA \mathcode`\[="42BB \mathcode`\]="52BC %
+  \mathcode`\!="5021 \mathcode`\/="429D \mathcode`\?="503F %
+  \mathcode`\,="613B \mathcode`\;="603B %
+  %
+  \delcode`\(="2B9300 \delcode`\)="2BA301 %
+  \delcode`\/="29D30E \delcode`\\="26E30F %
+  \delcode`\<="26830A \delcode`\>="26930B %
+  \delcode`\[="2BB302 \delcode`\]="2BC303 %
+  \delcode`\|="26A30C %
+}%
+\normalmath%
+% =============================================================================
+% == Paragraph                                                               ==
+% =============================================================================
+% - Boxes:
+\hfuzz=2pt\relax%
+\hbadness=1000 %
+% - Passes:
+\pretolerance=100 %
+\tolerance=500 %
+\emergencystretch=0pt\relax%
+% - Shape spaces:
+\hangindent=0pt\relax%
+\hangagter=1 %
+\parindent=12pt\relax%
+\leftskip=0pt\relax%
+\rightskip=0pt\relax%
+\parfillskip=0pt plus 1fil\relax%
+% - Demerits:
+\adjdemerits=10000 %
+\doublehyphendemerits=10000 %
+\finalhyphendemerits=5000 %
+% - Penalties:
+\linepenalty=10 %
+\interlinepenalty=0 %
+\hyphenpenalty=50 %
+\exhyphenpenalty=50 %
+\brokenpenalty=100 %
+\clubpenalty=10000 %
+\widowpenalty=10000 %
+% - Interline spaces:
+% \baselineskip is set in text switch
+\lineskiplimit=0pt\relax%
+\lineskip=1pt\relax%
+% - Looseness:
+\looseness=0 %
+% - Space between two adjacent paragraphs:
+\parskip=0pt plus 1pt\relax%
+% =============================================================================
+% == Page                                                                    ==
+% =============================================================================
+\newdimen\pageleftmargin%
+% - Boxes:
+\vfuzz=0.1pt\relax%
+\vbadness=1000 %
+\maxdepth=5pt\relax%
+\prevdepth=-1000pt\relax%
+% - Layout:
+\topskip=10pt\relax%
+\hsize=117mm\relax%
+\vsize=191mm\relax%
+\pageleftmargin=63pt\relax%
+% - Floats:
+\floatingpenalty=0 %
+% - Splitting:
+\splittopskip=\topskip%
+\splitmaxdepth=\maxdimen%
+% - Output:
+\maxdeadcycles=100 %
+% =============================================================================
+% == End of notes.tex                                                        ==
+% =============================================================================
+\makeatother%
+\endinput%
