@@ -14,10 +14,17 @@
 \def\makeatother{\catcode`\@=12 }%
 \makeatletter%
 %
-\newcount\tempcnt@i \temcnt@i=0 %
+\newcount\tempcnt@i \tempcnt@i=0 %
+%
+\def\setparam #1#2{%
+  \ifx#1\undefined\else%
+    #1=#2\relax%
+  \fi%
+}%
 % =============================================================================
 % == Text                                                                    ==
 % =============================================================================
+\newbox\strutbox%
 % - Fonts:
 \defaulthyphenchar=`\-%
 \defaultskewchar=-1 %
@@ -25,6 +32,8 @@
 \font\tenntxit=ntx-Italic-tlf-t1\relax%
 \font\tentxtt=t1xtt\relax \hyphenchar\tentxtt=-1 %
 \font\ninentxregt=ntx-Regular-tlf-t1 at 8.5pt\relax%
+\font\fnmarkref=ntx-Regular-tlf-t1 at 7.3pt\relax%
+\font\fnmarktext=ntx-Regular-tlf-t1 at 6.20496pt\relax%
 % - Boxes:
 \boxmaxdepth=\maxdimen%
 % - Spaces:
@@ -35,21 +44,36 @@
 % - Hyphenation:
 \uchyph=1 %
 % - Switches:
+\def\makestrutbox{%
+  \setbox\strutbox=\hbox{%
+    \vrule width 0pt height 0.7\baselineskip depth 0.3\baselineskip%
+  }%
+}%
 \def\normal{%
-  \font\tenntxregt%
+  \tenntxregt%
   \baselineskip=12pt\relax%
   \abovedisplayskip=10pt\relax%
   \belowdisplayskip=\abovedisplayskip\relax%
   \abovedisplayshortskip=0pt\relax%
   \belowdisplayshortskip=6pt\relax%
+  \makestrutbox%
+  \def\fnmarkfont{%
+    \fnmarkref%
+    \baselineskip=7.3pt\relax%
+  }%
 }%
 \def\small{%
-  \font\ninentxregt%
+  \ninentxregt%
   \baselineskip=10pt\relax%
   \abovedisplayskip=8.5pt\relax%
   \belowdisplayskip=\abovedisplayskip\relax%
   \abovedisplayshortskip=0pt\relax%
   \belowdisplayshortskip=4pt\relax%
+  \makestrutbox%
+  \def\fnmarkfont{%
+    \fnmarktext%
+    \baselineskip=6.20496pt\relax%
+  }%
 }%
 \normal%
 % =============================================================================
@@ -95,7 +119,7 @@
   % Reset \mathcodes to their IniTeX values:
   \count@=0 %
   \loop%
-    \tmpcnt@i="\ifnum\count@>47 %
+    \tempcnt@i="\ifnum\count@>47 %
       \ifnum\count@<58 %
         % Digits:
         7000 % 48..57
@@ -162,7 +186,7 @@
   \scriptscriptfont3=\fiventxex%
   %
   \mathcode`\.="013A \mathcode`\\="026E \mathcode`\|="026A %
-  \mathcode`\*="2203 \mathcode`\+="22CF \mathcode`\-="2200 %
+  \mathcode`\*="2203 \mathcode`+="22CF \mathcode`\-="2200 %
   \mathcode`\:="303A \mathcode`\<="313C \mathcode`\=="343D \mathcode`\>="313E %
   \mathcode`\(="42B9 \mathcode`\)="52BA \mathcode`\[="42BB \mathcode`\]="52BC %
   \mathcode`\!="5021 \mathcode`\/="429D \mathcode`\?="503F %
@@ -187,7 +211,7 @@
 \emergencystretch=0pt\relax%
 % - Shape spaces:
 \hangindent=0pt\relax%
-\hangagter=1 %
+\hangafter=1 %
 \parindent=12pt\relax%
 \leftskip=0pt\relax%
 \rightskip=0pt\relax%
@@ -212,27 +236,333 @@
 \looseness=0 %
 % - Space between two adjacent paragraphs:
 \parskip=0pt plus 1pt\relax%
+% - Switches:
+\def\sloppy{%
+  \tolerance=9999 %
+  \emergencystretch=3em\relax%
+  \hfuzz=0.5pt\relax%
+  \vfuzz=\hfuzz%
+}%
+\def\parboxrestore{%
+  \parindent=0pt\relax%
+  \leftskip=0pt\relax%
+  \rightskip=0pt\relax%
+  \parfillskip=0pt plus 1fil\relax%
+  \lineskiplimit=0pt\relax%
+  \lineskip=1pt\relax%
+  \parskip=0pt\relax%
+  \sloppy%
+}%
 % =============================================================================
 % == Page                                                                    ==
 % =============================================================================
-\newdimen\pageleftmargin%
 % - Boxes:
 \vfuzz=0.1pt\relax%
 \vbadness=1000 %
 \maxdepth=5pt\relax%
 \prevdepth=-1000pt\relax%
 % - Layout:
+\newdimen\sidemargin%
+\newdimen\headheight%
+\newdimen\headsep%
+\newdimen\footskip%
+%
 \topskip=10pt\relax%
 \hsize=117mm\relax%
 \vsize=191mm\relax%
-\pageleftmargin=63pt\relax%
+\sidemargin=63pt\relax%
+\headheight=12pt\relax%
+\headsep=12pt\relax%
+\footskip=30pt\relax%
 % - Floats:
+\newinsert\botins%
+\newskip\floatsep%
+\newskip\textfloatsep%
+\newskip\fptop%
+\newskip\fpsep%
+\newskip\fpbot%
+%
+\floatsep=12pt plus 2pt minus 2pt\relax%
+\textfloatsep=24pt plus 2pt minus 4pt\relax%
+\fptop=0pt\relax%
+\fpsep=12pt\relax%
+\fpbot=0pt plus 1fil\relax%
+\dimen0=\floatsep%
+\skip0=\textfloatsep%
+\advance\skip0 by -\dimen0 %
+\count\topins=1000 %
+\dimen\topins=\maxdimen%
+\skip\topins=\skip0 %
+\count\botins=1000 %
+\dimen\botins=\maxdimen%
+\skip\botins=\skip0 %
+\count\footins=1000 %
+\dimen\footins=8in\relax%
+\skip\footins=9pt plus 4pt minus 2pt\relax%
 \floatingpenalty=0 %
+%
+\def\binsert #1{%
+  \par%
+  #1%
+  \begingroup%
+    \setbox0=\vbox\bgroup%
+}%
+\def\einsert #1{%
+    \egroup%
+    \insert#1{%
+      \penalty 100 %
+      \splittopskip=0pt\relax%
+      \splitmaxdepth=\maxdimen%
+      \floatingpenalty=0 %
+      \offinterlineskip%
+      \box0%
+      \nobreak%
+      \vskip\floatsep%
+    }%
+  \endgroup%
+}%
+%
+\newdimen\footnotesep%
+\newcount\fncount \fncount=0 %
+\edef\thefncount{\the\fncount}%
+\def\makefnmark{%
+  \hbox{\mathsurround=0pt $\relax^{\hbox{\fnmarkfont\thefncount}}$}%
+}%
+\def\makefntext #1{%
+  \parindent=12pt\relax%
+  \noindent%
+  \leavevmode\hbox{\makefnmark} #1%
+}%
+\interfootnotelinepenalty=100 %
+\footnotesep=9pt\relax%
+\def\footnote #1{%
+  \global\advance\fncount by 1%
+  \xdef\thefncount{\the\fncount}%
+  \leavevmode%
+  \edef\@tempsf{\the\spacefactor}%
+  \nobreak%
+  \makefnmark%
+  \spacefactor=\@tempsf\relax%
+  \insert\footins{%
+    \small%
+    \interlinepenalty=\interfootnotelinepenalty%
+    \splittopskip=\footnotesep%
+    \splitmaxdepth=\dp\strutbox%
+    \floatingpenalty=\@MM%
+    \parboxrestore%
+    \makefntext{%
+      \vrule width 0pt height \footnotesep depth 0pt\relax%
+      \ignorespaces%
+      #1%
+      \unskip%
+      \ifhmode\nobreak\fi%
+      \vrule width 0pt height 0pt depth \dp\strutbox\relax%
+    }%
+  }%
+}%
+\def\footnoterule{%
+  \kern -3pt%
+  \hrule width 36mm%
+  \kern 2.6pt\relax%
+}%
 % - Splitting:
 \splittopskip=\topskip%
 \splitmaxdepth=\maxdimen%
 % - Output:
+\let\@the@head\empty%
+\let\@the@foot\empty%
+\let\@ragged@bottom\empty%
 \maxdeadcycles=100 %
+%
+\def\normalbottom{%
+  \let\@ragged@bottom\empty%
+}%
+\def\raggedbottom{%
+  \def\@ragged@bottom{\vskip 0pt plus 0.0001fil\relax}%
+}%
+\def\supereject{%
+  \par%
+  \hbox to \hsize{}%
+  \nobreak%
+  \vfill%
+  \penalty-\@MM%
+}%
+\def\notesoutput{%
+  \shipout\vbox{%
+    \offinterlineskip%
+    \moveright\sidemargin\vbox{%
+      \makeheadline%
+      \makepage%
+      \makefootline%
+    }%
+  }%
+  \advancepageno%
+  \ifnum\outputpenalty>-\@MM\else%
+    \ifnum\insertpenalties>0%
+      \supereject%
+    \fi%
+  \fi%
+}%
+\def\makeheadline{%
+  \setbox0=\vbox to \headheight{%
+    \vfil%
+    \hbox to \hsize{\@the@head}%
+  }%
+  \dp0=0pt%
+  \box0%
+  \vskip\headsep%
+}%
+\def\makepage{%
+  \ifnum\outputpenalty>-\@MM\else%
+    % What contains the tail of \box255 when we arrive here?
+    % If we get here by \end, it means that the page break was chosen before
+    % \hbox to \hsize{} (because after this box all elements, including the
+    % \penalty -2^30, are discardable). Similarly to \supereject, where we also
+    % forbid break between \hbox to \hsize{} and \penalty-\@MM so these are
+    % always together (preferring \supereject over \end prevents
+    % \hbox to \hsize{} to be the last element on a page).
+    %
+    % We are now about to cut the tail and measure the \box255 without it to
+    % see if there are some lines of text remaining or the recent page will
+    % contain only floats.
+    \setbox255=\vbox{%
+      \count@=10 % prevent infinite loop
+      \boxmaxdepth=\maxdepth%
+      \unvbox255 %
+      \loop%
+        \advance\count@ by -1%
+        \unskip\unpenalty%
+        \ifnum\count@>0%
+          \setbox0=\lastbox%
+        \else%
+          \setbox0=\hbox{}% this stops the loop
+        \fi%
+        \ifvoid0 %
+      \repeat%
+      % Remove \topskip or \baselineskip:
+      \unskip%
+    }%
+  \fi%
+  \dimen0=\ht255 %
+  \advance\dimen0 by \dp255 %
+  \ifdim\dimen0>.5\topskip%
+    \makepageT%
+  \else%
+    \makepageF%
+  \fi%
+}%
+\def\makepageT{%
+  \setbox0=\box255 %
+  \ifvoid\topins\else%
+    \setbox0=\vbox{%
+      \boxmaxdepth=\maxdepth%
+      \unvbox\topins%
+      \unskip%
+      \vskip\textfloatsep%
+      \unvbox0%
+    }%
+  \fi%
+  \ifvoid\botins\else%
+    \setbox0=\vbox{%
+      \unvbox0%
+      \vskip\textfloatsep%
+      \unvbox\botins%
+      \unskip%
+    }%
+  \fi%
+  \ifvoid\footins\else%
+    \setbox0=\vbox{%
+      \boxmaxdepth=\maxdepth%
+      \unvbox0%
+      \vskip\skip\footins%
+      \footnoterule%
+      \unvbox\footins%
+    }%
+  \fi%
+  \setbox0=\vbox to \vsize{%
+    \dimen0=\dp0%
+    \unvbox0%
+    \vskip-\dimen0 %
+    \@ragged@bottom%
+  }%
+  \box0%
+}%
+\def\makepageF{%
+  % Clear the page box (it should have no content):
+  {\setbox0=\box255}%
+  \setbox0=\vbox{%
+    \def\@reset@count@{\count@=25 }%
+    \@reset@count@%
+    \boxmaxdepth=\maxdepth%
+    \offinterlineskip%
+    \global\setbox1=\vbox{}%
+    \unvbox\topins%
+    \unvbox\botins%
+    \loop%
+      \unskip\unpenalty%
+      \setbox0=\lastbox%
+      \ifvoid0\advance\count@-1 \fi%
+      \ifvbox0 %
+        \@reset@count@%
+        \global\setbox1=\vbox{\box0\vskip\fpsep\unvbox1}%
+      \fi%
+      \ifnum\count@>0 %
+    \repeat%
+  }%
+  \dimen1=\ht1%
+  \advance\dimen1 by \dp1 %
+  \ifvoid\footins%
+    % Only floats:
+    \ifdim\dimen1>.5\topskip%
+      \setbox0=\vbox to \vsize{%
+        \vskip\fptop%
+        \unvbox1%
+        \unskip%
+        \vskip\fpbot%
+      }%
+    \else%
+      \setbox0=\vbox to 0pt{}%
+    \fi%
+  \else%
+    \setbox1=\vbox{%
+      \boxmaxdepth=\maxdepth%
+      \ifdim\dimen1>.5\topskip%
+        % Footnotes goes after floats:
+        \unvbox1%
+        \unskip%
+        \vskip\skip\footins%
+        \footnoterule%
+      \else%
+        % Footnotes goes on the separate page:
+        \setbox0=\vtop{\unvcopy\footins}%
+        \skip0=\topskip%
+        \advance\skip0 by -\ht0 %
+        \ifdim\skip0>0pt\vskip\skip0 \fi% \topskip
+      \fi%
+      \unvbox\footins%
+    }%
+    \setbox0=\vbox to \vsize{%
+      \dimen1=\dp1%
+      \unvbox1%
+      \vskip-\dimen1 %
+      \@ragged@bottom%
+    }%
+  \fi%
+  \ifdim\ht0>0pt\box0\fi%
+}%
+\def\makefootline{%
+  \baselineskip=\footskip \lineskiplimit=0pt\relax%
+  \hbox to \hsize{\@the@foot}%
+}%
+\output{\notesoutput}%
+% =============================================================================
+% == PDF                                                                     ==
+% =============================================================================
+% - Output:
+\setparam\pdfoutput{1}%
+\setparam\pdfdecimaldigits{3}%
+\setparam\pdfpagewidth{210 true mm}%
+\setparam\pdfpageheight{297 true mm}%
 % =============================================================================
 % == End of notes.tex                                                        ==
 % =============================================================================
