@@ -1,0 +1,370 @@
+%
+% File:    ./macros/document.tex
+% Author:  Jiří Kučera <sanczes AT gmail.com>
+% Date:    2023-08-06 20:34:56 +0200
+% Project: Math Notes
+% Brief:   Document typesetting macros
+%
+% SPDX-License-Identifier: MIT
+%
+\expandafter\ifx\csname (./macros/document.tex)\endcsname\relax%
+  \expandafter\def\csname (./macros/document.tex)\endcsname{}%
+\else%
+  \expandafter\endinput%
+\fi%
+%
+\input macros/utils%
+\input macros/params%
+%
+\makeatletter%
+%
+\newbox\strutbox%
+\newdimen\paperwidth%
+\newdimen\paperheight%
+\newdimen\sidemargin%
+\newdimen\headheight%
+\newdimen\headsep%
+\newdimen\footskip%
+\newinsert\botins%
+\newskip\floatsep%
+\newskip\textfloatsep%
+\newskip\fptop%
+\newskip\fpsep%
+\newskip\fpbot%
+\newdimen\footnotesep%
+\ensurereg{count}{fncount}{0}%
+%
+\paperwidth 210 true mm%
+\paperheight 297 true mm%
+\sidemargin 63\Unit%
+\headheight 12\Unit%
+\headsep 12\Unit%
+\footskip 30\Unit%
+\floatsep 12\Unit plus 2\Unit minus 2\Unit%
+\textfloatsep 24\Unit plus 2\Unit minus 4\Unit%
+\fptop\ZeroUnit%
+\fpsep 12\Unit%
+\fpbot \ZeroUnit plus 1fil%
+\dimen\Zero\floatsep%
+\skip\Zero\textfloatsep%
+\advance\skip\Zero-\dimen\Zero%
+\count\topins\Thousand%
+\dimen\topins\maxdimen%
+\skip\topins\skip\Zero%
+\count\botins\Thousand%
+\dimen\botins\maxdimen%
+\skip\botins\skip\Zero%
+\count\footins\Thousand%
+\dimen\footins 8in%
+\skip\footins 9\Unit plus 4\Unit minus 2\Unit%
+\interfootnotelinepenalty 100 %
+\footnotesep 9\Unit%
+%
+\font\ninerm=cmr9%
+\font\sixrm=cmr6%
+%
+\def\makestrutbox{%
+  \setbox\strutbox\hbox{%
+    \vrule width\ZeroUnit height.7\baselineskip depth.3\baselineskip%
+  }%
+}%
+\def\normal{%
+  \tenrm%
+  \baselineskip 12\Unit%
+  \makestrutbox%
+  \def\fnmarkfont{%
+    \sevenrm%
+    \baselineskip\FontQuadWidth\font%
+  }%
+}%
+\def\small{%
+  \ninerm%
+  \baselineskip 10\Unit%
+  \makestrutbox%
+  \def\fnmarkfont{%
+    \sixrm%
+    \baselineskip\FontQuadWidth\font%
+  }%
+}%
+\def\sloppy{%
+  \tolerance 9999 %
+  \emergencystretch 3em%
+  \hfuzz .5\Unit%
+  \vfuzz\hfuzz%
+}%
+\def\parboxrestore{%
+  \parindent\ZeroUnit%
+  \leftskip\ZeroUnit%
+  \rightskip\ZeroUnit%
+  \parfillskip \ZeroUnit plus 1fil%
+  \lineskiplimit\ZeroUnit%
+  \lineskip\Unit%
+  \parskip\ZeroUnit%
+  \sloppy%
+}%
+%
+\def\binsert #1{%
+  \par%
+  #1%
+  \begingroup%
+    \setbox\Zero\vbox\bgroup%
+}%
+\def\einsert #1{%
+    \egroup%
+    \insert#1{%
+      \penalty 100 %
+      \splittopskip\ZeroUnit%
+      \splitmaxdepth\maxdimen%
+      \floatingpenalty\Zero%
+      \offinterlineskip%
+      \box\Zero%
+      \nobreak%
+      \vskip\floatsep%
+    }%
+  \endgroup%
+}%
+%
+\edef\thefncount{\the\fncount}%
+\def\makefnmark{%
+  \hbox{\mathsurround\ZeroUnit $\relax^{\hbox{\fnmarkfont\thefncount}}$}%
+}%
+\def\makefntext #1{%
+  \parindent 12\Unit%
+  \noindent%
+  \leavevmode\hbox{\makefnmark} #1%
+}%
+\def\footnote #1{%
+  \global\advance\fncount\One%
+  \xdef\thefncount{\the\fncount}%
+  \leavevmode%
+  \edef\@tempsf{\the\spacefactor}%
+  \nobreak%
+  \makefnmark%
+  \spacefactor\@tempsf%
+  \insert\footins{%
+    \small%
+    \interlinepenalty\interfootnotelinepenalty%
+    \splittopskip\footnotesep%
+    \splitmaxdepth\dp\strutbox%
+    \floatingpenalty\TwentyThousands%
+    \parboxrestore%
+    \makefntext{%
+      \vrule width\ZeroUnit height\footnotesep depth\ZeroUnit%
+      \ignorespaces%
+      #1%
+      \unskip%
+      \ifhmode\nobreak\fi%
+      \vrule width\ZeroUnit height\ZeroUnit depth\dp\strutbox%
+    }%
+  }%
+}%
+\def\footnoterule{%
+  \kern -3\Unit%
+  \hrule width 36mm%
+  \kern 2.6\Unit%
+}%
+%
+\let\@the@head\empty%
+\let\@the@foot\empty%
+\let\@ragged@bottom\empty%
+\def\normalbottom{%
+  \let\@ragged@bottom\empty%
+}%
+\def\raggedbottom{%
+  \def\@ragged@bottom{\vskip \ZeroUnit plus.0001fil\relax}%
+}%
+\def\supereject{%
+  \par%
+  \hbox to\hsize{}%
+  \nobreak%
+  \vfill%
+  \penalty -\TwentyThousands%
+}%
+\def\normaloutput{%
+  \shipout\vbox{%
+    \offinterlineskip%
+    \moveright\sidemargin\vbox{%
+      \makeheadline%
+      \makepage%
+      \makefootline%
+    }%
+  }%
+  \advancepageno%
+  \ifnum\outputpenalty>-\TwentyThousands\else%
+    \ifnum\insertpenalties>\Zero%
+      \supereject%
+    \fi%
+  \fi%
+}%
+\def\makeheadline{%
+  \setbox\Zero\vbox to\headheight{%
+    \vfil%
+    \hbox to\hsize{\@the@head}%
+  }%
+  \dp\Zero\ZeroUnit%
+  \box\Zero%
+  \vskip\headsep%
+}%
+\def\makepage{%
+  \ifnum\outputpenalty>-\TwentyThousands\else%
+    % What contains the tail of \box255 when we arrive here?
+    % If we get here by \end, it means that the page break was chosen before
+    % \hbox to \hsize{} (because after this box all elements, including the
+    % \penalty -2^30, are discardable). Similarly to \supereject, where we also
+    % forbid break between \hbox to \hsize{} and \penalty-\@MM so these are
+    % always together (preferring \supereject over \end prevents
+    % \hbox to \hsize{} to be the last element on a page).
+    %
+    % We are now about to cut the tail and measure the \box255 without it to
+    % see if there are some lines of text remaining or the recent page will
+    % contain only floats.
+    \setbox\Cclv\vbox{%
+      \counta 10% prevent infinite loop
+      \boxmaxdepth\maxdepth%
+      \unvbox\Cclv%
+      \loop%
+        \advance\counta\MinusOne%
+        \unskip\unpenalty%
+        \ifnum\counta>\Zero%
+          \setbox\Zero\lastbox%
+        \else%
+          \setbox\Zero\hbox{}% this stops the loop
+        \fi%
+        \ifvoid\Zero%
+      \repeat%
+      % Remove \topskip or \baselineskip:
+      \unskip%
+      % Append removed \vfill:
+      \vfill%
+    }%
+  \fi%
+  \dimen\Zero\ht\Cclv%
+  \advance\dimen\Zero\dp\Cclv%
+  \ifdim\dimen\Zero>.5\topskip%
+    \makepageT%
+  \else%
+    \makepageF%
+  \fi%
+}%
+\def\makepageT{%
+  \setbox\Zero\box\Cclv%
+  \ifvoid\topins\else%
+    \setbox\Zero\vbox{%
+      \boxmaxdepth\maxdepth%
+      \unvbox\topins%
+      \unskip%
+      \vskip\textfloatsep%
+      \unvbox\Zero%
+    }%
+  \fi%
+  \ifvoid\botins\else%
+    \setbox\Zero\vbox{%
+      \unvbox\Zero%
+      \vskip\textfloatsep%
+      \unvbox\botins%
+      \unskip%
+    }%
+  \fi%
+  \ifvoid\footins\else%
+    \setbox\Zero\vbox{%
+      \boxmaxdepth\maxdepth%
+      \unvbox\Zero%
+      \vskip\skip\footins%
+      \footnoterule%
+      \unvbox\footins%
+    }%
+  \fi%
+  \setbox\Zero\vbox to\vsize{%
+    \dimen\Zero\dp\Zero%
+    \unvbox\Zero%
+    \vskip -\dimen\Zero%
+    \@ragged@bottom%
+  }%
+  \box\Zero%
+}%
+\def\makepageF{%
+  % Clear the page box (it should have no content):
+  {\setbox\Zero\box\Cclv}%
+  \setbox\Zero\vbox{%
+    \def\@reset@counta{\counta 25\relax}%
+    \@reset@counta%
+    \boxmaxdepth\maxdepth%
+    \offinterlineskip%
+    \global\setbox\One\vbox{}%
+    \unvbox\topins%
+    \unvbox\botins%
+    \loop%
+      \unskip\unpenalty%
+      \setbox\Zero\lastbox%
+      \ifvoid\Zero\advance\counta\MinusOne\fi%
+      \ifvbox\Zero%
+        \@reset@counta%
+        \global\setbox\One\vbox{\box\Zero\vskip\fpsep\unvbox\One}%
+      \fi%
+      \ifnum\counta>\Zero%
+    \repeat%
+  }%
+  \dimen\One\ht\One%
+  \advance\dimen\One\dp\One%
+  \ifvoid\footins%
+    % Only floats:
+    \ifdim\dimen\One>.5\topskip%
+      \setbox\Zero\vbox to\vsize{%
+        \vskip\fptop%
+        \unvbox\One%
+        \unskip%
+        \vskip\fpbot%
+      }%
+    \else%
+      \setbox\Zero\vbox to\ZeroUnit{}%
+    \fi%
+  \else%
+    \setbox\One\vbox{%
+      \boxmaxdepth\maxdepth%
+      \ifdim\dimen\One>.5\topskip%
+        % Footnotes goes after floats:
+        \unvbox\One%
+        \unskip%
+        \vskip\skip\footins%
+        \footnoterule%
+      \else%
+        % Footnotes goes on the separate page:
+        \setbox\Zero\vtop{\unvcopy\footins}%
+        \skip\Zero\topskip%
+        \advance\skip\Zero-\ht\Zero%
+        \ifdim\skip\Zero>\ZeroUnit\vskip\skip\Zero\fi% \topskip
+      \fi%
+      \unvbox\footins%
+    }%
+    \setbox\Zero\vbox to\vsize{%
+      \dimen\One\dp\One%
+      \unvbox\One%
+      \vskip -\dimen\One%
+      \@ragged@bottom%
+    }%
+  \fi%
+  \ifdim\ht\Zero>\ZeroUnit\box\Zero\fi%
+}%
+\def\makefootline{%
+  \baselineskip\footskip \lineskiplimit\ZeroUnit%
+  \hbox to\hsize{\@the@foot}%
+}%
+\output{\normaloutput}%
+%
+\def\fullpage{%
+  \hoffset -1in%
+  \voffset -1in%
+  \hsize\paperwidth%
+  \vsize\paperheight%
+  \topskip\ZeroUnit%
+  \parindent\ZeroUnit%
+  \offinterlineskip%
+  \parskip\ZeroUnit%
+  \everypar{{\setbox\Zero\lastbox}}%
+  \output{\shipout\box\Cclv \advancepageno}%
+}%
+%
+\restorecat\@%
+\raggedbottom%
+\normal%
+\endinput%

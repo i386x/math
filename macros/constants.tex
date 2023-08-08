@@ -1,0 +1,42 @@
+%
+% File:    ./macros/constants.tex
+% Author:  Jiří Kučera <sanczes AT gmail.com>
+% Date:    2023-08-06 11:36:16 +0200
+% Project: Math Notes
+% Brief:   Constants
+%
+% SPDX-License-Identifier: MIT
+%
+\expandafter\ifx\csname (./macros/constants.tex)\endcsname\relax%
+  \expandafter\def\csname (./macros/constants.tex)\endcsname{}%
+\else%
+  \expandafter\endinput%
+\fi%
+%
+\chardef\CatLetter=11%
+\chardef\CatOther=12%
+%
+\edef\RestoreAtCatCode{\catcode`@=\the\catcode`@\relax}%
+\catcode`\@\CatLetter%
+%
+\chardef\Zero=0%
+\let\One\@ne%
+\let\Two\tw@%
+\let\Three\thr@@%
+\let\Sixteen\sixt@@n%
+\chardef\Cxxviii=128%
+\let\Cclv\@cclv%
+\let\Cclvi\@cclvi%
+\let\Thousand\@m%
+\let\TenThousands\@M%
+\let\TwentyThousands\@MM%
+\let\MinusOne\m@ne%
+%
+\let\ZeroUnit\z@%
+\let\Unit\p@%
+\let\ZeroSkip\z@skip%
+%
+\let\VoidBox\voidb@x%
+%
+\RestoreAtCatCode%
+\endinput%

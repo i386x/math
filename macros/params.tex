@@ -1,0 +1,116 @@
+%
+% File:    ./macros/params.tex
+% Author:  Jiří Kučera <sanczes AT gmail.com>
+% Date:    2023-08-06 19:42:33 +0200
+% Project: Math Notes
+% Brief:   TeX parameters
+%
+% SPDX-License-Identifier: MIT
+%
+\expandafter\ifx\csname (./macros/params.tex)\endcsname\relax%
+  \expandafter\def\csname (./macros/params.tex)\endcsname{}%
+\else%
+  \expandafter\endinput%
+\fi%
+%
+\input macros/utils%
+% I/O:
+\newlinechar`^^J%
+% Fonts:
+\defaulthyphenchar`\-%
+\defaultskewchar\MinusOne%
+% Boxes (general):
+\boxmaxdepth\maxdimen%
+% Text spaces:
+\sfcode`\'\Zero%
+\sfcode`\)\Zero%
+\sfcode`\]\Zero%
+\frenchspacing%
+\spaceskip\ZeroUnit%
+\xspaceskip\ZeroUnit%
+% Hyphenation:
+\uchyph\One%
+% Align:
+\tabskip\ZeroUnit%
+% Math spaces:
+\mathsurround\ZeroUnit%
+\scriptspace .5\Unit%
+\thinmuskip 3mu%
+\medmuskip 4mu plus 2mu minus 4mu%
+\thickmuskip 5mu plus 5mu%
+% Math penalties:
+\binoppenalty 700%
+\relpenalty 500%
+\displaywidowpenalty 50%
+\predisplaypenalty\Zero%
+\postdisplaypenalty\Zero%
+% Math codes:
+\LoopOverCodes{%
+  \countb\Zero%
+  \isdigit\counta{\countb "7000\relax}%
+  \isupper\counta{\countb "7100\relax}%
+  \islower\counta{\countb "7100\relax}%
+  \advance\countb\counta%
+  \mathcode\counta\countb%
+}%
+\mathcode`\  "8000%
+\mathcode`\' "8000%
+\mathcode`\_ "8000%
+% Math delimiters:
+\nulldelimiterspace 1.2\Unit%
+\delimiterfactor 901 %
+\delimitershortfall 5\Unit%
+\LoopOverCodes{\delcode\counta\MinusOne}%
+\delcode`\.\Zero%
+% Paragraphs:
+\hfuzz 2\Unit%
+\hbadness\Thousand%
+% - passes:
+\pretolerance 100%
+\tolerance 500 %
+\emergencystretch\ZeroUnit%
+% - shape spaces:
+\hangindent\ZeroUnit%
+\hangafter\One%
+\parindent 12\Unit%
+\leftskip\ZeroUnit%
+\rightskip\ZeroUnit%
+\parfillskip \ZeroUnit plus 1fil%
+% - demerits:
+\adjdemerits\TenThousands%
+\doublehyphendemerits\TenThousands%
+\finalhyphendemerits 5000%
+% - penalties:
+\linepenalty 10%
+\interlinepenalty\Zero%
+\hyphenpenalty 50%
+\exhyphenpenalty 50%
+\brokenpenalty 100%
+\clubpenalty\TenThousands%
+\widowpenalty\TenThousands%
+% - interline spaces:
+\baselineskip 12\Unit%
+\lineskiplimit\ZeroUnit%
+\lineskip\Unit%
+% - looseness:
+\looseness\Zero%
+% - space between two adjacent paragraphs:
+\parskip \ZeroUnit plus \Unit%
+% Pages:
+\vfuzz .1\Unit%
+\vbadness\Thousand%
+\maxdepth 5\Unit%
+\prevdepth -1000\Unit%
+% - layout:
+\topskip 10\Unit%
+\hsize 117mm%
+\vsize 191mm%
+% - floats:
+\floatingpenalty\Zero%
+% - splitting:
+\splittopskip\topskip%
+\splitmaxdepth\maxdimen%
+% - output:
+\maxdeadcycles 100%
+%
+\endinput%

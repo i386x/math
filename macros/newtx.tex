@@ -1,0 +1,76 @@
+%
+% File:    ./macros/newtx.tex
+% Author:  Jiří Kučera <sanczes AT gmail.com>
+% Date:    2023-08-08 01:19:01 +0200
+% Project: Math Notes
+% Brief:   New TX fonts
+%
+% SPDX-License-Identifier: MIT
+%
+\expandafter\ifx\csname (./macros/newtx.tex)\endcsname\relax%
+  \expandafter\def\csname (./macros/newtx.tex)\endcsname{}%
+\else%
+  \expandafter\endinput%
+\fi%
+%
+\input macros/constants%
+%
+% Text fonts:
+\font\tenrm=ntx-Regular-tlf-t1%
+\font\ninerm=ntx-Regular-tlf-t1 at 8.5\Unit%
+\font\sevenrm=ntx-Regular-tlf-t1 at 8.5\Unit%
+\font\sixrm=ntx-Regular-tlf-t1 at 6.20496\Unit%
+\font\tenit=ntx-Italic-tlf-t1%
+\font\tentt=t1xtt%
+\hyphenchar\tentt\MinusOne%
+%
+% Math fonts:
+\font\tenrmm=ntx-Regular-tlf-ot1%
+\font\sevenrmm=ntx-Regular-tlf-ot1 at 7.3\Unit%
+\font\fivermm=ntx-Regular-tlf-ot1 at 5.5\Unit%
+\font\teni=ntxmi0%
+\skewchar\teni 127%
+\font\seveni=ntxmi07 at 7.3\Unit%
+\skewchar\seveni 127%
+\font\fivei=ntxmi05 at 5.5\Unit%
+\skewchar\fivei 127%
+\font\tensy=ntxsy%
+\skewchar\tensy 120%
+\font\sevensy=ntxsy7 at 7.3\Unit%
+\skewchar\sevensy 120%
+\font\fivesy=ntxsy5 at 5.5\Unit%
+\skewchar\fivesy 120%
+\font\tenex=ntxexx%
+\font\sevenex=ntxexx at 7.3\Unit%
+\font\fiveex=ntxexx at 5.5\Unit%
+%
+% Math switches:
+\def\normalmath{%
+  \textfont\Zero\tenrmm%
+  \scriptfont\Zero\sevenrmm%
+  \scriptscriptfont\Zero\fivermm%
+  \textfont\One\teni%
+  \scriptfont\One\seveni%
+  \scriptscriptfont\One\fivei%
+  \textfont\Two\tensy%
+  \scriptfont\Two\sevensy%
+  \scriptscriptfont\Two\fivesy%
+  \textfont\Three\tenex%
+  \scriptfont\Three\sevenex%
+  \scriptscriptfont\Three\fiveex%
+  %
+  \mathcode`\. "013A \mathcode`\\ "026E \mathcode`\| "026A%
+  \mathcode`\* "2203 \mathcode`+ "22CF \mathcode`\- "2200%
+  \mathcode`\: "303A \mathcode`\< "313C \mathcode`\= "343D \mathcode`\> "313E%
+  \mathcode`\( "42B9 \mathcode`\) "52BA \mathcode`\[ "42BB \mathcode`\] "52BC%
+  \mathcode`\! "5021 \mathcode`\/ "429D \mathcode`\? "503F%
+  \mathcode`\, "613B \mathcode`\; "603B%
+  %
+  \delcode`\( "2B9300 \delcode`\) "2BA301%
+  \delcode`\/ "29D30E \delcode`\\ "26E30F%
+  \delcode`\< "26830A \delcode`\> "26930B%
+  \delcode`\[ "2BB302 \delcode`\] "2BC303%
+  \delcode`\| "26A30C %
+}%
+%
+\endinput%

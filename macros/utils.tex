@@ -1,0 +1,80 @@
+%
+% File:    ./macros/utils.tex
+% Author:  Jiří Kučera <sanczes AT gmail.com>
+% Date:    2023-08-06 01:23:59 +0200
+% Project: Math Notes
+% Brief:   Utility macros
+%
+% SPDX-License-Identifier: MIT
+%
+\expandafter\ifx\csname (./macros/utils.tex)\endcsname\relax%
+  \expandafter\def\csname (./macros/utils.tex)\endcsname{}%
+\else%
+  \expandafter\endinput%
+\fi%
+%
+\input macros/constants%
+%
+\let\do\relax%
+\let\next\relax%
+%
+\def\afterfi #1\fi{\fi#1}%
+\def\afterfifi #1\fi\fi{\fi\fi#1}%
+%
+\def\namelet #1{\expandafter\let\csname #1\endcsname}%
+\def\nameslet #1#2{%
+  \expandafter\let\csname #1\expandafter\endcsname\csname #2\endcsname%
+}%
+\def\namedef #1{\expandafter\def\csname #1\endcsname}%
+\def\nameedef #1{\expandafter\edef\csname #1\endcsname}%
+%
+\def\applyw #1{\csname #1\endcsname}%
+\def\applycw #1#2{\expandafter#1\csname #2\endcsname}%
+\def\applyww #1#2{\csname #1\expandafter\endcsname\csname #2\endcsname}%
+%
+\def\isdigit #1#2{\ifnum#1>47 \ifnum#1<58 \afterfifi{#2}\fi\fi}%
+\def\isupper #1#2{\ifnum#1>64 \ifnum#1<91 \afterfifi{#2}\fi\fi}%
+\def\islower #1#2{\ifnum#1>96 \ifnum#1<123 \afterfifi{#2}\fi\fi}%
+%
+\def\changecat #1#2{%
+  \namelet{restore@\number`#1@catcode}\empty%
+  \ifnum#2=\catcode`#1\relax\else%
+    \nameedef{restore@\number`#1@catcode}{%
+      \catcode`\noexpand#1=\the\catcode`#1\relax%
+    }%
+    \catcode`#1=#2\relax%
+  \fi%
+}%
+\def\restorecat #1{\applyw{restore@\number`#1@catcode}}%
+\def\makeatletter{\changecat\@\CatLetter}%
+\def\makeatother{\changecat\@\CatOther}%
+%
+\def\ensurereg #1#2#3{%
+  \applycw\ifx{#2}\relax%
+    \applyww{new#1}{#2}%
+  \fi%
+  \applyw{#2}=#3\relax%
+}%
+\nameslet{counta}{count@}%
+\ensurereg{count}{countb}{0}%
+%
+\def\LoopOverCodes #1{%
+  \counta\Zero%
+  \loop%
+    #1%
+    \advance\counta\One%
+    \ifnum\counta<\Cxxviii%
+  \repeat%
+}%
+%
+\def\setparam #1#2{%
+  \ifx#1\undefined\else%
+    #1=#2\relax%
+  \fi%
+}%
+%
+\def\wterm{\immediate\write\Sixteen}%
+%
+\def\FontQuadWidth{\fontdimen6}%
+%
+\endinput%

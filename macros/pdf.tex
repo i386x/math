@@ -1,0 +1,43 @@
+%
+% File:    ./macros/pdf.tex
+% Author:  Jiří Kučera <sanczes AT gmail.com>
+% Date:    2023-08-07 23:33:41 +0200
+% Project: Math Notes
+% Brief:   PDF features macros
+%
+% SPDX-License-Identifier: MIT
+%
+\expandafter\ifx\csname (./macros/pdf.tex)\endcsname\relax%
+  \expandafter\def\csname (./macros/pdf.tex)\endcsname{}%
+\else%
+  \expandafter\endinput%
+\fi%
+\ifx\pdfliteral\undefined%
+  \expandafter\endinput%
+\fi%
+%
+\input macros/utils
+%
+\makeatletter%
+%
+\edef\@page@width{\ifx\paperwidth\undefined 210 true mm\else\paperwidth\fi}%
+\edef\@page@height{\ifx\paperheight\undefined 297 true mm\else\paperheight\fi}%
+%
+\setparam\pdfoutput{1}%
+\setparam\pdfminorversion{5}%
+\setparam\pdfcompresslevel{9}%
+\setparam\pdfobjcompresslevel{2}%
+\setparam\pdfdecimaldigits{3}%
+\setparam\pdfhorigin{1 true in}%
+\setparam\pdfvorigin{1 true in}%
+\setparam\pdfpagewidth{\@page@width}%
+\setparam\pdfpageheight{\@page@height}%
+\setparam\pdfpkresolution{600}%
+\setparam\pdfimageresolution{72}%
+\setparam\pdfimagehicolor{1}%
+\setparam\pdfimageapplygamma{1}%
+\setparam\pdfgamma{1000}%
+\setparam\pdfimagegamma{2200}%
+%
+\restorecat\@%
+\endinput%

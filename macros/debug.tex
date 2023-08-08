@@ -1,0 +1,67 @@
+%
+% File:    ./macros/debug.tex
+% Author:  Jiří Kučera <sanczes AT gmail.com>
+% Date:    2023-08-06 19:29:56 +0200
+% Project: Math Notes
+% Brief:   Debugging
+%
+% SPDX-License-Identifier: MIT
+%
+\expandafter\ifx\csname (./macros/debug.tex)\endcsname\relax%
+  \expandafter\def\csname (./macros/debug.tex)\endcsname{}%
+\else%
+  \expandafter\endinput%
+\fi%
+%
+\input macros/utils%
+%
+\makeatletter%
+%
+\ensurereg{count}{debuglevel}{0}%
+\ensurereg{count}{@pages@shipped}{0}%
+\ensurereg{count}{showpage}{0}%
+\newbox\@page@box%
+%
+\def\debug #1#2{\ifnum#1>\debuglevel\else\wterm{#2}\fi}%
+\def\showentirebox #1{{%
+  \showboxbreadth\maxdimen%
+  \showboxdepth\maxdimen%
+  \showbox#1%
+}}%
+%
+\def\@clrevrbox{\everyhbox{}\everyvbox{}}%
+\let\@shipout\shipout%
+\def\@@shipout{\futurelet\next\@@shipout@cont}%
+\def\@@shipout@cont{%
+  \ifx\next\@clrevrbox%
+    % We are inside box group (the \@sentinel was inserted by \every[hv]box)
+    \expandafter\aftergroup\expandafter\@@shipout@do%
+  \else%
+    % Ordinary box register assignment
+    \expandafter\@@shipout@do%
+  \fi%
+}%
+\def\@@shipout@do{%
+  \@clrevrbox%
+  \global\advance\@pages@shipped\One%
+  \ifnum\showpage=\@pages@shipped%
+    \showentirebox\@page@box%
+  \fi%
+  \@shipout\box\@page@box%
+}%
+\def\shipout{%
+  % Box specification has two flavors:
+  %   1. \box <number>
+  %   2. \vbox | \vtop | \hbox {...}
+  % When the latter is used in \setbox, \afterassignment inserts a token right
+  % after {, before \everyhbox, \everyvbox. The following code must distinguish
+  % between these two cases.
+  \everyhbox{\@clrevrbox}\everyvbox{\@clrevrbox}%
+  \afterassignment\@@shipout%
+  \setbox\@page@box%
+}%
+%
+\scrollmode%
+%
+\restorecat\@%
+\endinput%

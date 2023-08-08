@@ -7,564 +7,83 @@
 %
 % SPDX-License-Identifier: MIT
 %
-% =============================================================================
-% == Auxiliary macros and registers                                          ==
-% =============================================================================
-\def\makeatletter{\catcode`\@=11 }%
-\def\makeatother{\catcode`\@=12 }%
-\makeatletter%
+\input macros/document%
+\input macros/newtx%
 %
-\newcount\tempcnt@i \tempcnt@i=0 %
+\paperwidth 210mm%
+\paperheight 297mm%
 %
-\def\setparam #1#2{%
-  \ifx#1\undefined\else%
-    #1=#2\relax%
-  \fi%
-}%
-% =============================================================================
-% == Text                                                                    ==
-% =============================================================================
-\newbox\strutbox%
-% - Fonts:
-\defaulthyphenchar=`\-%
-\defaultskewchar=-1 %
-\font\tenntxregt=ntx-Regular-tlf-t1\relax%
-\font\tenntxit=ntx-Italic-tlf-t1\relax%
-\font\tentxtt=t1xtt\relax \hyphenchar\tentxtt=-1 %
-\font\ninentxregt=ntx-Regular-tlf-t1 at 8.5pt\relax%
-\font\fnmarkref=ntx-Regular-tlf-t1 at 7.3pt\relax%
-\font\fnmarktext=ntx-Regular-tlf-t1 at 6.20496pt\relax%
-% - Boxes:
-\boxmaxdepth=\maxdimen%
-% - Spaces:
-\sfcode`\'=0 \sfcode`\)=0 \sfcode`\]=0 \sfcode`\.=1000 \sfcode`\?=1000 %
-\sfcode`\!=1000 \sfcode`\:=1000 \sfcode`\;=1000 \sfcode`\,=1000 %
-\spaceskip=0pt\relax%
-\xspaceskip=0pt\relax%
-% - Hyphenation:
-\uchyph=1 %
-% - Switches:
-\def\makestrutbox{%
-  \setbox\strutbox=\hbox{%
-    \vrule width 0pt height 0.7\baselineskip depth 0.3\baselineskip%
-  }%
-}%
+\input macros/pdf%
+%
+% Text switches:
 \def\normal{%
-  \tenntxregt%
-  \baselineskip=12pt\relax%
-  \abovedisplayskip=10pt\relax%
-  \belowdisplayskip=\abovedisplayskip\relax%
-  \abovedisplayshortskip=0pt\relax%
-  \belowdisplayshortskip=6pt\relax%
+  \tenrm%
+  \baselineskip 12\Unit%
+  \abovedisplayskip 10\Unit%
+  \belowdisplayskip\abovedisplayskip%
+  \abovedisplayshortskip\ZeroUnit%
+  \belowdisplayshortskip 6\Unit%
   \makestrutbox%
   \def\fnmarkfont{%
-    \fnmarkref%
-    \baselineskip=7.3pt\relax%
+    \sevenrm%
+    \baselineskip\FontQuadWidth\sevenrm%
   }%
 }%
 \def\small{%
-  \ninentxregt%
-  \baselineskip=10pt\relax%
-  \abovedisplayskip=8.5pt\relax%
-  \belowdisplayskip=\abovedisplayskip\relax%
-  \abovedisplayshortskip=0pt\relax%
-  \belowdisplayshortskip=4pt\relax%
+  \ninerm%
+  \baselineskip 10\Unit%
+  \abovedisplayskip 8.5\Unit%
+  \belowdisplayskip\abovedisplayskip%
+  \abovedisplayshortskip\ZeroUnit%
+  \belowdisplayshortskip 4\Unit%
   \makestrutbox%
   \def\fnmarkfont{%
-    \fnmarktext%
-    \baselineskip=6.20496pt\relax%
+    \sixrm%
+    \baselineskip\FontQuadWidth\sixrm%
   }%
 }%
-\normal%
 % =============================================================================
-% == Alignment                                                               ==
+% == Title pages                                                             ==
 % =============================================================================
-\tabskip=0pt\relax%
-% =============================================================================
-% == Math                                                                    ==
-% =============================================================================
-% - Fonts:
-\font\tenntxregm=ntx-Regular-tlf-ot1\relax%
-\font\sevenntxregm=ntx-Regular-tlf-ot1 at 7.3pt\relax%
-\font\fiventxregm=ntx-Regular-tlf-ot1 at 5.5pt\relax%
-\font\tenntxmi=ntxmi0\relax%
-\skewchar\tenntxmi=127 %
-\font\sevenntxmi=ntxmi07 at 7.3pt\relax%
-\skewchar\sevenntxmi=127 %
-\font\fiventxmi=ntxmi05 at 5.5pt\relax%
-\skewchar\fiventxmi=127 %
-\font\tenntxsym=ntxsy\relax%
-\skewchar\tenntxsym=120 %
-\font\sevenntxsym=ntxsy7 at 7.3pt\relax%
-\skewchar\sevenntxsym=120 %
-\font\fiventxsym=ntxsy5 at 5.5pt\relax%
-\skewchar\fiventxsym=120 %
-\font\tenntxex=ntxexx\relax%
-\font\sevenntxex=ntxexx at 7.3pt\relax%
-\font\fiventxex=ntxexx at 5.5pt\relax%
-% - Spaces:
-\mathsurround=0pt\relax%
-\scriptspace=0.5pt\relax%
-\thinmuskip=3mu\relax%
-\medmuskip=4mu plus 2mu minus 4mu\relax%
-\thickmuskip=5mu plus 5mu\relax%
-% - Penalties:
-\binoppenalty=700 %
-\relpenalty=500 %
-\displaywidowpenalty=50 %
-\predisplaypenalty=0 %
-\postdisplaypenalty=0 %
-% - Math codes:
-\def\resetmathcodes{%
-  % Reset \mathcodes to their IniTeX values:
-  \count@=0 %
-  \loop%
-    \tempcnt@i="\ifnum\count@>47 %
-      \ifnum\count@<58 %
-        % Digits:
-        7000 % 48..57
-      \else% >= 58
-        \ifnum\count@>64 %
-          \ifnum\count@<91 %
-            % Upper case letters:
-            7100 % 65..90
-          \else% >= 91
-            \ifnum\count@>96 %
-              \ifnum\count@<123 %
-                % Lower case letters:
-                7100 % 97..122
-              \else% >= 123
-                0000 % 123..127
-              \fi%
-            \else% >= 91 and <= 96
-              0000 % 91..96
-            \fi%
-          \fi%
-        \else% >= 58 and <= 64
-          0000 % 58..64
-        \fi%
-      \fi%
-    \else% >= 0 and <= 47
-      0000 % 0..47
-    \fi%
-    \advance\tempcnt@i\count@%
-    \mathcode\count@=\tempcnt@i%
-    \advance\count@ by 1 %
-    \ifnum\count@<128 %
-  \repeat%
-}%
-\resetmathcodes%
-\mathcode`\ ="8000 \mathcode`\'="8000 \mathcode`\_="8000 %
-% - Delimiters:
-\nulldelimiterspace=1.2pt\relax%
-\delimiterfactor=901 %
-\delimitershortfall=5pt\relax%
-\def\resetdelcodes{%
-  % Reset \delcodes to their IniTeX values:
-  \count@=0 %
-  \loop%
-    \delcode\count@=-1 %
-    \advance\count@ by 1 %
-    \ifnum\count@<128 %
-  \repeat%
-  \delcode`\.=0 %
-}%
-\resetdelcodes%
-% - Math switches:
-\def\normalmath{%
-  \textfont0=\tenntxregm%
-  \scriptfont0=\sevenntxregm%
-  \scriptscriptfont0=\fiventxregm%
-  \textfont1=\tenntxmi%
-  \scriptfont1=\sevenntxmi%
-  \scriptscriptfont1=\fiventxmi%
-  \textfont2=\tenntxsym%
-  \scriptfont2=\sevenntxsym%
-  \scriptscriptfont2=\fiventxsym%
-  \textfont3=\tenntxex%
-  \scriptfont3=\sevenntxex%
-  \scriptscriptfont3=\fiventxex%
-  %
-  \mathcode`\.="013A \mathcode`\\="026E \mathcode`\|="026A %
-  \mathcode`\*="2203 \mathcode`+="22CF \mathcode`\-="2200 %
-  \mathcode`\:="303A \mathcode`\<="313C \mathcode`\=="343D \mathcode`\>="313E %
-  \mathcode`\(="42B9 \mathcode`\)="52BA \mathcode`\[="42BB \mathcode`\]="52BC %
-  \mathcode`\!="5021 \mathcode`\/="429D \mathcode`\?="503F %
-  \mathcode`\,="613B \mathcode`\;="603B %
-  %
-  \delcode`\(="2B9300 \delcode`\)="2BA301 %
-  \delcode`\/="29D30E \delcode`\\="26E30F %
-  \delcode`\<="26830A \delcode`\>="26930B %
-  \delcode`\[="2BB302 \delcode`\]="2BC303 %
-  \delcode`\|="26A30C %
-}%
-\normalmath%
-% =============================================================================
-% == Paragraph                                                               ==
-% =============================================================================
-% - Boxes:
-\hfuzz=2pt\relax%
-\hbadness=1000 %
-% - Passes:
-\pretolerance=100 %
-\tolerance=500 %
-\emergencystretch=0pt\relax%
-% - Shape spaces:
-\hangindent=0pt\relax%
-\hangafter=1 %
-\parindent=12pt\relax%
-\leftskip=0pt\relax%
-\rightskip=0pt\relax%
-\parfillskip=0pt plus 1fil\relax%
-% - Demerits:
-\adjdemerits=10000 %
-\doublehyphendemerits=10000 %
-\finalhyphendemerits=5000 %
-% - Penalties:
-\linepenalty=10 %
-\interlinepenalty=0 %
-\hyphenpenalty=50 %
-\exhyphenpenalty=50 %
-\brokenpenalty=100 %
-\clubpenalty=10000 %
-\widowpenalty=10000 %
-% - Interline spaces:
-% \baselineskip is set in text switch
-\lineskiplimit=0pt\relax%
-\lineskip=1pt\relax%
-% - Looseness:
-\looseness=0 %
-% - Space between two adjacent paragraphs:
-\parskip=0pt plus 1pt\relax%
-% - Switches:
-\def\sloppy{%
-  \tolerance=9999 %
-  \emergencystretch=3em\relax%
-  \hfuzz=0.5pt\relax%
-  \vfuzz=\hfuzz%
-}%
-\def\parboxrestore{%
-  \parindent=0pt\relax%
-  \leftskip=0pt\relax%
-  \rightskip=0pt\relax%
-  \parfillskip=0pt plus 1fil\relax%
-  \lineskiplimit=0pt\relax%
-  \lineskip=1pt\relax%
-  \parskip=0pt\relax%
-  \sloppy%
-}%
-% =============================================================================
-% == Page                                                                    ==
-% =============================================================================
-% - Boxes:
-\vfuzz=0.1pt\relax%
-\vbadness=1000 %
-\maxdepth=5pt\relax%
-\prevdepth=-1000pt\relax%
-% - Layout:
-\newdimen\sidemargin%
-\newdimen\headheight%
-\newdimen\headsep%
-\newdimen\footskip%
-%
-\topskip=10pt\relax%
-\hsize=117mm\relax%
-\vsize=191mm\relax%
-\sidemargin=63pt\relax%
-\headheight=12pt\relax%
-\headsep=12pt\relax%
-\footskip=30pt\relax%
-% - Floats:
-\newinsert\botins%
-\newskip\floatsep%
-\newskip\textfloatsep%
-\newskip\fptop%
-\newskip\fpsep%
-\newskip\fpbot%
-%
-\floatsep=12pt plus 2pt minus 2pt\relax%
-\textfloatsep=24pt plus 2pt minus 4pt\relax%
-\fptop=0pt\relax%
-\fpsep=12pt\relax%
-\fpbot=0pt plus 1fil\relax%
-\dimen0=\floatsep%
-\skip0=\textfloatsep%
-\advance\skip0 by -\dimen0 %
-\count\topins=1000 %
-\dimen\topins=\maxdimen%
-\skip\topins=\skip0 %
-\count\botins=1000 %
-\dimen\botins=\maxdimen%
-\skip\botins=\skip0 %
-\count\footins=1000 %
-\dimen\footins=8in\relax%
-\skip\footins=9pt plus 4pt minus 2pt\relax%
-\floatingpenalty=0 %
-%
-\def\binsert #1{%
-  \par%
-  #1%
+\font\coverfont=NotoSans-Bold-tlf-t1 at 62pt\relax%
+\font\coversubfont=ntx-Italic-tlf-t1 at 25pt\relax%
+\def\frontcover{%
   \begingroup%
-    \setbox0=\vbox\bgroup%
-}%
-\def\einsert #1{%
-    \egroup%
-    \insert#1{%
-      \penalty 100 %
-      \splittopskip=0pt\relax%
-      \splitmaxdepth=\maxdimen%
-      \floatingpenalty=0 %
-      \offinterlineskip%
-      \box0%
-      \nobreak%
-      \vskip\floatsep%
+    \fullpage%
+    \setbox0=\hbox{\coverfont Math Notes}%
+    \dimen0=\hsize%
+    \advance\dimen0-\wd0 %
+    \dimen1=62pt %
+    \vbox to\paperheight{%
+      \pdfliteral{0.5 0.5 0 0 k}%
+      \rlap{\vrule width\paperwidth height\paperheight depth 0pt\relax}%
+      \kern -.75\vsize\relax%
+      \moveright .5\dimen0\vbox{%
+        \pdfliteral{1 g 1 G}%
+        \hrule width\wd0 height 1.6pt depth 0pt\relax%
+        \kern 5.6pt\relax%
+        \hrule width\wd0 height 4.8pt depth 0pt\relax%
+        \kern .125\dimen1 %
+        \copy0 %
+        \kern 2\dp0 %
+        \kern .125\dimen1 %
+        \hrule width\wd0 height 4.8pt depth 0pt\relax%
+        \kern 5.6pt\relax%
+        \hrule width\wd0 height 1.6pt depth 0pt\relax%
+        \kern .125\dimen1%
+        \hbox to\wd0{\coversubfont\hss from Mathematical Logic}%
+        \pdfliteral{0 g 0 G}%
+      }%
+      \vfill%
+      \pdfliteral{0 g}%
     }%
+    \eject%
   \endgroup%
 }%
-%
-\newdimen\footnotesep%
-\newcount\fncount \fncount=0 %
-\edef\thefncount{\the\fncount}%
-\def\makefnmark{%
-  \hbox{\mathsurround=0pt $\relax^{\hbox{\fnmarkfont\thefncount}}$}%
-}%
-\def\makefntext #1{%
-  \parindent=12pt\relax%
-  \noindent%
-  \leavevmode\hbox{\makefnmark} #1%
-}%
-\interfootnotelinepenalty=100 %
-\footnotesep=9pt\relax%
-\def\footnote #1{%
-  \global\advance\fncount by 1%
-  \xdef\thefncount{\the\fncount}%
-  \leavevmode%
-  \edef\@tempsf{\the\spacefactor}%
-  \nobreak%
-  \makefnmark%
-  \spacefactor=\@tempsf\relax%
-  \insert\footins{%
-    \small%
-    \interlinepenalty=\interfootnotelinepenalty%
-    \splittopskip=\footnotesep%
-    \splitmaxdepth=\dp\strutbox%
-    \floatingpenalty=\@MM%
-    \parboxrestore%
-    \makefntext{%
-      \vrule width 0pt height \footnotesep depth 0pt\relax%
-      \ignorespaces%
-      #1%
-      \unskip%
-      \ifhmode\nobreak\fi%
-      \vrule width 0pt height 0pt depth \dp\strutbox\relax%
-    }%
-  }%
-}%
-\def\footnoterule{%
-  \kern -3pt%
-  \hrule width 36mm%
-  \kern 2.6pt\relax%
-}%
-% - Splitting:
-\splittopskip=\topskip%
-\splitmaxdepth=\maxdimen%
-% - Output:
-\let\@the@head\empty%
-\let\@the@foot\empty%
-\let\@ragged@bottom\empty%
-\maxdeadcycles=100 %
-%
-\def\normalbottom{%
-  \let\@ragged@bottom\empty%
-}%
-\def\raggedbottom{%
-  \def\@ragged@bottom{\vskip 0pt plus 0.0001fil\relax}%
-}%
-\def\supereject{%
-  \par%
-  \hbox to \hsize{}%
-  \nobreak%
-  \vfill%
-  \penalty-\@MM%
-}%
-\def\notesoutput{%
-  \shipout\vbox{%
-    \offinterlineskip%
-    \moveright\sidemargin\vbox{%
-      \makeheadline%
-      \makepage%
-      \makefootline%
-    }%
-  }%
-  \advancepageno%
-  \ifnum\outputpenalty>-\@MM\else%
-    \ifnum\insertpenalties>0%
-      \supereject%
-    \fi%
-  \fi%
-}%
-\def\makeheadline{%
-  \setbox0=\vbox to \headheight{%
-    \vfil%
-    \hbox to \hsize{\@the@head}%
-  }%
-  \dp0=0pt%
-  \box0%
-  \vskip\headsep%
-}%
-\def\makepage{%
-  \ifnum\outputpenalty>-\@MM\else%
-    % What contains the tail of \box255 when we arrive here?
-    % If we get here by \end, it means that the page break was chosen before
-    % \hbox to \hsize{} (because after this box all elements, including the
-    % \penalty -2^30, are discardable). Similarly to \supereject, where we also
-    % forbid break between \hbox to \hsize{} and \penalty-\@MM so these are
-    % always together (preferring \supereject over \end prevents
-    % \hbox to \hsize{} to be the last element on a page).
-    %
-    % We are now about to cut the tail and measure the \box255 without it to
-    % see if there are some lines of text remaining or the recent page will
-    % contain only floats.
-    \setbox255=\vbox{%
-      \count@=10 % prevent infinite loop
-      \boxmaxdepth=\maxdepth%
-      \unvbox255 %
-      \loop%
-        \advance\count@ by -1%
-        \unskip\unpenalty%
-        \ifnum\count@>0%
-          \setbox0=\lastbox%
-        \else%
-          \setbox0=\hbox{}% this stops the loop
-        \fi%
-        \ifvoid0 %
-      \repeat%
-      % Remove \topskip or \baselineskip:
-      \unskip%
-    }%
-  \fi%
-  \dimen0=\ht255 %
-  \advance\dimen0 by \dp255 %
-  \ifdim\dimen0>.5\topskip%
-    \makepageT%
-  \else%
-    \makepageF%
-  \fi%
-}%
-\def\makepageT{%
-  \setbox0=\box255 %
-  \ifvoid\topins\else%
-    \setbox0=\vbox{%
-      \boxmaxdepth=\maxdepth%
-      \unvbox\topins%
-      \unskip%
-      \vskip\textfloatsep%
-      \unvbox0%
-    }%
-  \fi%
-  \ifvoid\botins\else%
-    \setbox0=\vbox{%
-      \unvbox0%
-      \vskip\textfloatsep%
-      \unvbox\botins%
-      \unskip%
-    }%
-  \fi%
-  \ifvoid\footins\else%
-    \setbox0=\vbox{%
-      \boxmaxdepth=\maxdepth%
-      \unvbox0%
-      \vskip\skip\footins%
-      \footnoterule%
-      \unvbox\footins%
-    }%
-  \fi%
-  \setbox0=\vbox to \vsize{%
-    \dimen0=\dp0%
-    \unvbox0%
-    \vskip-\dimen0 %
-    \@ragged@bottom%
-  }%
-  \box0%
-}%
-\def\makepageF{%
-  % Clear the page box (it should have no content):
-  {\setbox0=\box255}%
-  \setbox0=\vbox{%
-    \def\@reset@count@{\count@=25 }%
-    \@reset@count@%
-    \boxmaxdepth=\maxdepth%
-    \offinterlineskip%
-    \global\setbox1=\vbox{}%
-    \unvbox\topins%
-    \unvbox\botins%
-    \loop%
-      \unskip\unpenalty%
-      \setbox0=\lastbox%
-      \ifvoid0\advance\count@-1 \fi%
-      \ifvbox0 %
-        \@reset@count@%
-        \global\setbox1=\vbox{\box0\vskip\fpsep\unvbox1}%
-      \fi%
-      \ifnum\count@>0 %
-    \repeat%
-  }%
-  \dimen1=\ht1%
-  \advance\dimen1 by \dp1 %
-  \ifvoid\footins%
-    % Only floats:
-    \ifdim\dimen1>.5\topskip%
-      \setbox0=\vbox to \vsize{%
-        \vskip\fptop%
-        \unvbox1%
-        \unskip%
-        \vskip\fpbot%
-      }%
-    \else%
-      \setbox0=\vbox to 0pt{}%
-    \fi%
-  \else%
-    \setbox1=\vbox{%
-      \boxmaxdepth=\maxdepth%
-      \ifdim\dimen1>.5\topskip%
-        % Footnotes goes after floats:
-        \unvbox1%
-        \unskip%
-        \vskip\skip\footins%
-        \footnoterule%
-      \else%
-        % Footnotes goes on the separate page:
-        \setbox0=\vtop{\unvcopy\footins}%
-        \skip0=\topskip%
-        \advance\skip0 by -\ht0 %
-        \ifdim\skip0>0pt\vskip\skip0 \fi% \topskip
-      \fi%
-      \unvbox\footins%
-    }%
-    \setbox0=\vbox to \vsize{%
-      \dimen1=\dp1%
-      \unvbox1%
-      \vskip-\dimen1 %
-      \@ragged@bottom%
-    }%
-  \fi%
-  \ifdim\ht0>0pt\box0\fi%
-}%
-\def\makefootline{%
-  \baselineskip=\footskip \lineskiplimit=0pt\relax%
-  \hbox to \hsize{\@the@foot}%
-}%
-\output{\notesoutput}%
-% =============================================================================
-% == PDF                                                                     ==
-% =============================================================================
-% - Output:
-\setparam\pdfoutput{1}%
-\setparam\pdfdecimaldigits{3}%
-\setparam\pdfpagewidth{210 true mm}%
-\setparam\pdfpageheight{297 true mm}%
 % =============================================================================
 % == End of notes.tex                                                        ==
 % =============================================================================
-\makeatother%
+\restorecat\@%
+\normalmath%
+\normal%
 \endinput%
