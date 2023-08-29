@@ -16,7 +16,9 @@
 \chardef\CatLetter=11%
 \chardef\CatOther=12%
 %
-\edef\RestoreAtCatCode{\catcode`@=\the\catcode`@\relax}%
+\expandafter\edef\csname @restore@\number`\@@catcode\endcsname{%
+  \catcode`\noexpand\@=\the\catcode`\@\relax%
+}%
 \catcode`\@\CatLetter%
 %
 \chardef\Zero=0%
@@ -38,5 +40,5 @@
 %
 \let\VoidBox\voidb@x%
 %
-\RestoreAtCatCode%
+\csname @restore@\number`\@@catcode\endcsname%
 \endinput%

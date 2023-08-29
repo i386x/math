@@ -1,0 +1,358 @@
+%
+% File:    ./macros/t1.tex
+% Author:  Jiří Kučera <sanczes AT gmail.com>
+% Date:    2023-08-10 03:18:29 +0200
+% Project: Math Notes
+% Brief:   T1 encoding
+%
+% SPDX-License-Identifier: MIT
+%
+\expandafter\ifx\csname (./macros/t1.tex)\endcsname\relax%
+  \expandafter\def\csname (./macros/t1.tex)\endcsname{}%
+\else%
+  \expandafter\endinput%
+\fi%
+%
+\input macros/utils%
+%
+\catcode"80\CatLetter% \u A
+\catcode"81\CatLetter% \k A
+\catcode"82\CatLetter% \' C
+\catcode"83\CatLetter% \v C
+\catcode"84\CatLetter% \v D
+\catcode"85\CatLetter% \v E
+\catcode"86\CatLetter% \k E
+\catcode"87\CatLetter% \u G
+\catcode"88\CatLetter% \' L
+\catcode"89\CatLetter% \v L
+\catcode"8A\CatLetter% \L
+\catcode"8B\CatLetter% \' N
+\catcode"8C\CatLetter% \v N
+\catcode"8E\CatLetter% \H O
+\catcode"8F\CatLetter% \' R
+\catcode"90\CatLetter% \v R
+\catcode"91\CatLetter% \' S
+\catcode"92\CatLetter% \v S
+\catcode"93\CatLetter% \c S
+\catcode"94\CatLetter% \v T
+\catcode"95\CatLetter% \c T
+\catcode"96\CatLetter% \H U
+\catcode"97\CatLetter% \r U
+\catcode"98\CatLetter% \" Y
+\catcode"99\CatLetter% \' Z
+\catcode"9A\CatLetter% \v Z
+\catcode"9B\CatLetter% \. Z
+\catcode"9D\CatLetter% \. I
+\catcode"A0\CatLetter% \u a
+\catcode"A1\CatLetter% \k a
+\catcode"A2\CatLetter% \' c
+\catcode"A3\CatLetter% \v c
+\catcode"A4\CatLetter% \v d
+\catcode"A5\CatLetter% \v e
+\catcode"A6\CatLetter% \k e
+\catcode"A7\CatLetter% \u g
+\catcode"A8\CatLetter% \' l
+\catcode"A9\CatLetter% \v l
+\catcode"AA\CatLetter% \l
+\catcode"AB\CatLetter% \' n
+\catcode"AC\CatLetter% \v n
+\catcode"AE\CatLetter% \H o
+\catcode"AF\CatLetter% \' r
+\catcode"B0\CatLetter% \v r
+\catcode"B1\CatLetter% \' s
+\catcode"B2\CatLetter% \v s
+\catcode"B3\CatLetter% \c s
+\catcode"B4\CatLetter% \v t
+\catcode"B5\CatLetter% \c t
+\catcode"B6\CatLetter% \H u
+\catcode"B7\CatLetter% \r u
+\catcode"B8\CatLetter% \" y
+\catcode"B9\CatLetter% \' z
+\catcode"BA\CatLetter% \v z
+\catcode"BB\CatLetter% \. z
+\catcode"C0\CatLetter% \` A
+\catcode"C1\CatLetter% \' A
+\catcode"C2\CatLetter% \^ A
+\catcode"C3\CatLetter% \~ A
+\catcode"C4\CatLetter% \" A
+\catcode"C5\CatLetter% \r A
+\catcode"C7\CatLetter% \c C
+\catcode"C8\CatLetter% \` E
+\catcode"C9\CatLetter% \' E
+\catcode"CA\CatLetter% \^ E
+\catcode"CB\CatLetter% \" E
+\catcode"CC\CatLetter% \` I
+\catcode"CD\CatLetter% \' I
+\catcode"CE\CatLetter% \^ I
+\catcode"CF\CatLetter% \" I
+\catcode"D1\CatLetter% \~ N
+\catcode"D2\CatLetter% \` O
+\catcode"D3\CatLetter% \' O
+\catcode"D4\CatLetter% \^ O
+\catcode"D5\CatLetter% \~ O
+\catcode"D6\CatLetter% \" O
+\catcode"D8\CatLetter% \O
+\catcode"D9\CatLetter% \` U
+\catcode"DA\CatLetter% \' U
+\catcode"DB\CatLetter% \^ U
+\catcode"DC\CatLetter% \" U
+\catcode"DD\CatLetter% \' Y
+\catcode"DF\CatLetter% \SS
+\catcode"E0\CatLetter% \` a
+\catcode"E1\CatLetter% \' a
+\catcode"E2\CatLetter% \^ a
+\catcode"E3\CatLetter% \~ a
+\catcode"E4\CatLetter% \" a
+\catcode"E5\CatLetter% \r a
+\catcode"E7\CatLetter% \c c
+\catcode"E8\CatLetter% \` e
+\catcode"E9\CatLetter% \' e
+\catcode"EA\CatLetter% \^ e
+\catcode"EB\CatLetter% \" e
+\catcode"EC\CatLetter% \` i \` \i
+\catcode"ED\CatLetter% \' i \' \i
+\catcode"EE\CatLetter% \^ i \^ \i
+\catcode"EF\CatLetter% \" i \" \i
+\catcode"F1\CatLetter% \~ n
+\catcode"F2\CatLetter% \` o
+\catcode"F3\CatLetter% \' o
+\catcode"F4\CatLetter% \^ o
+\catcode"F5\CatLetter% \~ o
+\catcode"F6\CatLetter% \" o
+\catcode"F8\CatLetter% \o
+\catcode"F9\CatLetter% \` u
+\catcode"FA\CatLetter% \' u
+\catcode"FB\CatLetter% \^ u
+\catcode"FC\CatLetter% \" u
+\catcode"FD\CatLetter% \' y
+\catcode"FF\CatLetter% \ss
+%
+\chardef\i="19%
+\chardef\j="1A%
+\chardef\L="8A%
+\chardef\NG="8D%
+\chardef\IJ="9C%
+\chardef\dj="9E%
+\chardef\textsection="9F%
+\chardef\l="AA%
+\chardef\ng="AD%
+\chardef\ij="BC%
+\chardef\textexclamdown="BD%
+\chardef\textquestiondown="BE%
+\chardef\textsterling="BF%
+\chardef\AE="C6%
+\chardef\DH="D0%
+\chardef\DJ="D0%
+\chardef\OE="D7%
+\chardef\O="D8%
+\chardef\TH="DE%
+\chardef\SS="DF%
+\chardef\ae="E6%
+\chardef\dh="F0%
+\chardef\oe="F7%
+\chardef\o="F8%
+\chardef\th="FE%
+\chardef\ss="FF%
+%
+\lcucpair{"A0}{"80}%
+\lcucpair{"A1}{"81}%
+\lcucpair{"A2}{"82}%
+\lcucpair{"A3}{"83}%
+\lcucpair{"A4}{"84}%
+\lcucpair{"A5}{"85}%
+\lcucpair{"A6}{"86}%
+\lcucpair{"A7}{"87}%
+\lcucpair{"A8}{"88}%
+\lcucpair{"A9}{"89}%
+\lcucpair{"AA}{"8A}%
+\lcucpair{"AB}{"8B}%
+\lcucpair{"AC}{"8C}%
+\lcucpair{"AD}{"8D}%
+\lcucpair{"AE}{"8E}%
+\lcucpair{"AF}{"8F}%
+\lcucpair{"B0}{"90}%
+\lcucpair{"B1}{"91}%
+\lcucpair{"B2}{"92}%
+\lcucpair{"B3}{"93}%
+\lcucpair{"B4}{"94}%
+\lcucpair{"B5}{"95}%
+\lcucpair{"B6}{"96}%
+\lcucpair{"B7}{"97}%
+\lcucpair{"B8}{"98}%
+\lcucpair{"B9}{"99}%
+\lcucpair{"BA}{"9A}%
+\lcucpair{"BB}{"9B}%
+\lcucpair{"BC}{"9C}%
+\lcucpair{"E0}{"C0}%
+\lcucpair{"E1}{"C1}%
+\lcucpair{"E2}{"C2}%
+\lcucpair{"E3}{"C3}%
+\lcucpair{"E4}{"C4}%
+\lcucpair{"E5}{"C5}%
+\lcucpair{"E6}{"C6}%
+\lcucpair{"E7}{"C7}%
+\lcucpair{"E8}{"C8}%
+\lcucpair{"E9}{"C9}%
+\lcucpair{"EA}{"CA}%
+\lcucpair{"EB}{"CB}%
+\lcucpair{"EC}{"CC}%
+\lcucpair{"ED}{"CD}%
+\lcucpair{"EE}{"CE}%
+\lcucpair{"EF}{"CF}%
+\lcucpair{"F0}{"D0}%
+\lcucpair{"9E}{"D0}%
+\lcucpair{"F1}{"D1}%
+\lcucpair{"F2}{"D2}%
+\lcucpair{"F3}{"D3}%
+\lcucpair{"F4}{"D4}%
+\lcucpair{"F5}{"D5}%
+\lcucpair{"F6}{"D6}%
+\lcucpair{"F7}{"D7}%
+\lcucpair{"F8}{"D8}%
+\lcucpair{"F9}{"D9}%
+\lcucpair{"FA}{"DA}%
+\lcucpair{"FB}{"DB}%
+\lcucpair{"FC}{"DC}%
+\lcucpair{"FD}{"DD}%
+\lcucpair{"FE}{"DE}%
+\lcucpair{"FF}{"DF}%
+%
+\def\` #1{%
+  \ifx A#1^^c0\else%
+  \ifx E#1^^c8\else%
+  \ifx I#1^^cc\else%
+  \ifx O#1^^d2\else%
+  \ifx U#1^^d9\else%
+  \ifx a#1^^e0\else%
+  \ifx e#1^^e8\else%
+  \ifx i#1^^ec\else%
+  \ifx\i#1^^ec\else%
+  \ifx o#1^^f2\else%
+  \ifx u#1^^f9\else%
+}%
+\def\' #1{%
+  \ifx C#1^^82\else%
+  \ifx L#1^^88\else%
+  \ifx N#1^^8b\else%
+  \ifx R#1^^8f\else%
+  \ifx S#1^^91\else%
+  \ifx Z#1^^99\else%
+  \ifx c#1^^a2\else%
+  \ifx l#1^^a8\else%
+  \ifx n#1^^ab\else%
+  \ifx r#1^^af\else%
+  \ifx s#1^^b1\else%
+  \ifx z#1^^b9\else%
+  \ifx A#1^^c1\else%
+  \ifx E#1^^c9\else%
+  \ifx I#1^^cd\else%
+  \ifx O#1^^d3\else%
+  \ifx U#1^^da\else%
+  \ifx Y#1^^dd\else%
+  \ifx a#1^^e1\else%
+  \ifx e#1^^e9\else%
+  \ifx i#1^^ed\else%
+  \ifx\i#1^^ed\else%
+  \ifx o#1^^f3\else%
+  \ifx u#1^^fa\else%
+  \ifx y#1^^fd\else%
+}%
+\def\^ #1{%
+  \ifx A#1^^c2\else%
+  \ifx E#1^^ca\else%
+  \ifx I#1^^ce\else%
+  \ifx O#1^^d4\else%
+  \ifx U#1^^db\else%
+  \ifx a#1^^e2\else%
+  \ifx e#1^^ea\else%
+  \ifx i#1^^ee\else%
+  \ifx\i#1^^ee\else%
+  \ifx o#1^^f4\else%
+  \ifx u#1^^fb\else%
+}%
+\def\" #1{%
+  \ifx Y#1^^98\else%
+  \ifx y#1^^b8\else%
+  \ifx A#1^^c4\else%
+  \ifx E#1^^cb\else%
+  \ifx I#1^^cf\else%
+  \ifx O#1^^d6\else%
+  \ifx U#1^^dc\else%
+  \ifx a#1^^e4\else%
+  \ifx e#1^^eb\else%
+  \ifx i#1^^ef\else%
+  \ifx\i#1^^ef\else%
+  \ifx o#1^^f6\else%
+  \ifx u#1^^fc\else%
+}%
+\def\~ #1{%
+  \ifx A#1^^c3\else%
+  \ifx N#1^^d1\else%
+  \ifx O#1^^d5\else%
+  \ifx a#1^^e3\else%
+  \ifx n#1^^f1\else%
+  \ifx o#1^^f5\else%
+}%
+\def\= #1{}%
+\def\. #1{%
+  \ifx Z#1^^9b\else%
+  \ifx I#1^^9d\else%
+  \ifx z#1^^bb\else%
+}%
+\def\u #1{%
+  \ifx A#1^^80\else%
+  \ifx G#1^^87\else%
+  \ifx a#1^^a0\else%
+  \ifx g#1^^a7\else%
+}%
+\def\v #1{%
+  \ifx C#1^^83\else%
+  \ifx D#1^^84\else%
+  \ifx E#1^^85\else%
+  \ifx L#1^^89\else%
+  \ifx N#1^^8c\else%
+  \ifx R#1^^90\else%
+  \ifx S#1^^92\else%
+  \ifx T#1^^94\else%
+  \ifx Z#1^^9a\else%
+  \ifx c#1^^a3\else%
+  \ifx d#1^^a4\else%
+  \ifx e#1^^a5\else%
+  \ifx l#1^^a9\else%
+  \ifx n#1^^ac\else%
+  \ifx r#1^^b0\else%
+  \ifx s#1^^b2\else%
+  \ifx t#1^^b4\else%
+  \ifx z#1^^ba\else%
+}%
+\def\H #1{%
+  \ifx O#1^^8e\else%
+  \ifx U#1^^96\else%
+  \ifx o#1^^ae\else%
+  \ifx u#1^^b6\else%
+}%
+\def\t #1{}%
+\def\c #1{%
+  \ifx S#1^^93\else%
+  \ifx T#1^^95\else%
+  \ifx s#1^^b3\else%
+  \ifx t#1^^b5\else%
+  \ifx C#1^^c7\else%
+  \ifx c#1^^e7\else%
+}%
+\def\d #1{}%
+\def\b #1{}%
+\def\r #1{%
+  \ifx U#1^^97\else%
+  \ifx u#1^^b7\else%
+  \ifx A#1^^c5\else%
+  \ifx a#1^^e5\else%
+}%
+\def\k #1{%
+  \ifx A#1^^81\else%
+  \ifx E#1^^86\else%
+  \ifx a#1^^a1\else%
+  \ifx e#1^^a6\else%
+}%
+%
+\endinput%

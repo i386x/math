@@ -9,11 +9,19 @@
 %
 \input macros/document%
 \input macros/newtx%
+\input macros/drawing%
 %
 \paperwidth 210mm%
 \paperheight 297mm%
 %
 \input macros/pdf%
+%
+% Extra fonts:
+\font\lxiisf=NotoSans-Bold-tlf-t1 at 62\Unit%
+\font\xxvit=ntx-Italic-tlf-t1 at 25\Unit%
+%
+% Constants:
+\def\MathNotes{Math Notes}%
 %
 % Text switches:
 \def\normal{%
@@ -42,40 +50,37 @@
     \baselineskip\FontQuadWidth\sixrm%
   }%
 }%
-% =============================================================================
-% == Title pages                                                             ==
-% =============================================================================
-\font\coverfont=NotoSans-Bold-tlf-t1 at 62pt\relax%
-\font\coversubfont=ntx-Italic-tlf-t1 at 25pt\relax%
+%
+% Title pages and covers:
 \def\frontcover{%
   \begingroup%
     \fullpage%
-    \setbox0=\hbox{\coverfont Math Notes}%
-    \dimen0=\hsize%
-    \advance\dimen0-\wd0 %
-    \dimen1=62pt %
-    \vbox to\paperheight{%
-      \pdfliteral{0.5 0.5 0 0 k}%
-      \rlap{\vrule width\paperwidth height\paperheight depth 0pt\relax}%
-      \kern -.75\vsize\relax%
-      \moveright .5\dimen0\vbox{%
-        \pdfliteral{1 g 1 G}%
-        \hrule width\wd0 height 1.6pt depth 0pt\relax%
-        \kern 5.6pt\relax%
-        \hrule width\wd0 height 4.8pt depth 0pt\relax%
-        \kern .125\dimen1 %
-        \copy0 %
-        \kern 2\dp0 %
-        \kern .125\dimen1 %
-        \hrule width\wd0 height 4.8pt depth 0pt\relax%
-        \kern 5.6pt\relax%
-        \hrule width\wd0 height 1.6pt depth 0pt\relax%
-        \kern .125\dimen1%
-        \hbox to\wd0{\coversubfont\hss from Mathematical Logic}%
-        \pdfliteral{0 g 0 G}%
+    \textbox\Zero{\lxiisf\@title}%
+    \dimen\Zero\hsize%
+    \advance\dimen\Zero-\wd\Zero%
+    \dimen\One\FontQuadWidth\lxiisf%
+    \vbox to\vsize{%
+      \setcolor cmyk(.5, .5, 0, 0);%
+      \rlap{\vrule width\hsize height\vsize depth\ZeroUnit}%
+      \kern -.75\vsize%
+      \moveright .5\dimen\Zero\vbox{%
+        \setcolor gray(1);%
+        \hrule width\wd\Zero height 1.6\Unit depth\ZeroUnit%
+        \kern 5.6\Unit%
+        \hrule width\wd\Zero height 4.8\Unit depth\ZeroUnit%
+        \kern .125\dimen\One%
+        \copy\Zero%
+        \kern 2\dp\Zero%
+        \kern .125\dimen\One%
+        \hrule width\wd\Zero height 4.8\Unit depth\ZeroUnit%
+        \kern 5.6\Unit%
+        \hrule width\wd\Zero height 1.6\Unit depth\Zero%
+        \kern .125\dimen\One%
+        \hbox to\wd\Zero{\hss\xxvit from \@subject}%
+        \resetcolor%
       }%
       \vfill%
-      \pdfliteral{0 g}%
+      \resetcolor%
     }%
     \eject%
   \endgroup%

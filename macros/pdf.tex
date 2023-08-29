@@ -39,5 +39,9 @@
 \setparam\pdfgamma{1000}%
 \setparam\pdfimagegamma{2200}%
 %
+\def\@setcolor@gray #1{\pdfliteral{#1 g #1 G}}%
+\def\@setcolor@rgb #1#2#3{\pdfliteral{#1 #2 #3 rg #1 #2 #3 RG}}%
+\def\@setcolor@cmyk #1#2#3#4{\pdfliteral{#1 #2 #3 #4 k #1 #2 #3 #4 K}}%
+%
 \restorecat\@%
 \endinput%

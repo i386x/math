@@ -1,0 +1,48 @@
+%
+% File:    ./macros/drawing.tex
+% Author:  Jiří Kučera <sanczes AT gmail.com>
+% Date:    2023-08-08 18:30:12 +0200
+% Project: Math Notes
+% Brief:   Drawing primitives
+%
+% SPDX-License-Identifier: MIT
+%
+\expandafter\ifx\csname (./macros/drawing.tex)\endcsname\relax%
+  \expandafter\def\csname (./macros/drawing.tex)\endcsname{}%
+\else%
+  \expandafter\endinput%
+\fi%
+%
+\input macros/utils%
+%
+\makeatletter%
+%
+\def\setcolor #1({%
+  \strip{#1}\@tempa%
+  \applyw{setcolor@\@tempa}%
+}%
+\def\setcolor@gray #1);{%
+  \strip{#1}\@tempa%
+  \@setcolor@gray\@tempa%
+}%
+\def\setcolor@rgb #1,#2,#3);{%
+  \strip{#3}\@tempc%
+  \strip{#2}\@tempb%
+  \strip{#1}\@tempa%
+  \@setcolor@rgb\@tempa\@tempb\@tempc%
+}%
+\def\setcolor@cmyk #1,#2,#3,#4);{%
+  \strip{#4}\@tempd%
+  \strip{#3}\@tempc%
+  \strip{#2}\@tempb%
+  \strip{#1}\@tempa%
+  \@setcolor@cmyk\@tempa\@tempb\@tempc\@tempd%
+}%
+\def\resetcolor{\setcolor gray(0);}%
+%
+\def\@setcolor@gray #1{}%
+\def\@setcolor@rgb #1#2#3{}%
+\def\@setcolor@cmyk #1#2#3#4{}%
+%
+\restorecat\@%
+\endinput%

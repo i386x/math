@@ -15,8 +15,17 @@
 %
 \input macros/constants%
 %
+\expandafter\edef\csname @restore@\number`\@@catcode\endcsname{%
+  \catcode`\noexpand\@=\the\catcode`\@\relax%
+}%
+\catcode`\@\CatLetter%
+%
+\let\\\relax%
 \let\do\relax%
 \let\next\relax%
+\let\@tempa\relax%
+%
+\def\spacetok:{\let\spacetok= }\spacetok: % the space after : is important
 %
 \def\afterfi #1\fi{\fi#1}%
 \def\afterfifi #1\fi\fi{\fi\fi#1}%
@@ -36,16 +45,39 @@
 \def\isupper #1#2{\ifnum#1>64 \ifnum#1<91 \afterfifi{#2}\fi\fi}%
 \def\islower #1#2{\ifnum#1>96 \ifnum#1<123 \afterfifi{#2}\fi\fi}%
 %
+\def\strip #1{\futurelet\@tempa\@strip@left #1\relax}%
+\def\@strip@left{%
+  \ifx\@tempa\spacetok%
+    \let\next\@strip@left@cont%
+  \else\ifx\@tempa\relax%
+    \def\next:##1\relax##2{\let##2\empty}%
+  \else%
+    \let\next\@strip@right%
+  \fi\fi%
+  \next:%
+}%
+\def\@strip@left@cont: {\futurelet\@tempa\@strip@left}%
+\def\@strip@right:#1\relax{\@strip@right@cont#1\\ \\\relax}%
+\def\@strip@right@cont #1 \\#2\relax{%
+  \if^^@#2^^@%
+    \let\next\@strip@done%
+  \else%
+    \let\next\@strip@right@cont%
+  \fi%
+  \next#1\\ \\\relax%
+}%
+\def\@strip@done #1\\#2\relax#3{\def#3{#1}}%
+%
 \def\changecat #1#2{%
-  \namelet{restore@\number`#1@catcode}\empty%
+  \namelet{@restore@\number`#1@catcode}\empty%
   \ifnum#2=\catcode`#1\relax\else%
-    \nameedef{restore@\number`#1@catcode}{%
+    \nameedef{@restore@\number`#1@catcode}{%
       \catcode`\noexpand#1=\the\catcode`#1\relax%
     }%
     \catcode`#1=#2\relax%
   \fi%
 }%
-\def\restorecat #1{\applyw{restore@\number`#1@catcode}}%
+\def\restorecat #1{\applyw{@restore@\number`#1@catcode}}%
 \def\makeatletter{\changecat\@\CatLetter}%
 \def\makeatother{\changecat\@\CatOther}%
 %
@@ -55,7 +87,7 @@
   \fi%
   \applyw{#2}=#3\relax%
 }%
-\nameslet{counta}{count@}%
+\let\counta\count@%
 \ensurereg{count}{countb}{0}%
 %
 \def\LoopOverCodes #1{%
@@ -65,6 +97,12 @@
     \advance\counta\One%
     \ifnum\counta<\Cxxviii%
   \repeat%
+}%
+\def\lcucpair #1#2{%
+  \lccode#1=#1%
+  \lccode#2=#1%
+  \uccode#1=#2%
+  \uccode#2=#2%
 }%
 %
 \def\setparam #1#2{%
@@ -77,4 +115,7 @@
 %
 \def\FontQuadWidth{\fontdimen6}%
 %
+\def\textbox #1{\setbox#1\hbox}%
+%
+\restorecat\@%
 \endinput%

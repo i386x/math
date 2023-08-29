@@ -364,6 +364,13 @@
   \output{\shipout\box\Cclv \advancepageno}%
 }%
 %
+\def\@title{Title}%
+\def\@subject{Subject}%
+\def\@author{A.U. Thor}%
+\def\title #1{\xdef\@title{#1}}%
+\def\subject #1{\xdef\@subject{#1}}%
+\def\author #1{\xdef\@author{#1}}%
+%
 \restorecat\@%
 \raggedbottom%
 \normal%
