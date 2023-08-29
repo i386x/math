@@ -14,57 +14,172 @@
 \fi%
 %
 \input macros/constants%
+\input macros/utils%
 %
-% Text fonts:
+% Fonts:
+%   - Roman
 \font\tenrm=ntx-Regular-tlf-t1%
 \font\ninerm=ntx-Regular-tlf-t1 at 8.5\Unit%
-\font\sevenrm=ntx-Regular-tlf-t1 at 8.5\Unit%
+\font\sevenrm=ntx-Regular-tlf-t1 at 7.3\Unit%
 \font\sixrm=ntx-Regular-tlf-t1 at 6.20496\Unit%
-\font\tenit=ntx-Italic-tlf-t1%
-\font\tentt=t1xtt%
+\font\fivevrm=ntx-Regular-tlf-t1 at 5.5\Unit%
+\font\fourvirm=ntx-Regular-tlf-t1 at 4.67502\Unit%
+\font\fourrm=ntx-Regular-tlf-t1 at 4.01501\Unit%
+\font\threeivrm=ntx-Regular-tlf-t1 at 3.41273\Unit%
+%   - sans serif
+\font\tensf=NotoSans-Regular-tlf-t1%
+\font\ninesf=NotoSans-Regular-tlf-t1 at 8.5\Unit%
+\font\sevensf=NotoSans-Regular-tlf-t1 at 7.3\Unit%
+\font\sixsf=NotoSans-Regular-tlf-t1 at 6.20496\Unit%
+\font\fivevsf=NotoSans-Regular-tlf-t1 at 5.5\Unit%
+\font\fourvisf=NotoSans-Regular-tlf-t1 at 4.67502\Unit%
+\font\foursf=NotoSans-Regular-tlf-t1 at 4.01501\Unit%
+\font\threeivsf=NotoSans-Regular-tlf-t1 at 3.41273\Unit%
+%   - typewriter
+\font\tentt=NotoSansMono-Regular-tlf-t1%
 \hyphenchar\tentt\MinusOne%
-%
-% Math fonts:
+\font\ninett=NotoSansMono-Regular-tlf-t1 at 8.5\Unit%
+\hyphenchar\ninett\MinusOne%
+\font\seventt=NotoSansMono-Regular-tlf-t1 at 7.3\Unit%
+\hyphenchar\seventt\MinusOne%
+\font\sixtt=NotoSansMono-Regular-tlf-t1 at 6.20496\Unit%
+\hyphenchar\sixtt\MinusOne%
+\font\fivevtt=NotoSansMono-Regular-tlf-t1 at 5.5\Unit%
+\hyphenchar\fivevtt\MinusOne%
+\font\fourvitt=NotoSansMono-Regular-tlf-t1 at 4.67502\Unit%
+\hyphenchar\fourvitt\MinusOne%
+\font\fourtt=NotoSansMono-Regular-tlf-t1 at 4.01501\Unit%
+\hyphenchar\fourtt\MinusOne%
+\font\threeivtt=NotoSansMono-Regular-tlf-t1 at 3.41273\Unit%
+\hyphenchar\threeivtt\MinusOne%
+%   - italic
+\font\tenit=ntx-Italic-tlf-t1%
+\font\nineit=ntx-Italic-tlf-t1 at 8.5\Unit%
+\font\sevenit=ntx-Italic-tlf-t1 at 7.3\Unit%
+\font\sixit=ntx-Italic-tlf-t1 at 6.20496\Unit%
+\font\fivevit=ntx-Italic-tlf-t1 at 5.5\Unit%
+\font\fourviit=ntx-Italic-tlf-t1 at 4.67502\Unit%
+\font\fourit=ntx-Italic-tlf-t1 at 4.01501\Unit%
+\font\threeivit=ntx-Italic-tlf-t1 at 3.41273\Unit%
+%   - slanted
+\font\tensl=ntx-Italic-tlf-th-t1%
+\font\ninesl=ntx-Italic-tlf-th-t1 at 8.5\Unit%
+\font\sevensl=ntx-Italic-tlf-th-t1 at 7.3\Unit%
+\font\sixsl=ntx-Italic-tlf-th-t1 at 6.20496\Unit%
+\font\fivevsl=ntx-Italic-tlf-th-t1 at 5.5\Unit%
+\font\fourvisl=ntx-Italic-tlf-th-t1 at 4.67502\Unit%
+\font\foursl=ntx-Italic-tlf-th-t1 at 4.01501\Unit%
+\font\threeivsl=ntx-Italic-tlf-th-t1 at 3.41273\Unit%
+%   - small caps
+\font\tensc=ntx-Regular-tlf-sc-t1%
+\font\ninesc=ntx-Regular-tlf-sc-t1 at 8.5\Unit%
+\font\sevensc=ntx-Regular-tlf-sc-t1 at 7.3\Unit%
+\font\sixsc=ntx-Regular-tlf-sc-t1 at 6.20496\Unit%
+\font\fivevsc=ntx-Regular-tlf-sc-t1 at 5.5\Unit%
+\font\fourvisc=ntx-Regular-tlf-sc-t1 at 4.67502\Unit%
+\font\foursc=ntx-Regular-tlf-sc-t1 at 4.01501\Unit%
+\font\threeivsc=ntx-Regular-tlf-sc-t1 at 3.41273\Unit%
+%   - bold-face Roman
+\font\tenbf=ntx-Bold-tlf-t1%
+\font\ninebf=ntx-Bold-tlf-t1 at 8.5\Unit%
+\font\sevenbf=ntx-Bold-tlf-t1 at 7.3\Unit%
+\font\sixbf=ntx-Bold-tlf-t1 at 6.20496\Unit%
+\font\fivevbf=ntx-Bold-tlf-t1 at 5.5\Unit%
+\font\fourvibf=ntx-Bold-tlf-t1 at 4.67502\Unit%
+\font\fourbf=ntx-Bold-tlf-t1 at 4.01501\Unit%
+\font\threeivbf=ntx-Bold-tlf-t1 at 3.41273\Unit%
+%   - TS1 Roman symbols
+\font\tentsr=ts1-qtmr%
+\font\ninetsr=ts1-qtmr at 8.5\Unit%
+\font\seventsr=ts1-qtmr at 7.3\Unit%
+\font\sixtsr=ts1-qtmr at 6.20496\Unit%
+%   - TS1 italic symbols
+\font\tentsi=ts1-qtmri%
+\font\ninetsi=ts1-qtmri at 8.5\Unit%
+\font\seventsi=ts1-qtmri at 7.3\Unit%
+\font\sixtsi=ts1-qtmri at 6.20496\Unit%
+%   - TS1 bold-face Roman symbols
+\font\tentsb=ts1-qtmb%
+\font\ninetsb=ts1-qtmb at 8.5\Unit%
+\font\seventsb=ts1-qtmb at 7.3\Unit%
+\font\sixtsb=ts1-qtmb at 6.20496\Unit%
+%   - math Roman
 \font\tenrmm=ntx-Regular-tlf-ot1%
+\font\ninermm=ntx-Regular-tlf-ot1 at 8.5\Unit%
 \font\sevenrmm=ntx-Regular-tlf-ot1 at 7.3\Unit%
-\font\fivermm=ntx-Regular-tlf-ot1 at 5.5\Unit%
+\font\sixrmm=ntx-Regular-tlf-ot1 at 6.20496\Unit%
+\font\fivevrmm=ntx-Regular-tlf-ot1 at 5.5\Unit%
+\font\fivermm=ntx-Regular-tlf-ot1 at 5.32896\Unit%
+\font\fourvirmm=ntx-Regular-tlf-ot1 at 4.67502\Unit%
+\font\fourvrmm=ntx-Regular-tlf-ot1 at 4.52959\Unit%
+\font\fourrmm=ntx-Regular-tlf-ot1 at 4.01501\Unit%
+\font\threeivrmm=ntx-Regular-tlf-ot1 at 3.41273\Unit%
+%   - math italic
 \font\teni=ntxmi0%
 \skewchar\teni 127%
+\font\ninei=ntxmi07 at 8.5\Unit%
+\skewchar\ninei 127%
 \font\seveni=ntxmi07 at 7.3\Unit%
 \skewchar\seveni 127%
-\font\fivei=ntxmi05 at 5.5\Unit%
+\font\sixi=ntxmi05 at 6.20496\Unit%
+\skewchar\sixi 127%
+\font\fivevi=ntxmi05 at 5.5\Unit%
+\skewchar\fivevi 127%
+\font\fivei=ntxmi05 at 5.32896\Unit%
 \skewchar\fivei 127%
+\font\fourvii=ntxmi05 at 4.67502\Unit%
+\skewchar\fourvii 127%
+\font\fourvi=ntxmi05 at 4.52959\Unit%
+\skewchar\fourvi 127%
+\font\fouri=ntxmi05 at 4.01501\Unit%
+\skewchar\fouri 127%
+\font\threeivi=ntxmi05 at 3.41273\Unit%
+\skewchar\threeivi 127%
+%   - math symbols
 \font\tensy=ntxsy%
 \skewchar\tensy 120%
+\font\ninesy=ntxsy7 at 8.5\Unit%
+\skewchar\ninesy 120%
 \font\sevensy=ntxsy7 at 7.3\Unit%
 \skewchar\sevensy 120%
-\font\fivesy=ntxsy5 at 5.5\Unit%
+\font\sixsy=ntxsy5 at 6.20496\Unit%
+\skewchar\sixsy 120%
+\font\fivevsy=ntxsy5 at 5.5\Unit%
+\skewchar\fivevsy 120%
+\font\fivesy=ntxsy5 at 5.32896\Unit%
 \skewchar\fivesy 120%
+\font\fourvisy=ntxsy5 at 4.67502\Unit%
+\skewchar\fourvisy 120%
+\font\fourvsy=ntxsy5 at 4.52959\Unit%
+\skewchar\fourvsy 120%
+\font\foursy=ntxsy5 at 4.01501\Unit%
+\skewchar\foursy 120%
+\font\threeivsy=ntxsy5 at 3.41273\Unit%
+\skewchar\threeivsy 120%
+%   - math extra symbols
 \font\tenex=ntxexx%
+\font\nineex=ntxexx at 8.5\Unit%
 \font\sevenex=ntxexx at 7.3\Unit%
-\font\fiveex=ntxexx at 5.5\Unit%
+\font\sixex=ntxexx at 6.20496\Unit%
+\font\fivevex=ntxexx at 5.5\Unit%
+\font\fiveex=ntxexx at 5.32896\Unit%
+\font\fourviex=ntxexx at 4.67502\Unit%
+\font\fourvex=ntxexx at 4.52959\Unit%
+\font\fourex=ntxexx at 4.01501\Unit%
+\font\threeivex=ntxexx at 3.41273\Unit%
 %
-% Math switches:
-\def\normalmath{%
-  \textfont\Zero\tenrmm%
-  \scriptfont\Zero\sevenrmm%
-  \scriptscriptfont\Zero\fivermm%
-  \textfont\One\teni%
-  \scriptfont\One\seveni%
-  \scriptscriptfont\One\fivei%
-  \textfont\Two\tensy%
-  \scriptfont\Two\sevensy%
-  \scriptscriptfont\Two\fivesy%
-  \textfont\Three\tenex%
-  \scriptfont\Three\sevenex%
-  \scriptscriptfont\Three\fiveex%
-  %
+% Math codes:
+\def\setmathcodes{%
+  \mathcode`\" "0022 \mathcode`\# "0023 \mathcode`\$ "0024 \mathcode`\% "0025%
+  \mathcode`\& "0026 \mathcode`\@ "0040 \mathcode`\^ "005E \mathcode`\` "0060%
+  \mathcode`\{ "007B \mathcode`\} "007D \mathcode`\~ "007E%
   \mathcode`\. "013A \mathcode`\\ "026E \mathcode`\| "026A%
   \mathcode`\* "2203 \mathcode`+ "22CF \mathcode`\- "2200%
   \mathcode`\: "303A \mathcode`\< "313C \mathcode`\= "343D \mathcode`\> "313E%
   \mathcode`\( "42B9 \mathcode`\) "52BA \mathcode`\[ "42BB \mathcode`\] "52BC%
   \mathcode`\! "5021 \mathcode`\/ "429D \mathcode`\? "503F%
   \mathcode`\, "613B \mathcode`\; "603B%
+  \mathcode`\  "8000 \mathcode`\' "8000 \mathcode`\_ "8000%
   %
   \delcode`\( "2B9300 \delcode`\) "2BA301%
   \delcode`\/ "29D30E \delcode`\\ "26E30F%
@@ -73,4 +188,132 @@
   \delcode`\| "26A30C %
 }%
 %
+% Base lines:
+\def\tenbaseline{\baselineskip 12\Unit}%
+\def\ninebaseline{\baselineskip 10\Unit}%
+\def\sevenbaseline{\baselineskip 7.3\Unit}%
+\def\sixbaseline{\baselineskip 6.20496\Unit}%
+%
+% Text font size switches:
+%   - helpers
+\def\tenTextCommaSize{fivev}%
+\def\nineTextCommaSize{fourvi}%
+\def\sevenTextCommaSize{four}%
+\def\sixTextCommaSize{threeiv}%
+\def\MakeFontSwitch #1#2#3#4{%
+  \namedef{#2}{%
+    \def\tieaccent{\applyw{#1#3}\accent#4 }%
+    \def\textcommafont{%
+      \baselineskip\ZeroSkip%
+      \applyw{\applyw{#1TextCommaSize}#2}%
+    }%
+    \applyw{#1#2}%
+  }%
+}%
+\def\MakeFontSwitches #1{%
+  \MakeFontSwitch{#1}{rm}{tsr}{26}%
+  \MakeFontSwitch{#1}{sf}{i}{127}%
+  \MakeFontSwitch{#1}{tt}{i}{127}%
+  \MakeFontSwitch{#1}{it}{tsi}{26}%
+  \MakeFontSwitch{#1}{sl}{tsi}{26}%
+  \MakeFontSwitch{#1}{sc}{tsr}{26}%
+  \MakeFontSwitch{#1}{bf}{tsb}{26}%
+}%
+\def\TextSizeSwitchBase #1{%
+  \applyw{#1baseline}%
+  \makestrutbox%
+  \MakeFontSwitches{#1}%
+}%
+%   - normal size
+\def\normal{%
+  \TextSizeSwitchBase{ten}%
+  \normalmath%
+  \rm%
+}%
+%   - small size
+\def\small{%
+  \TextSizeSwitchBase{nine}%
+  \smallmath%
+  \rm%
+}%
+%   - script size (for footnote super scripts in text)
+\def\scriptsize{%
+  \TextSizeSwitchBase{seven}%
+  \scriptsizemath%
+  \rm%
+}%
+%   - small script size (for footnote super scripts in footnotes)
+\def\smallscriptsize{%
+  \TextSizeSwitchBase{six}%
+  \smallscriptsizemath%
+  \rm%
+}%
+%
+% Math font size switches:
+%   - normal
+\def\normalmath{%
+  \textfont\Zero\tenrmm% 10 pt
+  \scriptfont\Zero\sevenrmm% 7.3 pt
+  \scriptscriptfont\Zero\fivevrmm% 5.5 pt
+  \textfont\One\teni% 10 pt
+  \scriptfont\One\seveni% 7.3 pt
+  \scriptscriptfont\One\fivevi% 5.5 pt
+  \textfont\Two\tensy% 10 pt
+  \scriptfont\Two\sevensy% 7.3 pt
+  \scriptscriptfont\Two\fivevsy% 5.5 pt
+  \textfont\Three\tenex% 10 pt
+  \scriptfont\Three\sevenex% 7.3 pt
+  \scriptscriptfont\Three\fivevex% 5.5 pt
+}%
+%   - small
+\def\smallmath{%
+  \textfont\Zero\ninermm% 8.5 pt
+  \scriptfont\Zero\sixrmm% 6.20496 pt
+  \scriptscriptfont\Zero\fourvirmm% 4.67502 pt
+  \textfont\One\ninei% 8.5 pt
+  \scriptfont\One\sixi% 6.20496 pt
+  \scriptscriptfont\One\fourvii% 4.67502 pt
+  \textfont\Two\ninesy% 8.5 pt
+  \scriptfont\Two\sixsy% 6.20496 pt
+  \scriptscriptfont\Two\fourvisy% 4.67502 pt
+  \textfont\Three\nineex% 8.5 pt
+  \scriptfont\Three\sixex% 6.20496 pt
+  \scriptscriptfont\Three\fourviex% 4.67502 pt
+}%
+%   - script size
+\def\scriptsizemath{%
+  \textfont\Zero\sevenrmm% 7.3 pt
+  \scriptfont\Zero\fivermm% 5.32896 pt
+  \scriptscriptfont\Zero\fourrmm% 4.01501 pt
+  \textfont\One\seveni% 7.3 pt
+  \scriptfont\One\fivei% 5.32896 pt
+  \scriptscriptfont\One\fouri% 4.01501 pt
+  \textfont\Two\sevensy% 7.3 pt
+  \scriptfont\Two\fivesy% 5.32896 pt
+  \scriptscriptfont\Two\foursy% 4.01501 pt
+  \textfont\Three\sevenex% 7.3 pt
+  \scriptfont\Three\fiveex% 5.32896 pt
+  \scriptscriptfont\Three\fourex% 4.01501 pt
+}%
+%   - small script size
+\def\smallscriptsizemath{%
+  \textfont\Zero\sixrmm% 6.20496 pt
+  \scriptfont\Zero\fourvrmm% 4.52959 pt
+  \scriptscriptfont\Zero\threeivrmm% 3.41273 pt
+  \textfont\One\sixi% 6.20496 pt
+  \scriptfont\One\fourvi% 4.52959 pt
+  \scriptscriptfont\One\threeivi% 3.41273 pt
+  \textfont\Two\sixsy% 6.20496 pt
+  \scriptfont\Two\fourvsy% 4.52959 pt
+  \scriptscriptfont\Two\threeivsy% 3.41273 pt
+  \textfont\Three\sixex% 6.20496 pt
+  \scriptfont\Three\fourvex% 4.52959 pt
+  \scriptscriptfont\Three\threeivex% 3.41273 pt
+}%
+%
+% Setup:
+\setmathcodes%
+\normal%
+%
+% End of newtx.tex:
 \endinput%

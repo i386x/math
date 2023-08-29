@@ -16,13 +16,16 @@
   \expandafter\endinput%
 \fi%
 %
-\input macros/utils
+\input macros/utils%
 %
+% Let @ be a letter:
 \makeatletter%
 %
+% Determine page width and height:
 \edef\@page@width{\ifx\paperwidth\undefined 210 true mm\else\paperwidth\fi}%
 \edef\@page@height{\ifx\paperheight\undefined 297 true mm\else\paperheight\fi}%
 %
+% Set PDF parameters:
 \setparam\pdfoutput{1}%
 \setparam\pdfminorversion{5}%
 \setparam\pdfcompresslevel{9}%
@@ -39,5 +42,13 @@
 \setparam\pdfgamma{1000}%
 \setparam\pdfimagegamma{2200}%
 %
+% Implement drawing driver API for PDF:
+\def\@setcolor@gray #1{\pdfliteral{#1 g #1 G}}%
+\def\@setcolor@rgb #1#2#3{\pdfliteral{#1 #2 #3 rg #1 #2 #3 RG}}%
+\def\@setcolor@cmyk #1#2#3#4{\pdfliteral{#1 #2 #3 #4 k #1 #2 #3 #4 K}}%
+%
+% Restore @'s category:
 \restorecat\@%
+%
+% End of pdf.tex:
 \endinput%

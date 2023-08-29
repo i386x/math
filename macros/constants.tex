@@ -13,17 +13,23 @@
   \expandafter\endinput%
 \fi%
 %
+% Category codes:
 \chardef\CatLetter=11%
 \chardef\CatOther=12%
 %
-\edef\RestoreAtCatCode{\catcode`@=\the\catcode`@\relax}%
+% Let @ be a letter:
+\expandafter\edef\csname @restore@\number`\@ @catcode\endcsname{%
+  \catcode`\noexpand\@=\the\catcode`\@\relax%
+}%
 \catcode`\@\CatLetter%
 %
+% Numeric constants:
 \chardef\Zero=0%
 \let\One\@ne%
 \let\Two\tw@%
 \let\Three\thr@@%
 \let\Sixteen\sixt@@n%
+\chardef\Xxxii=32%
 \chardef\Cxxviii=128%
 \let\Cclv\@cclv%
 \let\Cclvi\@cclvi%
@@ -32,11 +38,16 @@
 \let\TwentyThousands\@MM%
 \let\MinusOne\m@ne%
 %
+% Dimension constants:
 \let\ZeroUnit\z@%
 \let\Unit\p@%
 \let\ZeroSkip\z@skip%
 %
+% Registers constants:
 \let\VoidBox\voidb@x%
 %
-\RestoreAtCatCode%
+% Restore @'s category:
+\csname @restore@\number`\@ @catcode\endcsname%
+%
+% End of constants.tex:
 \endinput%

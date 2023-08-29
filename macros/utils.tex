@@ -15,12 +15,29 @@
 %
 \input macros/constants%
 %
+% Let @ be a letter:
+\expandafter\edef\csname @restore@\number`\@ @catcode\endcsname{%
+  \catcode`\noexpand\@=\the\catcode`\@\relax%
+}%
+\catcode`\@\CatLetter%
+%
+% General hooks, sentinels, and temporary storage:
+\let\\\relax%
 \let\do\relax%
 \let\next\relax%
+\let\@tempa\relax%
 %
+% The space token:
+\def\spacetok:{\let\spacetok= }\spacetok: % the space after : is important
+%
+% Gobbling:
+\def\gobble #1{}%
+%
+% Moving stuff after a conditional:
 \def\afterfi #1\fi{\fi#1}%
 \def\afterfifi #1\fi\fi{\fi\fi#1}%
 %
+% Defining macros and aliases with arbitrary names:
 \def\namelet #1{\expandafter\let\csname #1\endcsname}%
 \def\nameslet #1#2{%
   \expandafter\let\csname #1\expandafter\endcsname\csname #2\endcsname%
@@ -28,36 +45,74 @@
 \def\namedef #1{\expandafter\def\csname #1\endcsname}%
 \def\nameedef #1{\expandafter\edef\csname #1\endcsname}%
 %
+% Invoking macros with arbitrary names:
 \def\applyw #1{\csname #1\endcsname}%
 \def\applycw #1#2{\expandafter#1\csname #2\endcsname}%
 \def\applyww #1#2{\csname #1\expandafter\endcsname\csname #2\endcsname}%
 %
+% Character tests:
 \def\isdigit #1#2{\ifnum#1>47 \ifnum#1<58 \afterfifi{#2}\fi\fi}%
 \def\isupper #1#2{\ifnum#1>64 \ifnum#1<91 \afterfifi{#2}\fi\fi}%
 \def\islower #1#2{\ifnum#1>96 \ifnum#1<123 \afterfifi{#2}\fi\fi}%
 %
+% Stripping:
+\def\strip #1{\futurelet\@tempa\@strip@left #1\relax}%
+\def\@strip@left{%
+  \ifx\@tempa\spacetok%
+    \let\next\@strip@left@cont%
+  \else\ifx\@tempa\relax%
+    \def\next:##1\relax##2{\let##2\empty}%
+  \else%
+    \let\next\@strip@right%
+  \fi\fi%
+  \next:%
+}%
+\def\@strip@left@cont: {\futurelet\@tempa\@strip@left}%
+\def\@strip@right:#1\relax{\@strip@right@cont#1\\ \\\relax}%
+\begingroup%
+  \catcode`\^^@=12%
+  \gdef\@strip@right@cont #1 \\#2\relax{%
+    \if^^@#2^^@%
+      \let\next\@strip@done%
+    \else%
+      \let\next\@strip@right@cont%
+    \fi%
+    \next#1\\ \\\relax%
+  }%
+\endgroup%
+\def\@strip@done #1\\#2\relax#3{\def#3{#1}}%
+\edef\@pt{\expandafter\gobble\string\pt}%
+\edef\@tempa{\def\noexpand\@rem@pt ##1\@pt{##1}}\@tempa%
+\def\strippt{\expandafter\@rem@pt\the}%
+%
+% Character category utilities:
 \def\changecat #1#2{%
-  \namelet{restore@\number`#1@catcode}\empty%
+  \namelet{@restore@\number`#1@catcode}\empty%
   \ifnum#2=\catcode`#1\relax\else%
-    \nameedef{restore@\number`#1@catcode}{%
+    \nameedef{@restore@\number`#1@catcode}{%
       \catcode`\noexpand#1=\the\catcode`#1\relax%
     }%
     \catcode`#1=#2\relax%
   \fi%
 }%
-\def\restorecat #1{\applyw{restore@\number`#1@catcode}}%
+\def\restorecat #1{\applyw{@restore@\number`#1@catcode}}%
 \def\makeatletter{\changecat\@\CatLetter}%
 \def\makeatother{\changecat\@\CatOther}%
 %
+% Registers utilities:
 \def\ensurereg #1#2#3{%
   \applycw\ifx{#2}\relax%
     \applyww{new#1}{#2}%
   \fi%
   \applyw{#2}=#3\relax%
 }%
-\nameslet{counta}{count@}%
+\let\counta\count@%
 \ensurereg{count}{countb}{0}%
+\let\dimena\dimen@%
+\let\dimenb\dimen@i%
+\let\dimenc\dimen@ii%
 %
+% Codes utilities:
 \def\LoopOverCodes #1{%
   \counta\Zero%
   \loop%
@@ -66,15 +121,35 @@
     \ifnum\counta<\Cxxviii%
   \repeat%
 }%
+\def\lcucpair #1#2{%
+  \lccode#1=#1%
+  \lccode#2=#1%
+  \uccode#1=#2%
+  \uccode#2=#2%
+}%
 %
+% Parameters utilities:
 \def\setparam #1#2{%
   \ifx#1\undefined\else%
     #1=#2\relax%
   \fi%
 }%
 %
+% I/O:
 \def\wterm{\immediate\write\Sixteen}%
 %
+% Font utilities:
 \def\FontQuadWidth{\fontdimen6}%
 %
+% Horizontal list utilities:
+\def\SlantedShift #1{%
+  \dimena#1%
+  \kern \strippt\fontdimen1\font\dimena%
+}%
+\def\textbox #1{\setbox#1\hbox}%
+%
+% Restore @'s category:
+\restorecat\@%
+%
+% End of utils.tex:
 \endinput%

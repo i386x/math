@@ -13,15 +13,19 @@
   \expandafter\endinput%
 \fi%
 %
+\input macros/constants%
 \input macros/utils%
 %
+% Let @ be a letter:
 \makeatletter%
 %
+% Debug registers:
 \ensurereg{count}{debuglevel}{0}%
 \ensurereg{count}{@pages@shipped}{0}%
 \ensurereg{count}{showpage}{0}%
 \newbox\@page@box%
 %
+% Debugging macros:
 \def\debug #1#2{\ifnum#1>\debuglevel\else\wterm{#2}\fi}%
 \def\showentirebox #1{{%
   \showboxbreadth\maxdimen%
@@ -29,6 +33,7 @@
   \showbox#1%
 }}%
 %
+% Make \shipout to show the content of selected page:
 \def\@clrevrbox{\everyhbox{}\everyvbox{}}%
 \let\@shipout\shipout%
 \def\@@shipout{\futurelet\next\@@shipout@cont}%
@@ -61,7 +66,11 @@
   \setbox\@page@box%
 }%
 %
+% Enforce scroll mode:
 \scrollmode%
 %
+% Restore @'s category:
 \restorecat\@%
+%
+% End of debug.tex:
 \endinput%

@@ -13,11 +13,14 @@
   \expandafter\endinput%
 \fi%
 %
+\input macros/constants%
 \input macros/utils%
 \input macros/params%
 %
 \makeatletter%
 %
+% Page layout:
+%   - registers
 \newbox\strutbox%
 \newdimen\paperwidth%
 \newdimen\paperheight%
@@ -33,7 +36,7 @@
 \newskip\fpbot%
 \newdimen\footnotesep%
 \ensurereg{count}{fncount}{0}%
-%
+%   - layout
 \paperwidth 210 true mm%
 \paperheight 297 true mm%
 \sidemargin 63\Unit%
@@ -60,31 +63,571 @@
 \interfootnotelinepenalty 100 %
 \footnotesep 9\Unit%
 %
-\font\ninerm=cmr9%
+% Fonts:
+%   - naming convention: <base-size>[<fraction-size>]<suffix>
+%       <base-size>        <fraction-size>    <suffix>
+%         ten    10          i   .1             rm   Roman
+%         nine   9/8.5       q   .25            sf   sans serif
+%         eight  8           iv  .4             tt   typewriter
+%         seven  7.3/7       v   .5             it   italic
+%         six    6.20496/6   vi  .6             sl   slanted
+%                5.94997                        sc   small caps
+%         five   5.32896/5                      bf   bold-face Roman
+%         four   4                              itt  italic typewriter
+%         three  3/2.97498                      u    upright
+%                                               tsr  TS1 Roman symbols
+%                                               tsf  TS1 sans serif symbols
+%                                               tst  TS1 typewriter symbols
+%                                               tsi  TS1 italic symbols
+%                                               tsl  TS1 slanted symbols
+%                                               tsc  TS1 small caps symbols
+%                                               tsb  TS1 bold-face Roman
+%                                                    symbols
+%                                               rmm  math Roman
+%                                               i    math italic
+%                                               sy   math symbols
+%                                               ex   math extra symbols
+%   - Roman
+\font\tenrm=cmr10%
+\font\eightrm=cmr8%
+\font\sevenrm=cmr7%
 \font\sixrm=cmr6%
+\font\fiverm=cmr5%
+%   - sans serif
+\font\tensf=cmss10%
+\font\eightsf=cmss8%
+\font\sevensf=cmss8 at 7\Unit%
+\font\sixsf=cmss8 at 6\Unit%
+\font\fivesf=cmss8 at 5\Unit%
+%   - typewriter
+\font\tentt=cmtt10%
+\hyphenchar\tentt\MinusOne%
+\font\eighttt=cmtt8%
+\hyphenchar\eighttt\MinusOne%
+\font\seventt=cmtt8 at 7\Unit%
+\hyphenchar\seventt\MinusOne%
+\font\sixtt=cmtt8 at 6\Unit%
+\hyphenchar\sixtt\MinusOne%
+\font\fivett=cmtt8 at 5\Unit%
+\hyphenchar\fivett\MinusOne%
+%   - italic
+\font\tenit=cmti10%
+\font\eightit=cmti8%
+\font\sevenit=cmti7%
+\font\sixit=cmti7 at 6\Unit%
+\font\fiveit=cmti7 at 5\Unit%
+%   - slanted
+\font\tensl=cmsl10%
+\font\eightsl=cmsl8%
+\font\sevensl=cmsl8 at 7\Unit%
+\font\sixsl=cmsl8 at 6\Unit%
+\font\fivesl=cmsl8 at 5\Unit%
+%   - small caps
+\font\tensc=cmcsc10%
+\font\eightsc=cmcsc10 at 8\Unit%
+\font\sevensc=cmcsc10 at 7\Unit%
+\font\sixsc=cmcsc10 at 6\Unit%
+\font\fivesc=cmcsc10 at 5\Unit%
+%   - bold-face Roman
+\font\tenbf=cmbx10%
+\font\eightbf=cmbx8%
+\font\sevenbf=cmbx7%
+\font\sixbf=cmbx6%
+\font\fivebf=cmbx5%
+%   - italic typewriter
+\font\tenitt=cmitt10%
+\hyphenchar\tenitt\MinusOne%
+\font\eightitt=cmitt10 at 8\Unit%
+\hyphenchar\eightitt\MinusOne%
+\font\sevenitt=cmitt10 at 7\Unit%
+\hyphenchar\sevenitt\MinusOne%
+\font\sixitt=cmitt10 at 6\Unit%
+\hyphenchar\sixitt\MinusOne%
+\font\fiveitt=cmitt10 at 5\Unit%
+\hyphenchar\fiveitt\MinusOne%
+%   - upright
+\font\tenu=cmu10%
+\font\eightu=cmu10 at 8\Unit%
+\font\sevenu=cmu10 at 7\Unit%
+\font\sixu=cmu10 at 6\Unit%
+\font\fiveu=cmu10 at 5\Unit%
+%   - TS1 Roman symbols
+\font\tentsr=tcrm1000%
+\hyphenchar\tentsr\MinusOne%
+\font\eighttsr=tcrm0800%
+\hyphenchar\eighttsr\MinusOne%
+\font\seventsr=tcrm0700%
+\hyphenchar\seventsr\MinusOne%
+\font\sixtsr=tcrm0600%
+\hyphenchar\sixtsr\MinusOne%
+%   - TS1 sans serif symbols
+\font\tentsf=tcss1000%
+\hyphenchar\tentsf\MinusOne%
+\font\eighttsf=tcss0800%
+\hyphenchar\eighttsf\MinusOne%
+\font\seventsf=tcss0700%
+\hyphenchar\seventsf\MinusOne%
+\font\sixtsf=tcss0600%
+\hyphenchar\sixtsf\MinusOne%
+%   - TS1 typewriter symbols
+\font\tentst=tctt1000%
+\hyphenchar\tentst\MinusOne%
+\font\eighttst=tctt0800%
+\hyphenchar\eighttst\MinusOne%
+\font\seventst=tctt0800 at 7\Unit%
+\hyphenchar\seventst\MinusOne%
+\font\sixtst=tctt0800 at 6\Unit%
+\hyphenchar\sixtst\MinusOne%
+%   - TS1 italic symbols
+\font\tentsi=tcti1000%
+\hyphenchar\tentsi\MinusOne%
+\font\eighttsi=tcti0800%
+\hyphenchar\eighttsi\MinusOne%
+\font\seventsi=tcti0700%
+\hyphenchar\seventsi\MinusOne%
+\font\sixtsi=tcti0600%
+\hyphenchar\sixtsi\MinusOne%
+%   - TS1 slanted symbols
+\font\tentsl=tcsl1000%
+\hyphenchar\tentsl\MinusOne%
+\font\eighttsl=tcsl0800%
+\hyphenchar\eighttsl\MinusOne%
+\font\seventsl=tcsl0700%
+\hyphenchar\seventsl\MinusOne%
+\font\sixtsl=tcsl0600%
+\hyphenchar\sixtsl\MinusOne%
+%   - TS1 bold-face Roman symbols
+\font\tentsb=tcbx1000%
+\hyphenchar\tentsb\MinusOne%
+\font\eighttsb=tcbx0800%
+\hyphenchar\eighttsb\MinusOne%
+\font\seventsb=tcbx0700%
+\hyphenchar\seventsb\MinusOne%
+\font\sixtsb=tcbx0600%
+\hyphenchar\sixtsb\MinusOne%
+%   - math Roman
+\font\tenrmm=cmr10%
+\font\eightrmm=cmr8%
+\font\sevenrmm=cmr7%
+\font\sixrmm=cmr6%
+\font\fivermm=cmr5%
+%   - math italic
+\font\teni=cmmi10%
+\skewchar\teni 127%
+\font\eighti=cmmi8%
+\skewchar\eighti 127%
+\font\seveni=cmmi7%
+\skewchar\seveni 127%
+\font\sixi=cmmi6%
+\skewchar\sixi 127%
+\font\fivei=cmmi5%
+\skewchar\fivei 127%
+%   - math symbols
+\font\tensy=cmsy10%
+\skewchar\tensy 48%
+\font\eightsy=cmsy8%
+\skewchar\eightsy 48%
+\font\sevensy=cmsy7%
+\skewchar\sevensy 48%
+\font\sixsy=cmsy6%
+\skewchar\sixsy 48%
+\font\fivesy=cmsy5%
+\skewchar\fivesy 48%
+%   - math extra symbols
+\font\texex=cmex10%
+\font\eightex=cmex8%
+\font\sevenex=cmex7%
+\font\sixex=cmex7 at 5.94997\Unit%
+\font\fiveex=cmex7 at 5\Unit%
+\font\fourqex=cmex7 at 4.25\Unit%
+\font\fouriex=cmex7 at 4.16495\Unit%
+\font\threeex=cmex7 at 2.97498\Unit%
 %
+% Math codes:
+\def\setmathcodes{%
+  \mathcode`\" "0022 \mathcode`\# "0023 \mathcode`\$ "0024 \mathcode`\% "0025%
+  \mathcode`\& "0026 \mathcode`\@ "0040 \mathcode`\^ "005E \mathcode`\` "0060%
+  \mathcode`\{ "007B \mathcode`\} "007D \mathcode`\~ "007E%
+  \mathcode`\. "013A \mathcode`\/ "013D \mathcode`\\ "026E \mathcode`\| "026A%
+  \mathcode`\* "2203 \mathcode`+ "202B \mathcode`\- "2200%
+  \mathcode`\: "303A \mathcode`\< "313C \mathcode`\= "303D \mathcode`\> "313E%
+  \mathcode`\( "4028 \mathcode`\) "5029 \mathcode`\[ "405B \mathcode`\] "505D%
+  \mathcode`\! "5021 \mathcode`\? "503F \mathcode`\, "613B \mathcode`\; "603B%
+  \mathcode`\  "8000 \mathcode`\' "8000 \mathcode`\_ "8000%
+  %
+  \delcode`\( "028300 \delcode`\) "029301%
+  \delcode`\/ "02F30E \delcode`\\ "26E30F%
+  \delcode`\< "26830A \delcode`\> "26930B%
+  \delcode`\[ "05B302 \delcode`\] "05D303%
+  \delcode`\| "26A30C %
+}%
+%
+% Base lines:
+\def\tenbaseline{\baselineskip 12\Unit}%
+\def\eightbaseline{\baselineskip 10\Unit}%
+\def\sevenbaseline{\baselineskip 7\Unit}%
+\def\sixbaseline{\baselineskip 5.94997\Unit}%
+%
+% Accents (OT1):
+%   - \`
+\def\`#1{%
+  \ifx i#1\`\i\else%
+  \ifx j#1\`\j\else%
+  {\accent18 #1}%
+  \fi\fi%
+}%
+%   - \'
+\def\'#1{%
+  \ifx i#1\'\i\else%
+  \ifx j#1\'\j\else%
+  {\accent19 #1}%
+  \fi\fi%
+}%
+%   - \v
+\def\v #1{%
+  \ifx i#1\v\i\else%
+  \ifx j#1\v\j\else%
+  {\accent20 #1}%
+  \fi\fi%
+}%
+%   - \u
+\def\u #1{%
+  \ifx i#1\u\i\else%
+  \ifx j#1\u\j\else%
+  {\accent21 #1}%
+  \fi\fi%
+}%
+%   - \=
+\def\=#1{%
+  \ifx i#1\=\i\else%
+  \ifx j#1\=\j\else%
+  {\accent22 #1}%
+  \fi\fi%
+}%
+%   - \r
+\def\r #1{%
+  \ifx i#1\r\i\else%
+  \ifx j#1\r\j\else%
+  \ifx A#1%
+    \leavevmode%
+    \setbox\Zero\hbox{!}%
+    \dimena \ht\Zero%
+    \advance\dimena -1ex%
+    \rlap{\raise .67\dimena\hbox{\char23}}%
+    A%
+  \else%
+    {\accent23 #1}%
+  \fi\fi\fi%
+}%
+%   - \^
+\def\^#1{%
+  \ifx i#1\^\i\else%
+  \ifx j#1\^\j\else%
+  {\accent94 #1}%
+  \fi\fi%
+}%
+%   - \.
+\def\.#1{%
+  \ifx i#1`\i\else%
+  \ifx\i#1`\i\else%
+  \ifx j#1`\j\else%
+  \ifx\j#1`\j\else%
+  {\accent95 #1}%
+  \fi\fi\fi\fi%
+}%
+%   - \H
+\def\H #1{%
+  \ifx i#1\H\i\else%
+  \ifx j#1\H\j\else%
+  {\accent125 #1}%
+  \fi\fi%
+}%
+%   - \~
+\def\~#1{%
+  \ifx i#1\~\i\else%
+  \ifx j#1\~\j\else%
+  {\accent126 #1}%
+  \fi\fi%
+}%
+%   - \"
+\def\"#1{%
+  \ifx i#1\"\i\else%
+  \ifx j#1\"\j\else%
+  {\accent127 #1}%
+  \fi\fi%
+}%
+%   - \b
+\def\b #1{%
+  \leavevmode%
+  \bgroup%
+    \o@lign{%
+      \relax#1\crcr%
+      \hidewidth%
+      \SlantedShift{-3ex}%
+      \vbox to .2ex{\hbox{\char22}\vss}%
+      \hidewidth%
+    }%
+  \egroup%
+}%
+%   - \c
+\def\c #1{%
+  \ifx g#1\textcommaabove{g}\else%
+    \leavevmode%
+    \setbox\Zero\hbox{#1}%
+    \ifdim\ht\Zero=1ex%
+      \accent24 #1%
+    \else{%
+      \ooalign{%
+        \unhbox\Zero\crcr%
+        \hidewidth\char24\hidewidth%
+      }%
+    }\fi%
+  \fi%
+}%
+%   - \d
+\def\d #1{%
+  \leavevmode%
+  \bgroup%
+    \o@lign{%
+      \relax#1\crcr%
+      \hidewidth\SlantedShift{-1ex}.\hidewidth%
+    }%
+  \egroup%
+}%
+%   - \t
+\def\t #1{%
+  \leavevmode%
+  \bgroup%
+    \edef\next{\the\font}%
+    \tieaccent\next#1%
+  \egroup%
+}%
+%   - comma above helper
+\def\textcommaabove #1{%
+  \leavevmode%
+  \bgroup%
+    \ooalign{%
+      \hidewidth\raise .7ex\hbox{\textcommafont`}\hidewidth\crcr%
+      \null#1\crcr%
+    }%
+  \egroup%
+}%
+%   - comma below helper
+\def\textcommabelow #1{%
+  \leavevmode%
+  \bgroup%
+    \ooalign{%
+      \null#1\crcr%
+      \hidewidth\raise -.31ex\hbox{\textcommafont,}\hidewidth%
+    }%
+  \egroup%
+}%
+%
+% Symbols (OT1):
+%   - let letter-like OT1 symbols be letters
+\catcode"19\CatLetter% \ss
+\catcode"1A\CatLetter% \ae
+\catcode"1B\CatLetter% \oe
+\catcode"1C\CatLetter% \o
+\catcode"1D\CatLetter% \AE
+\catcode"1E\CatLetter% \OE
+\catcode"1F\CatLetter% \O
+%   - name selected OT1 symbols
+\chardef\i="10%
+\chardef\j="11%
+\chardef\ss="19%
+\chardef\ae="1A%
+\chardef\oe="1B%
+\chardef\o="1C%
+\chardef\AE="1D%
+\chardef\OE="1E%
+\chardef\O="1F%
+\chardef\textquotedblright=`\"% "22
+\chardef\textquoteright=`\'% "27
+\chardef\textquotedblleft="5C%
+\chardef\textquoteleft=`\`% "60
+\chardef\textendash="7B%
+\chardef\textemdash="7C%
+%   - allow case conversions between letter-like OT1 symbols
+\lcucpair{"1A}{"1D}%
+\lcucpair{"1B}{"1E}%
+\lcucpair{"1C}{"1F}%
+%   - symbols composed from another symbols/parts
+\def\textexclamdown{!`}%
+\def\textquestiondown{?`}%
+\def\L{%
+  \leavevmode%
+  \setbox\Zero\hbox{L}%
+  \hbox to \wd\Zero{\hss\Xxxii L}%
+}%
+\def\l{%
+  \leavevmode%
+  \bgroup%
+    \Xxxii l%
+  \egroup%
+}%
+\def\ij{%
+  \nobreak\hskip\ZeroSkip i\kern -.02em j\nobreak\hskip\ZeroSkip%
+}%
+\def\IJ{%
+  \nobreak\hskip\ZeroSkip I\kern -.02em J\nobreak\hskip\ZeroSkip%
+}%
+\def\textdollar{%
+  \leavevmode%
+  \bgroup%
+    \textdollarfont%
+    \char`\$%
+  \egroup%
+}%
+\def\textsterling{%
+  \leavevmode%
+  \bgroup%
+    \textsterlingfont%
+    \char`\$%
+  \egroup%
+}%
+%
+% Special symbols:
+\def\copyright{%
+  \leavevmode%
+  \bgroup%
+    \copyrightfont%
+    \char169 %
+  \egroup%
+}%
+%
+% Text font size switches:
+%   - helpers
 \def\makestrutbox{%
   \setbox\strutbox\hbox{%
     \vrule width\ZeroUnit height.7\baselineskip depth.3\baselineskip%
   }%
 }%
-\def\normal{%
-  \tenrm%
-  \baselineskip 12\Unit%
-  \makestrutbox%
-  \def\fnmarkfont{%
-    \sevenrm%
-    \baselineskip\FontQuadWidth\font%
+\def\MakeFontSwitch #1#2#3#4#5{%
+  \namedef{#2}{%
+    \def\tieaccent{\applyw{#1ts#3}\accent26 }%
+    \def\textcommafont{%
+      \baselineskip\ZeroSkip%
+      \applyw{five#2}%
+    }%
+    \def\textdollarfont{\applyw{#1#4}}%
+    \def\textsterlingfont{\applyw{#1#5}}%
+    \def\copyrightfont{\applyw{#1ts#3}}%
+    \applyw{#1#2}%
   }%
 }%
-\def\small{%
-  \ninerm%
-  \baselineskip 10\Unit%
+\def\MakeFontSwitches #1{%
+  \MakeFontSwitch{#1}{rm}{r}{rm}{u}%
+  \MakeFontSwitch{#1}{sf}{f}{sf}{u}%
+  \MakeFontSwitch{#1}{tt}{t}{tt}{itt}%
+  \MakeFontSwitch{#1}{it}{i}{sl}{it}%
+  \MakeFontSwitch{#1}{sl}{l}{sl}{it}%
+  \MakeFontSwitch{#1}{sc}{r}{rm}{u}%
+  \MakeFontSwitch{#1}{bf}{b}{bf}{u}%
+}%
+\def\TextSizeSwitchBase #1{%
+  % Set up baseline skip for the size:
+  \applyw{#1baseline}%
+  % Make a box with strut for the size:
   \makestrutbox%
-  \def\fnmarkfont{%
-    \sixrm%
-    \baselineskip\FontQuadWidth\font%
-  }%
+  % Define text switches for the size:
+  \MakeFontSwitches{#1}%
+}%
+%   - normal size
+\def\normal{%
+  \TextSizeSwitchBase{ten}%
+  % Set up math fonts for the size:
+  \normalmath%
+  % Select font:
+  \rm%
+}%
+%   - small size
+\def\small{%
+  \TextSizeSwitchBase{eight}%
+  \smallmath%
+  \rm%
+}%
+%   - script size (for footnote super scripts in text)
+\def\scriptsize{%
+  \TextSizeSwitchBase{seven}%
+  \scriptsizemath%
+  \rm%
+}%
+%   - small script size (for footnote super scripts in footnotes)
+\def\smallscriptsize{%
+  \TextSizeSwitchBase{six}%
+  \smallscriptsizemath%
+  \rm%
+}%
+%
+% Math font size switches:
+%   - normal
+\def\normalmath{%
+  \textfont\Zero\tenrmm% 10 pt
+  \scriptfont\Zero\sevenrmm% 7 pt
+  \scriptscriptfont\Zero\fivermm% 5 pt
+  \textfont\One\teni% 10 pt
+  \scriptfont\One\seveni% 7 pt
+  \scriptscriptfont\One\fivei% 5 pt
+  \textfont\Two\tensy% 10 pt
+  \scriptfont\Two\sevensy% 7 pt
+  \scriptscriptfont\Two\fivesy% 5 pt
+  \textfont\Three\tenex% 10 pt
+  \scriptfont\Three\sevenex% 7 pt
+  \scriptscriptfont\Three\fiveex% 5 pt
+}%
+%   - small
+\def\smallmath{%
+  \textfont\Zero\eightrmm% 8 pt
+  \scriptfont\Zero\sixrmm% 6 pt
+  \scriptscriptfont\Zero\fivermm% 5 pt
+  \textfont\One\eighti% 8 pt
+  \scriptfont\One\sixi% 6 pt
+  \scriptscriptfont\One\fivei% 5 pt
+  \textfont\Two\eightsy% 8 pt
+  \scriptfont\Two\sixsy% 6 pt
+  \scriptscriptfont\Two\fivesy% 5 pt
+  \textfont\Three\eightex% 8 pt
+  \scriptfont\Three\sixex% 5.94997 pt
+  \scriptscriptfont\Three\fourqex% 4.25 pt
+}%
+%   - script size
+\def\scriptsizemath{%
+  \textfont\Zero\sevenrmm% 7 pt
+  \scriptfont\Zero\fivermm% 5 pt
+  \scriptscriptfont\Zero\fivermm% 5 pt
+  \textfont\One\seveni% 7 pt
+  \scriptfont\One\fivei% 5 pt
+  \scriptscriptfont\One\fivei% 5 pt
+  \textfont\Two\sevensy% 7 pt
+  \scriptfont\Two\fivesy% 5 pt
+  \scriptscriptfont\Two\fivesy% 5 pt
+  \textfont\Three\sevenex% 7 pt
+  \scriptfont\Three\fiveex% 5 pt
+  \scriptscriptfont\Three\fiveex% 5 pt
+}%
+%   - small script size
+\def\smallscriptsizemath{%
+  \textfont\Zero\sixrmm% 6 pt
+  \scriptfont\Zero\fivermm% 5 pt
+  \scriptscriptfont\Zero\fivermm% 5 pt
+  \textfont\One\sixi% 6 pt
+  \scriptfont\One\fivei% 5 pt
+  \scriptscriptfont\One\fivei% 5 pt
+  \textfont\Two\sixsy% 6 pt
+  \scriptfont\Two\fivesy% 5 pt
+  \scriptscriptfont\Two\fivesy% 5 pt
+  \textfont\Three\sixex% 5.94997 pt
+  \scriptfont\Three\fouriex% 4.16495 pt
+  \scriptscriptfont\Three\threeex% 2.97498 pt
+}%
+%
+% Paragraphs:
+\def\raggedright{%
+  \parindent\ZeroUnit%
+  \leftskip\ZeroSkip%
+  \rightskip \ZeroUnit plus 1fil%
+  \finalhyphendemerits\Zero%
 }%
 \def\sloppy{%
   \tolerance 9999 %
@@ -103,6 +646,7 @@
   \sloppy%
 }%
 %
+% Inserts:
 \def\binsert #1{%
   \par%
   #1%
@@ -124,14 +668,19 @@
   \endgroup%
 }%
 %
+% Footnotes:
 \edef\thefncount{\the\fncount}%
+\def\textfnmarkfont{%
+  \def\fnmarkfont{\scriptsize}%
+}%
+\def\fnmarkfont{\smallscriptsize}%
 \def\makefnmark{%
   \hbox{\mathsurround\ZeroUnit $\relax^{\hbox{\fnmarkfont\thefncount}}$}%
 }%
 \def\makefntext #1{%
   \parindent 12\Unit%
   \noindent%
-  \leavevmode\hbox{\makefnmark} #1%
+  \leavevmode\hbox{\textfnmarkfont\makefnmark} #1%
 }%
 \def\footnote #1{%
   \global\advance\fncount\One%
@@ -164,6 +713,7 @@
   \kern 2.6\Unit%
 }%
 %
+% Pages:
 \let\@the@head\empty%
 \let\@the@foot\empty%
 \let\@ragged@bottom\empty%
@@ -351,6 +901,7 @@
 }%
 \output{\normaloutput}%
 %
+% Full page:
 \def\fullpage{%
   \hoffset -1in%
   \voffset -1in%
@@ -364,7 +915,19 @@
   \output{\shipout\box\Cclv \advancepageno}%
 }%
 %
+% Title page:
+\def\@title{Title}%
+\def\@subject{Subject}%
+\def\@author{A.U. Thor}%
+\def\title #1{\gdef\@title{#1}}%
+\def\subject #1{\gdef\@subject{#1}}%
+\def\author #1{\gdef\@author{#1}}%
+%
+% Setup:
 \restorecat\@%
 \raggedbottom%
+\setmathcodes%
 \normal%
+%
+% End of document.tex:
 \endinput%
