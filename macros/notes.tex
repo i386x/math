@@ -25,20 +25,20 @@
 \font\xxiiiit=ntx-Italic-tlf-t1 at 23\Unit%
 %
 % Text font size switches:
-\let\OldNormal\normal%
+\let\@orig@normal\normal%
 \def\normal{%
-  \OldNormal%
+  \@orig@normal%
   \abovedisplayskip 10\Unit%
-  \belowdisplayskip\abovedisplayskip%
-  \abovedisplayshortskip\ZeroUnit%
+  \belowdisplayskip \abovedisplayskip%
+  \abovedisplayshortskip \ZeroUnit%
   \belowdisplayshortskip 6\Unit%
 }%
-\let\OldSmall\small%
+\let\@orig@small\small%
 \def\small{%
-  \OldSmall%
+  \@orig@small%
   \abovedisplayskip 8.5\Unit%
-  \belowdisplayskip\abovedisplayskip%
-  \abovedisplayshortskip\ZeroUnit%
+  \belowdisplayskip \abovedisplayskip%
+  \abovedisplayshortskip \ZeroUnit%
   \belowdisplayshortskip 4\Unit%
 }%
 %
@@ -46,49 +46,48 @@
 \def\MathNotes{Math Notes}%
 %
 % Title pages and covers:
-\newif\ifcover%
-\coverfalse%
+\newif\ifcover \coverfalse%
 %   - cover/title page
 \def\CoverOrTitle{%
   \begingroup%
     \fullpage%
     \textbox\Zero{\lxiisf\@title}%
-    \dimen\Zero\hsize%
-    \advance\dimen\Zero-\wd\Zero%
-    \dimen\One\FontQuadWidth\lxiisf%
-    \vbox to\vsize{%
+    \dimen\Zero \hsize%
+    \advance \dimen\Zero -\wd\Zero%
+    \dimen\One \FontQuadWidth\lxiisf%
+    \vbox to \vsize{%
       \ifcover%
         \setcolor cmyk(.5, .5, 0, 0);%
-        \rlap{\vrule width\hsize height\vsize depth\ZeroUnit}%
+        \rlap{\vrule width \hsize height \vsize depth \ZeroUnit}%
         \kern -.75\vsize%
       \else%
-        \hrule width\ZeroUnit height\ZeroUnit depth\ZeroUnit%
+        \hrule width \ZeroUnit height \ZeroUnit depth \ZeroUnit%
         \kern .25\vsize%
       \fi%
-      \moveright .5\dimen\Zero\vbox{%
+      \moveright .5\dimen\Zero \vbox{%
         \ifcover\setcolor gray(1);\fi%
-        \hrule width\wd\Zero height 1.6\Unit depth\ZeroUnit%
+        \hrule width \wd\Zero height 1.6\Unit depth \ZeroUnit%
         \kern 5.6\Unit%
-        \hrule width\wd\Zero height 4.8\Unit depth\ZeroUnit%
+        \hrule width \wd\Zero height 4.8\Unit depth \ZeroUnit%
         \kern .125\dimen\One%
         \copy\Zero%
         \kern 2\dp\Zero%
         \kern .125\dimen\One%
-        \hrule width\wd\Zero height 4.8\Unit depth\ZeroUnit%
+        \hrule width \wd\Zero height 4.8\Unit depth \ZeroUnit%
         \kern 5.6\Unit%
-        \hrule width\wd\Zero height 1.6\Unit depth\ZeroUnit%
+        \hrule width \wd\Zero height 1.6\Unit depth \ZeroUnit%
         \kern .125\dimen\One%
-        \hbox to\wd\Zero{\hss\xxvit from \@subject}%
+        \hbox to \wd\Zero{\hss\xxvit from \@subject}%
         \ifcover\resetcolor\fi%
       }%
       \vfill%
       \ifcover\else%
-        \moveright .25\dimen\Zero\vbox{%
+        \moveright .25\dimen\Zero \vbox{%
           \dimen\Zero .5\dimen\Zero%
-          \advance\dimen\Zero \wd\Zero%
-          \hrule width\dimen\Zero height 1.6\Unit depth\ZeroUnit%
+          \advance \dimen\Zero \wd\Zero%
+          \hrule width \dimen\Zero height 1.6\Unit depth \ZeroUnit%
           \kern .125\dimen\One%
-          \hbox to\dimen\Zero{%
+          \hbox to \dimen\Zero{%
             \input macros/t1%
             \hss\xxiiiit\@author\hss%
           }%
@@ -116,13 +115,13 @@
 }%
 %   - info page
 \def\infopage{%
-  \vbox to\vsize{%
-    \parindent\ZeroUnit%
-    \parskip 12\Unit plus \Unit\relax%
+  \vbox to \vsize{%
+    \parindent \ZeroUnit%
+    \parskip 12\Unit plus \Unit%
 
     \vss%
 
-    Title: {\it\MathNotes{} from \@subject}.
+    Title: {\it \MathNotes{} from \@subject}.
 
     Cover design by \@author.
 
@@ -166,6 +165,10 @@
 }%
 %
 % Setup:
+\let\@toclines\empty%
+{\let\defanchor\@save@old@anchor \let\tocline\gobblefour \sinput\@auxfilename}%
+\sinput\@auxfilename%
+\@open@auxfilew%
 \restorecat\@%
 \normal%
 %

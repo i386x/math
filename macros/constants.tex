@@ -21,7 +21,7 @@
 \expandafter\edef\csname @restore@\number`\@ @catcode\endcsname{%
   \catcode`\noexpand\@=\the\catcode`\@\relax%
 }%
-\catcode`\@\CatLetter%
+\catcode`\@ \CatLetter%
 %
 % Numeric constants:
 \chardef\Zero=0%
@@ -36,6 +36,7 @@
 \let\Thousand\@m%
 \let\TenThousands\@M%
 \let\TwentyThousands\@MM%
+\mathchardef\ThirtyThousands=30000%
 \let\MinusOne\m@ne%
 %
 % Dimension constants:

@@ -28,8 +28,8 @@
 % Debugging macros:
 \def\debug #1#2{\ifnum#1>\debuglevel\else\wterm{#2}\fi}%
 \def\showentirebox #1{{%
-  \showboxbreadth\maxdimen%
-  \showboxdepth\maxdimen%
+  \showboxbreadth \maxdimen%
+  \showboxdepth \maxdimen%
   \showbox#1%
 }}%
 %
@@ -39,7 +39,7 @@
 \def\@@shipout{\futurelet\next\@@shipout@cont}%
 \def\@@shipout@cont{%
   \ifx\next\@clrevrbox%
-    % We are inside box group (the \@sentinel was inserted by \every[hv]box)
+    % We are inside box group (the \@clrevrbox was inserted by \every[hv]box)
     \expandafter\aftergroup\expandafter\@@shipout@do%
   \else%
     % Ordinary box register assignment
@@ -48,11 +48,11 @@
 }%
 \def\@@shipout@do{%
   \@clrevrbox%
-  \global\advance\@pages@shipped\One%
+  \global\advance \@pages@shipped \One%
   \ifnum\showpage=\@pages@shipped%
     \showentirebox\@page@box%
   \fi%
-  \@shipout\box\@page@box%
+  \@shipout \box\@page@box%
 }%
 \def\shipout{%
   % Box specification has two flavors:
@@ -60,7 +60,7 @@
   %   2. \vbox | \vtop | \hbox {...}
   % When the latter is used in \setbox, \afterassignment inserts a token right
   % after {, before \everyhbox, \everyvbox. The following code must distinguish
-  % between these two cases.
+  % between these two cases
   \everyhbox{\@clrevrbox}\everyvbox{\@clrevrbox}%
   \afterassignment\@@shipout%
   \setbox\@page@box%

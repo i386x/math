@@ -19,31 +19,55 @@
 \expandafter\edef\csname @restore@\number`\@ @catcode\endcsname{%
   \catcode`\noexpand\@=\the\catcode`\@\relax%
 }%
-\catcode`\@\CatLetter%
+\catcode`\@ \CatLetter%
 %
 % General hooks, sentinels, and temporary storage:
 \let\\\relax%
 \let\do\relax%
 \let\next\relax%
 \let\@tempa\relax%
+\let\@tempb\relax%
+\let\@tempc\relax%
+\let\@tempd\relax%
+\newif\if@tempsw \@tempswfalse%
 %
-% The space token:
+% Tokens:
 \def\spacetok:{\let\spacetok= }\spacetok: % the space after : is important
+\let\asterisktok=*%
+\let\toksa\toks@%
+\def\addtoks #1#2{\expandafter\def\expandafter#1\expandafter{#1#2}}%
+\def\@protected{}%
+\def\protect #1{\addtoks\@protected{\protect#1}}%
+\def\protectonce #1{\addtoks\@protected{\protectonce#1}}%
 %
 % Gobbling:
 \def\gobble #1{}%
+\def\gobbletwo #1#2{}%
+\def\gobblethree #1#2#3{}%
+\def\gobblefour #1#2#3#4{}%
+%
+% Unpacking tuples:
+\def\first #1#2{#1}%
+\def\second #1#2{#2}%
+\def\firstofthree #1#2#3{#1}%
+\def\secondofthree #1#2#3{#2}%
+\def\thirdofthree #1#2#3{#3}%
 %
 % Moving stuff after a conditional:
-\def\afterfi #1\fi{\fi#1}%
-\def\afterfifi #1\fi\fi{\fi\fi#1}%
+\def\afterfi #1#2\fi{#2\fi#1}%
+\def\afterfifi #1#2\fi\fi{#2\fi\fi#1}%
 %
 % Defining macros and aliases with arbitrary names:
 \def\namelet #1{\expandafter\let\csname #1\endcsname}%
+\protect\namelet%
 \def\nameslet #1#2{%
   \expandafter\let\csname #1\expandafter\endcsname\csname #2\endcsname%
 }%
+\protect\nameslet%
 \def\namedef #1{\expandafter\def\csname #1\endcsname}%
+\protect\namedef%
 \def\nameedef #1{\expandafter\edef\csname #1\endcsname}%
+\protect\nameedef%
 %
 % Invoking macros with arbitrary names:
 \def\applyw #1{\csname #1\endcsname}%
@@ -82,8 +106,58 @@
 \endgroup%
 \def\@strip@done #1\\#2\relax#3{\def#3{#1}}%
 \edef\@pt{\expandafter\gobble\string\pt}%
-\edef\@tempa{\def\noexpand\@rem@pt ##1\@pt{##1}}\@tempa%
+{\edef\next{\gdef\noexpand\@rem@pt ##1\@pt{##1}}\next}%
 \def\strippt{\expandafter\@rem@pt\the}%
+%
+% Parsing:
+\def\ParseSubject #1#2{\applyw{@parse@subject@#2}#1}%
+\namedef{@parse@subject@.}#1#2.{%
+  \futurelet\@tempa\@parse@subject@cont #2 ()\relax#1%
+}%
+\namedef{@parse@subject@:}#1#2:{%
+  \futurelet\@tempa\@parse@subject@cont #2 ()\relax#1%
+}%
+\def\@parse@subject@cont{%
+  \ifx\@tempa\asterisktok%
+    \afterfi\@parse@subject@final@a%
+  \else%
+    \afterfi\@parse@subject@final@b%
+  \fi%
+}%
+\def\@parse@subject@final@a*#1 (#2)#3\relax#4{#4{*}{#1}{#2}}%
+\def\@parse@subject@final@b #1 (#2)#3\relax#4{#4{}{#1}{#2}}%
+\def\ParseCounterSpec #1#2{\@parse@counter@spec@try@eq #2=\relax#1}%
+\def\@parse@counter@spec@try@eq #1=#2\relax{%
+  \if$#2$%
+    \afterfi{\@parse@counter@spec@try@slash #1/\relax{0}}%
+  \else%
+    \afterfi{\@parse@counter@spec@eat@eq #1=#2\relax}%
+  \fi%
+}%
+\def\@parse@counter@spec@eat@eq #1=#2=\relax{%
+  \@parse@counter@spec@try@slash #1/\relax{#2}%
+}%
+\def\@parse@counter@spec@try@slash #1/#2\relax{%
+  \if$#2$%
+    \afterfi{\@parse@counter@spec@try@paren #1(\relax{1}}%
+  \else%
+    \afterfi{\@parse@counter@spec@eat@slash #1/#2\relax}%
+  \fi%
+}%
+\def\@parse@counter@spec@eat@slash #1/#2/\relax{%
+  \@parse@counter@spec@try@paren #1(\relax{#2}%
+}%
+\def\@parse@counter@spec@try@paren #1(#2\relax{%
+  \if$#2$%
+    \afterfi{\@parse@counter@spec@final{#1}{}}%
+  \else%
+    \afterfi{\@parse@counter@spec@eat@paren #1(#2\relax}%
+  \fi%
+}%
+\def\@parse@counter@spec@eat@paren #1(#2)(\relax{%
+  \@parse@counter@spec@final{#1}{#2}%
+}%
+\def\@parse@counter@spec@final #1#2#3#4#5{#5{#1}{#2}{#3}{#4}}%
 %
 % Character category utilities:
 \def\changecat #1#2{%
@@ -106,18 +180,37 @@
   \fi%
   \applyw{#2}=#3\relax%
 }%
+\def\newcounter #1{%
+  \ParseCounterSpec\@newcounter{#1}%
+}%
+\def\@newcounter #1#2#3#4{%
+  \ensurereg{count}{c@#1}{#4}%
+  \nameedef{c@#1@style}{#3}%
+  \namedef{c@#1@hooks}{}%
+  \if$#2$\else%
+    \applycw\addtoks{c@#2@hooks}{%
+      \applyw{c@#1@hooks}%
+      \global\applyw{c@#1}=#4\relax%
+    }%
+  \fi%
+}%
+\def\stepcounter #1{%
+  \global\applycw\advance{c@#1}\One%
+  \applyw{c@#1@hooks}%
+}%
 \let\counta\count@%
 \ensurereg{count}{countb}{0}%
+\ensurereg{count}{countc}{0}%
 \let\dimena\dimen@%
 \let\dimenb\dimen@i%
 \let\dimenc\dimen@ii%
 %
 % Codes utilities:
 \def\LoopOverCodes #1{%
-  \counta\Zero%
+  \counta \Zero%
   \loop%
     #1%
-    \advance\counta\One%
+    \advance \counta \One%
     \ifnum\counta<\Cxxviii%
   \repeat%
 }%
@@ -136,17 +229,47 @@
 }%
 %
 % I/O:
+\newread\@testin%
+\newwrite\@auxfile%
+\def\@auxfilename{\jobname.tmp}%
+\def\@open@auxfilew{\immediate\openout\@auxfile=\@auxfilename\relax}%
+\def\@close@auxfilew{\immediate\closeout\@auxfile}%
+\def\waux{\write\@auxfile}%
+\def\pwaux #1{%
+  \begingroup%
+    \def\protect ##1{\def##1{\string##1}}%
+    \def\protectonce ##1{\def##1{\noexpand##1}}%
+    \@protected%
+    \edef\next{\waux{#1}}%
+    \expandafter%
+  \endgroup%
+  \next%
+}%
 \def\wterm{\immediate\write\Sixteen}%
+\newif\ifwarning \warningfalse%
+\def\warning #1{\warningtrue \wterm{l.\the\inputlineno\space WARNING: #1}}%
+\def\sinput #1{%
+  \openin\@testin=#1%
+  \let\next\relax%
+  \ifeof\@testin%
+    \warning{The file `#1` does not exist.}%
+  \else%
+    \closein\@testin%
+    \def\next{\input #1 }%
+  \fi%
+  \next%
+}%
 %
 % Font utilities:
 \def\FontQuadWidth{\fontdimen6}%
 %
 % Horizontal list utilities:
 \def\SlantedShift #1{%
-  \dimena#1%
+  \dimena #1%
   \kern \strippt\fontdimen1\font\dimena%
 }%
 \def\textbox #1{\setbox#1\hbox}%
+\def\removeparbox{\everypar{{\setbox\Zero \lastbox}\everypar{}}}%
 %
 % Restore @'s category:
 \restorecat\@%
