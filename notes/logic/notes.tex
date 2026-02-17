@@ -14,37 +14,61 @@
 \subject{Mathematical Logic}%
 \author{Ji\v r\'i Ku\v cera}%
 
+\frontmatter
+
 \frontcover
 \titlepage
 \infopage
 
 \aboutpage
 
-\end
-
 \contents
+
+\mainmatter
 
 \chapter Introduction (intro).
 
-This document contain a notes related to mathematical logic. The content of the
-document is organized into three chapters.
+This document serves as a collection of notes taken from various sources about
+mathematical logic, mostly from \cite{Men15}. The content of this document is
+organized into three\footnote{A simple foot note.} chapters.
 
-\refsec{ch:intro}, gives the outline of this document. The structure of
-following chapters are described here.
+\refsec{ch:intro}, first outlines the structure of this document and then, in
+\refsec{sec:funterm}, it gives a fundamental terminology and notation used in
+the following chapters.
 
 \refsec{ch:pcalc}, is dedicated to the propositional calculus.
 
 Finally, \refsec{ch:folog}, is dedicated to the first-order logic.
 
+\section Fundamental Terminology (funterm).
+
+Mathematical logic is not a small area. Actually, it spans across many other
+fields of mathematics, like the computer science theory or set theory. To
+demonstrate it, lets take a look on axiomatic set theory. Axiomatic set theory
+precisely defines a set via axioms written in mathematical logic. On the other
+hand, mathematical logic uses notions of set and function to describe its core
+concepts, as it will be shown later. Thus, these two areas of mathematics are
+tightly interconnected.
+
 \chapter Propositional Calculus (pcalc).
 
 This chapter summarizes the notes taken about the propositional calculus.
+
+\iffalse
 
 \section Terminology (term).
 
 Let us first define formally some fundamental terminology. We suppose that the
 reader is familiar with the basic notions from algebra (see Chapter 1 in
 \cite{MN-Algebra} for definitions and used notation).
+
+\definition Language of propositional logic (plog-lang):
+  Let $P$ be a countable nonempty set of symbols, called \term{atomic
+  sentences}. The language of the propositional logic, $L_P$, is the set
+  containing all symbols from $P$, parenthesis $($ and $)$, and
+  \term{propositional connectives} $\lnot$, $\land$, $\lor$, $\imply$, and
+  $\iff$.
+\quit
 
 \definition Truth value (truth-value):
   A \term{truth value} is either 0 or 1. Truth values 0 and 1 are usually
@@ -148,6 +172,19 @@ expression made upon these symbols, respectively.
     \item Every statement form is made only by a finite number of applications
       of rules \refitem{1} and \refitem{2}.
   \quit
+\quit
+
+\fi
+
+\chapter First-Order Logic (folog).
+
+A placeholder chapter for the first-order logic.
+
+\references Bibliography:
+  \publication Men15:
+    Elliott Mendelson.
+    \emph{Introduction to Mathematical Logic}, 6th edition.
+    CRC Press, Boca Raton, 2015.
 \quit
 
 \docend

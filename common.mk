@@ -15,4 +15,6 @@ export TEXINPUTS = .:../..:
 .PHONY: all clean
 
 %.pdf: %.tex
+	$(RM) $(<:.tex=.tmp)
+	$(PDFTEX) $<
 	$(PDFTEX) $<
