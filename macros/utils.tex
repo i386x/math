@@ -19,25 +19,73 @@
 \expandafter\edef\csname @restore@\number`\@ @catcode\endcsname{%
   \catcode`\noexpand\@=\the\catcode`\@\relax%
 }%
-\catcode`\@\CatLetter%
+\catcode`\@ \CatLetter%
 %
 % General hooks, sentinels, and temporary storage:
 \let\\\relax%
+\def\sentinel{\relax\relax\relax}%
 \let\do\relax%
+\let\elt\relax%
 \let\next\relax%
 \let\@tempa\relax%
+\let\@tempb\relax%
+\let\@tempc\relax%
+\let\@tempd\relax%
+\let\@tempe\relax%
+\newif\if@tempsw \@tempswfalse%
 %
-% The space token:
+% Tokens:
 \def\spacetok:{\let\spacetok= }\spacetok: % the space after : is important
+\let\asterisktok=*%
+\let\toksa\toks@%
+\def\addtoks #1#2{\applycctx\def#1{#1#2}}%
+\def\car #1#2\\{#1}%
+\def\cdr #1#2\\{#2}%
+\def\rem #1\\{}%
+\def\@cxrx #1#2#3{%
+  \ifx#3\empty%
+    \let#2\empty%
+  \else%
+    \def\do ##1{\toksa\expandafter{#1##1\\}}%
+    \applyctx\do{#3}%
+    \edef#2{\the\toksa}%
+  \fi%
+}%
+\def\carx{\@cxrx\car}%
+\def\cdrx{\@cxrx\cdr}%
+\def\@protected{}%
+\def\protect #1{\addtoks\@protected{\protect#1}}%
+\def\protectonce #1{\addtoks\@protected{\protectonce#1}}%
 %
 % Gobbling:
 \def\gobble #1{}%
+\def\gobbletwo #1#2{}%
+\def\gobblethree #1#2#3{}%
+\def\gobblefour #1#2#3#4{}%
 %
-% Moving stuff after a conditional:
-\def\afterfi #1\fi{\fi#1}%
-\def\afterfifi #1\fi\fi{\fi\fi#1}%
+% Unpacking tuples:
+\def\first #1#2{#1}%
+\def\second #1#2{#2}%
+\def\firstofthree #1#2#3{#1}%
+\def\secondofthree #1#2#3{#2}%
+\def\thirdofthree #1#2#3{#3}%
 %
-% Defining macros and aliases with arbitrary names:
+% Macrobatics (macro acrobatics):
+\def\afterfi #1#2\fi{#2\fi#1}%
+\def\afterfifi #1#2\fi\fi{#2\fi\fi#1}%
+\def\throwoveras #1#2\endgroup{\applyccctx\endgroup\def#2{#1}}%
+\def\throwover #1{\throwoveras#1#1}%
+%   - `t` suffix stands for an arbitrary token
+\def\@unwrap #1{\edef#1{\expandafter}}%
+\def\unwrap #1{\@unwrap#1#1}%
+\def\@unwrapt #1{\@unwrap#1\expandafter}%
+\def\unwrapt #1#2{\@unwrapt#2#1#2}%
+\def\@unwraptt #1#2{\@unwrapt#1#2\expandafter}%
+\def\unwraptt #1#2#3{\@unwraptt#3#1#2#3}%
+\def\@unwrapttt #1#2#3{\@unwraptt#1#2#3\expandafter}%
+\def\unwrapttt #1#2#3#4{\@unwrapttt#4#1#2#3#4}%
+%
+% Defining macros:
 \def\namelet #1{\expandafter\let\csname #1\endcsname}%
 \def\nameslet #1#2{%
   \expandafter\let\csname #1\expandafter\endcsname\csname #2\endcsname%
@@ -45,10 +93,23 @@
 \def\namedef #1{\expandafter\def\csname #1\endcsname}%
 \def\nameedef #1{\expandafter\edef\csname #1\endcsname}%
 %
-% Invoking macros with arbitrary names:
+% Invoking macros:
+%   - suffixes: `w` means word, `c` control sequence, `t` an arbitrary token,
+%               and `x` means expand once
 \def\applyw #1{\csname #1\endcsname}%
 \def\applycw #1#2{\expandafter#1\csname #2\endcsname}%
+\def\applyccw #1#2#3{\expandafter#1\expandafter#2\csname #3\endcsname}%
 \def\applyww #1#2{\csname #1\expandafter\endcsname\csname #2\endcsname}%
+\def\applyctx #1{\expandafter#1\expandafter}%
+\def\applycctx #1#2{\applyctx#1#2\expandafter}%
+\def\applyccctx #1#2#3{\applycctx#1#2#3\expandafter}%
+\def\applycxx{\applycctx\expandafter}%
+%
+% Protection:
+\protect\namelet%
+\protect\nameslet%
+\protect\namedef%
+\protect\nameedef%
 %
 % Character tests:
 \def\isdigit #1#2{\ifnum#1>47 \ifnum#1<58 \afterfifi{#2}\fi\fi}%
@@ -82,8 +143,203 @@
 \endgroup%
 \def\@strip@done #1\\#2\relax#3{\def#3{#1}}%
 \edef\@pt{\expandafter\gobble\string\pt}%
-\edef\@tempa{\def\noexpand\@rem@pt ##1\@pt{##1}}\@tempa%
+{\edef\next{\gdef\noexpand\@rem@pt ##1\@pt{##1}}\next}%
 \def\strippt{\expandafter\@rem@pt\the}%
+%
+% Parsing:
+\def\ParseSubject #1#2{\applyw{@parse@subject@#2}#1}%
+\namedef{@parse@subject@.}#1#2.{%
+  \futurelet\@tempa\@parse@subject@cont #2 ()\relax#1%
+}%
+\namedef{@parse@subject@:}#1#2:{%
+  \futurelet\@tempa\@parse@subject@cont #2 ()\relax#1%
+}%
+\def\@parse@subject@cont{%
+  \ifx\@tempa\asterisktok%
+    \afterfi\@parse@subject@final@a%
+  \else%
+    \afterfi\@parse@subject@final@b%
+  \fi%
+}%
+\def\@parse@subject@final@a*#1 (#2)#3\relax#4{#4{*}{#1}{#2}}%
+\def\@parse@subject@final@b #1 (#2)#3\relax#4{#4{}{#1}{#2}}%
+\def\ParseCounterSpec #1#2{\@parse@counter@spec@try@eq #2=\relax#1}%
+\def\@parse@counter@spec@try@eq #1=#2\relax{%
+  \if$#2$%
+    \afterfi{\@parse@counter@spec@try@slash #1/\relax{0}}%
+  \else%
+    \afterfi{\@parse@counter@spec@eat@eq #1=#2\relax}%
+  \fi%
+}%
+\def\@parse@counter@spec@eat@eq #1=#2=\relax{%
+  \@parse@counter@spec@try@slash #1/\relax{#2}%
+}%
+\def\@parse@counter@spec@try@slash #1/#2\relax{%
+  \if$#2$%
+    \afterfi{\@parse@counter@spec@try@paren #1(\relax{1}}%
+  \else%
+    \afterfi{\@parse@counter@spec@eat@slash #1/#2\relax}%
+  \fi%
+}%
+\def\@parse@counter@spec@eat@slash #1/#2/\relax{%
+  \@parse@counter@spec@try@paren #1(\relax{#2}%
+}%
+\def\@parse@counter@spec@try@paren #1(#2\relax{%
+  \if$#2$%
+    \afterfi{\@parse@counter@spec@final{#1}{}}%
+  \else%
+    \afterfi{\@parse@counter@spec@eat@paren #1(#2\relax}%
+  \fi%
+}%
+\def\@parse@counter@spec@eat@paren #1(#2)(\relax{%
+  \@parse@counter@spec@final{#1}{#2}%
+}%
+\def\@parse@counter@spec@final #1#2#3#4#5{#5{#1}{#2}{#3}{#4}}%
+%
+% CSV list:
+\def\csviter #1#2{%
+  \@csviter #1#2,\relax\relax\relax,\\%
+}%
+\def\@csviter #1#2,{%
+  \begingroup%
+    \def\@tempa{#2}%
+    \expandafter%
+  \endgroup%
+  \ifx\@tempa\sentinel%
+    \expandafter\rem%
+  \fi%
+  #1{#2}%
+  \@csviter#1%
+}%
+%
+% Sorting:
+\newif\ifle \lefalse%
+\def\mergesort #1#2{%
+  % #1: a comparison macro
+  % #2: a macro containing a sequence of control sequences
+  \begingroup%
+    \@mergesort@init #1#2%
+    \@mergesort@run #1#2%
+    \ifnum\counta<\One%
+      \wraning{\string\mergesort\space is broken.}%
+    \fi%
+    \throwover #2%
+  \endgroup%
+}%
+\def\@mergesort@init #1#2{%
+  % #1, #2 as in \mergesort
+  \counta \Zero%
+  \unwrapttt\@merge@singletons#1#2#2\sentinel\sentinel%
+}%
+\def\@merge@singletons #1#2#3#4{%
+  % #1: a comparison macro
+  % #2: a container
+  % #3, #4: elements
+  \ifx#3\sentinel%
+    % We reached the end, align to the even number of groups
+    \@mergesort@align@groups #2%
+  \else\ifx#4\sentinel%
+    % One singleton group
+    \addtoks #2{{#3}}%
+    \advance \counta \One%
+    \@mergesort@align@groups #2%
+  \else%
+    % Two elements
+    #1#3#4%
+    \ifle%
+      % #3 <= #4
+      \addtoks #2{{#3#4}}%
+    \else%
+      % #3 > #4
+      \addtoks #2{{#4#3}}%
+    \fi%
+    \advance \counta \One%
+    \afterfifi{\@merge@singletons#1#2}%
+  \fi\fi%
+}%
+\def\@mergesort@align@groups #1{%
+  \ifodd\counta%
+    \addtoks #1{{}}%
+    \advance \counta \One%
+  \else%
+    % Add two empty groups to avoid groups merging crash
+    \addtoks #1{{}{}}%
+    \advance \counta \Two%
+  \fi%
+}%
+\def\@mergesort@run #1#2{%
+  \ifnum\counta<\Two\else%
+    \unwrapttt\@merge@groups#1#2#2\sentinel%
+    % Sanitize \@merge@groups result
+    \ifnum\counta<\One%
+      \def#2{{}}%
+      \counta \One%
+    \else\ifnum\counta=\One%
+      % #2 is sorted
+    \else%
+      \@mergesort@align@groups #2%
+    \fi\fi%
+    \afterfi{\@mergesort@run #1#2}%
+  \fi%
+}%
+\def\@merge@groups #1#2#3#4{%
+  % Two groups are eaten
+  \advance \counta -\Two%
+  \def\@tempa{#3}%
+  \def\@tempb{#4}%
+  \ifx\@tempa\empty%
+    % End reached => stop
+    \def\next ##1\sentinel{}%
+  \else\ifx\@tempb\empty%
+    % Merge #3 with the empty group and stop
+    \addtoks #2{{#3}}%
+    \advance \counta \One%
+    \def\next ##1\sentinel{}%
+  \else%
+    % Merge #3 and #4 together
+    \let\@tempe\empty%
+    \def\next{%
+      % \@tempc := car(\@tempa)
+      \carx\@tempc\@tempa%
+      % \@tempd := car(\@tempb)
+      \carx\@tempd\@tempb%
+      % Compare \@tempc and \@tempd
+      \ifx\@tempc\empty%
+        \ifx\@tempd\empty%
+          % End of merging
+          \let\next\relax%
+        \else%
+          \@merge@groups@move\@tempe\@tempd\@tempb%
+        \fi%
+      \else%
+        \ifx\@tempd\empty%
+          \@merge@groups@move\@tempe\@tempc\@tempa%
+        \else%
+          \applycxx#1\@tempc\@tempd%
+          \ifle%
+            % \@tempc <= \@tempd
+            \@merge@groups@move\@tempe\@tempc\@tempa%
+          \else%
+            % \@tempc > \@tempd
+            \@merge@groups@move\@tempe\@tempd\@tempb%
+          \fi%
+        \fi%
+      \fi%
+      \next%
+    }%
+    \next%
+    \applycctx\addtoks#2{\expandafter{\@tempe}}%
+    \advance \counta \One%
+    \def\next{\@merge@groups #1#2}%
+  \fi\fi%
+  \next%
+}%
+\def\@merge@groups@move #1#2#3{%
+  % append(#1, #2)
+  \applycctx\addtoks#1{#2}%
+  % #3 := cdr(#3)
+  \cdrx#3#3%
+}%
 %
 % Character category utilities:
 \def\changecat #1#2{%
@@ -106,18 +362,73 @@
   \fi%
   \applyw{#2}=#3\relax%
 }%
+\def\newcounter #1{%
+  \ParseCounterSpec\@newcounter{#1}%
+}%
+\def\@newcounter #1#2#3#4{%
+  \ensurereg{count}{c@#1}{#4}%
+  \nameedef{c@#1@style}{#3}%
+  \namedef{c@#1@hooks}{}%
+  \if$#2$\else%
+    \applycw\addtoks{c@#2@hooks}{%
+      \applyw{c@#1@hooks}%
+      \global\applyw{c@#1}=#4\relax%
+    }%
+  \fi%
+}%
+\def\stepcounter #1{%
+  \global\applycw\advance{c@#1}\One%
+  \applyw{c@#1@hooks}%
+}%
+\def\cval #1{\applyww{@c@style@\applyw{c@#1@style}}{c@#1}}%
+\let\arabic\number%
+\namelet{@c@style@1}\arabic%
+\let\roman\romannumeral%
+\let\@c@style@i\roman%
+\def\Roman #1{\applyctx\@Roman{\romannumeral #1.}}%
+\def\@Roman #1{\applyw{@Roman@#1}}%
+\def\@Roman@i{I\@Roman}%
+\def\@Roman@v{V\@Roman}%
+\def\@Roman@x{X\@Roman}%
+\def\@Roman@l{L\@Roman}%
+\def\@Roman@c{C\@Roman}%
+\def\@Roman@d{D\@Roman}%
+\def\@Roman@m{M\@Roman}%
+\namedef{@Roman@.}{}%
+\let\@c@style@I\Roman%
+\def\alph #1{%
+  \ifcase #1%
+    \or a\or b\or c\or d\or e\or f\or g\or h\or i\or j\or k\or l\or m\or n%
+    \or o\or p\or q\or r\or s\or t\or u\or v\or w\or x\or y\or z%
+    \else ?%
+  \fi%
+}%
+\let\@c@style@a\alph%
+\def\Alph #1{%
+  \ifcase #1%
+    \or A\or B\or C\or D\or E\or F\or G\or H\or I\or J\or K\or L\or M\or N%
+    \or O\or P\or Q\or R\or S\or T\or U\or V\or W\or X\or Y\or Z%
+    \else ?%
+  \fi%
+}%
+\let\@c@style@A\Alph%
 \let\counta\count@%
 \ensurereg{count}{countb}{0}%
+\ensurereg{count}{countc}{0}%
 \let\dimena\dimen@%
 \let\dimenb\dimen@i%
 \let\dimenc\dimen@ii%
+\let\skipa\skip@%
+\ensurereg{skip}{skipb}{\ZeroSkip}%
+\ensurereg{skip}{skipc}{\ZeroSkip}%
+\newbox\boxa%
 %
 % Codes utilities:
 \def\LoopOverCodes #1{%
-  \counta\Zero%
+  \counta \Zero%
   \loop%
     #1%
-    \advance\counta\One%
+    \advance \counta \One%
     \ifnum\counta<\Cxxviii%
   \repeat%
 }%
@@ -136,17 +447,124 @@
 }%
 %
 % I/O:
+\newread\@testin%
+\newwrite\@auxfile%
+\def\@auxfilename{\jobname.tmp}%
+\def\@open@auxfilew{\immediate\openout\@auxfile=\@auxfilename\relax}%
+\def\@close@auxfilew{\immediate\closeout\@auxfile}%
+\def\waux{\write\@auxfile}%
+\def\pwaux #1{%
+  \begingroup%
+    \def\protect ##1{\def##1{\string##1}}%
+    \def\protectonce ##1{\def##1{\noexpand##1}}%
+    \@protected%
+    \edef\next{\waux{#1}}%
+    \expandafter%
+  \endgroup%
+  \next%
+}%
 \def\wterm{\immediate\write\Sixteen}%
+\newif\ifwarning \warningfalse%
+\def\warning #1{%
+  \global\warningtrue%
+  \wterm{l.\the\inputlineno\space WARNING: #1}%
+}%
+\def\sinput #1{%
+  \openin\@testin=#1%
+  \let\next\relax%
+  \ifeof\@testin%
+    \warning{The file `#1` does not exist.}%
+  \else%
+    \closein\@testin%
+    \def\next{\input #1 }%
+  \fi%
+  \next%
+}%
 %
 % Font utilities:
 \def\FontQuadWidth{\fontdimen6}%
 %
 % Horizontal list utilities:
 \def\SlantedShift #1{%
-  \dimena#1%
+  \dimena #1%
   \kern \strippt\fontdimen1\font\dimena%
 }%
-\def\textbox #1{\setbox#1\hbox}%
+\def\textbox #1{\setbox#1 \hbox}%
+\def\removeparbox{\everypar{{\setbox\Zero \lastbox}\everypar{}}}%
+\def\hangfrom #1{%
+  \textbox\Zero{#1}%
+  \hangindent \wd\Zero%
+  \noindent \box\Zero%
+}%
+%
+% Vertical list utilities:
+\newif\if@nobreak \@nobreakfalse%
+\def\xremovelastskip #1{%
+  % Remove \lastskip if \lastskip <> #1
+  \skipa #1\relax%
+  \advance \skipa -\lastskip%
+  \ifdim\skipa=\ZeroUnit\else%
+    \vskip -\lastskip%
+  \fi%
+}%
+\def\@can@break@here{%
+  % Test whether the last element of the recent contributions list is a
+  % \penalty greater or equal 10000, possibly followed by one non-zero glue
+  % element. Since the test is not perfect, use this macro with caution
+  \skipa \ZeroSkip%
+  \ifdim\lastskip=\ZeroUnit\else%
+    \skipa \lastskip%
+    \unskip%
+  \fi%
+  \ifnum\lastpenalty<\TenThousands%
+    \@nobreakfalse%
+  \else%
+    \@nobreaktrue%
+  \fi%
+  \ifdim\skipa=\ZeroUnit\else%
+    \vskip \skipa%
+  \fi%
+}%
+\def\addpenalty #1{%
+  \@can@break@here%
+  \if@nobreak\else%
+    \ifdim\lastskip=\ZeroUnit%
+      \penalty #1\relax%
+    \else%
+      \xremovelastskip\ZeroUnit%
+      % \skipa is now -\lastskip
+      \penalty #1\relax%
+      \vskip -\skipa%
+    \fi%
+  \fi%
+}%
+\def\adjustvspace #1{%
+  % If #1 >= 0, the new vertical space will be max(\lastskip, #1).
+  % If #1 < 0, the new vertical space will be max(0, \lastskip) + #1. This is
+  % useful when we need to make a room for the incoming positive \vskip: the
+  % incoming positive \vskip will either reset the negative \lastskip to 0 or
+  % it will be canceled by the positive \lastskip
+  \ifdim\lastskip=\ZeroUnit%
+    \vskip #1\relax%
+  \else%
+    \skipb \lastskip%
+    \xremovelastskip{#1}%
+    % \skipa is now (#1 - \lastskip), make \skipa to be #1
+    \advance \skipa \skipb%
+    % If \lastskip = #1, do not contribute any space (the \xremovelastskip
+    % command is a no-op in this case)
+    \ifdim\skipa=\skipb\else%
+      \ifdim\skipb<\skipa%
+        \vskip \skipa%
+      \else\ifdim\skipa<\ZeroUnit%
+        \ifdim\skipb>\ZeroUnit%
+          \advance \skipa \skipb%
+          \vskip \skipa%
+        \fi%
+      \fi\fi%
+    \fi%
+  \fi%
+}%
 %
 % Restore @'s category:
 \restorecat\@%

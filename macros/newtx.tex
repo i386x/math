@@ -37,21 +37,21 @@
 \font\threeivsf=NotoSans-Regular-tlf-t1 at 3.41273\Unit%
 %   - typewriter
 \font\tentt=NotoSansMono-Regular-tlf-t1%
-\hyphenchar\tentt\MinusOne%
+\hyphenchar\tentt \MinusOne%
 \font\ninett=NotoSansMono-Regular-tlf-t1 at 8.5\Unit%
-\hyphenchar\ninett\MinusOne%
+\hyphenchar\ninett \MinusOne%
 \font\seventt=NotoSansMono-Regular-tlf-t1 at 7.3\Unit%
-\hyphenchar\seventt\MinusOne%
+\hyphenchar\seventt \MinusOne%
 \font\sixtt=NotoSansMono-Regular-tlf-t1 at 6.20496\Unit%
-\hyphenchar\sixtt\MinusOne%
+\hyphenchar\sixtt \MinusOne%
 \font\fivevtt=NotoSansMono-Regular-tlf-t1 at 5.5\Unit%
-\hyphenchar\fivevtt\MinusOne%
+\hyphenchar\fivevtt \MinusOne%
 \font\fourvitt=NotoSansMono-Regular-tlf-t1 at 4.67502\Unit%
-\hyphenchar\fourvitt\MinusOne%
+\hyphenchar\fourvitt \MinusOne%
 \font\fourtt=NotoSansMono-Regular-tlf-t1 at 4.01501\Unit%
-\hyphenchar\fourtt\MinusOne%
+\hyphenchar\fourtt \MinusOne%
 \font\threeivtt=NotoSansMono-Regular-tlf-t1 at 3.41273\Unit%
-\hyphenchar\threeivtt\MinusOne%
+\hyphenchar\threeivtt \MinusOne%
 %   - italic
 \font\tenit=ntx-Italic-tlf-t1%
 \font\nineit=ntx-Italic-tlf-t1 at 8.5\Unit%
@@ -170,21 +170,21 @@
 %
 % Math codes:
 \def\setmathcodes{%
-  \mathcode`\" "0022 \mathcode`\# "0023 \mathcode`\$ "0024 \mathcode`\% "0025%
-  \mathcode`\& "0026 \mathcode`\@ "0040 \mathcode`\^ "005E \mathcode`\` "0060%
-  \mathcode`\{ "007B \mathcode`\} "007D \mathcode`\~ "007E%
-  \mathcode`\. "013A \mathcode`\\ "026E \mathcode`\| "026A%
-  \mathcode`\* "2203 \mathcode`+ "22CF \mathcode`\- "2200%
-  \mathcode`\: "303A \mathcode`\< "313C \mathcode`\= "343D \mathcode`\> "313E%
-  \mathcode`\( "42B9 \mathcode`\) "52BA \mathcode`\[ "42BB \mathcode`\] "52BC%
-  \mathcode`\! "5021 \mathcode`\/ "429D \mathcode`\? "503F%
-  \mathcode`\, "613B \mathcode`\; "603B%
-  \mathcode`\  "8000 \mathcode`\' "8000 \mathcode`\_ "8000%
+  \mathcode`\" "0022 \mathcode`\# "0023 \mathcode`\$ "0024 \mathcode`\% "0025 %
+  \mathcode`\& "0026 \mathcode`\@ "0040 \mathcode`\^ "005E \mathcode`\` "0060 %
+  \mathcode`\{ "007B \mathcode`\} "007D \mathcode`\~ "007E %
+  \mathcode`\. "013A \mathcode`\\ "026E \mathcode`\| "026A %
+  \mathcode`\* "2203 \mathcode`+ "22CF \mathcode`\- "2200 %
+  \mathcode`\: "303A \mathcode`\< "313C \mathcode`\= "343D \mathcode`\> "313E %
+  \mathcode`\( "42B9 \mathcode`\) "52BA \mathcode`\[ "42BB \mathcode`\] "52BC %
+  \mathcode`\! "5021 \mathcode`\/ "429D \mathcode`\? "503F %
+  \mathcode`\, "613B \mathcode`\; "603B %
+  \mathcode`\  "8000 \mathcode`\' "8000 \mathcode`\_ "8000 %
   %
-  \delcode`\( "2B9300 \delcode`\) "2BA301%
-  \delcode`\/ "29D30E \delcode`\\ "26E30F%
-  \delcode`\< "26830A \delcode`\> "26930B%
-  \delcode`\[ "2BB302 \delcode`\] "2BC303%
+  \delcode`\( "2B9300 \delcode`\) "2BA301 %
+  \delcode`\/ "29D30E \delcode`\\ "26E30F %
+  \delcode`\< "26830A \delcode`\> "26930B %
+  \delcode`\[ "2BB302 \delcode`\] "2BC303 %
   \delcode`\| "26A30C %
 }%
 %
@@ -204,7 +204,7 @@
   \namedef{#2}{%
     \def\tieaccent{\applyw{#1#3}\accent#4 }%
     \def\textcommafont{%
-      \baselineskip\ZeroSkip%
+      \baselineskip \ZeroSkip%
       \applyw{\applyw{#1TextCommaSize}#2}%
     }%
     \applyw{#1#2}%
@@ -252,63 +252,63 @@
 % Math font size switches:
 %   - normal
 \def\normalmath{%
-  \textfont\Zero\tenrmm% 10 pt
-  \scriptfont\Zero\sevenrmm% 7.3 pt
-  \scriptscriptfont\Zero\fivevrmm% 5.5 pt
-  \textfont\One\teni% 10 pt
-  \scriptfont\One\seveni% 7.3 pt
-  \scriptscriptfont\One\fivevi% 5.5 pt
-  \textfont\Two\tensy% 10 pt
-  \scriptfont\Two\sevensy% 7.3 pt
-  \scriptscriptfont\Two\fivevsy% 5.5 pt
-  \textfont\Three\tenex% 10 pt
-  \scriptfont\Three\sevenex% 7.3 pt
-  \scriptscriptfont\Three\fivevex% 5.5 pt
+  \textfont\Zero \tenrmm% 10 pt
+  \scriptfont\Zero \sevenrmm% 7.3 pt
+  \scriptscriptfont\Zero \fivevrmm% 5.5 pt
+  \textfont\One \teni% 10 pt
+  \scriptfont\One \seveni% 7.3 pt
+  \scriptscriptfont\One \fivevi% 5.5 pt
+  \textfont\Two \tensy% 10 pt
+  \scriptfont\Two \sevensy% 7.3 pt
+  \scriptscriptfont\Two \fivevsy% 5.5 pt
+  \textfont\Three \tenex% 10 pt
+  \scriptfont\Three \sevenex% 7.3 pt
+  \scriptscriptfont\Three \fivevex% 5.5 pt
 }%
 %   - small
 \def\smallmath{%
-  \textfont\Zero\ninermm% 8.5 pt
-  \scriptfont\Zero\sixrmm% 6.20496 pt
-  \scriptscriptfont\Zero\fourvirmm% 4.67502 pt
-  \textfont\One\ninei% 8.5 pt
-  \scriptfont\One\sixi% 6.20496 pt
-  \scriptscriptfont\One\fourvii% 4.67502 pt
-  \textfont\Two\ninesy% 8.5 pt
-  \scriptfont\Two\sixsy% 6.20496 pt
-  \scriptscriptfont\Two\fourvisy% 4.67502 pt
-  \textfont\Three\nineex% 8.5 pt
-  \scriptfont\Three\sixex% 6.20496 pt
-  \scriptscriptfont\Three\fourviex% 4.67502 pt
+  \textfont\Zero \ninermm% 8.5 pt
+  \scriptfont\Zero \sixrmm% 6.20496 pt
+  \scriptscriptfont\Zero \fourvirmm% 4.67502 pt
+  \textfont\One \ninei% 8.5 pt
+  \scriptfont\One \sixi% 6.20496 pt
+  \scriptscriptfont\One \fourvii% 4.67502 pt
+  \textfont\Two \ninesy% 8.5 pt
+  \scriptfont\Two \sixsy% 6.20496 pt
+  \scriptscriptfont\Two \fourvisy% 4.67502 pt
+  \textfont\Three \nineex% 8.5 pt
+  \scriptfont\Three \sixex% 6.20496 pt
+  \scriptscriptfont\Three \fourviex% 4.67502 pt
 }%
 %   - script size
 \def\scriptsizemath{%
-  \textfont\Zero\sevenrmm% 7.3 pt
-  \scriptfont\Zero\fivermm% 5.32896 pt
-  \scriptscriptfont\Zero\fourrmm% 4.01501 pt
-  \textfont\One\seveni% 7.3 pt
-  \scriptfont\One\fivei% 5.32896 pt
-  \scriptscriptfont\One\fouri% 4.01501 pt
-  \textfont\Two\sevensy% 7.3 pt
-  \scriptfont\Two\fivesy% 5.32896 pt
-  \scriptscriptfont\Two\foursy% 4.01501 pt
-  \textfont\Three\sevenex% 7.3 pt
-  \scriptfont\Three\fiveex% 5.32896 pt
-  \scriptscriptfont\Three\fourex% 4.01501 pt
+  \textfont\Zero \sevenrmm% 7.3 pt
+  \scriptfont\Zero \fivermm% 5.32896 pt
+  \scriptscriptfont\Zero \fourrmm% 4.01501 pt
+  \textfont\One \seveni% 7.3 pt
+  \scriptfont\One \fivei% 5.32896 pt
+  \scriptscriptfont\One \fouri% 4.01501 pt
+  \textfont\Two \sevensy% 7.3 pt
+  \scriptfont\Two \fivesy% 5.32896 pt
+  \scriptscriptfont\Two \foursy% 4.01501 pt
+  \textfont\Three \sevenex% 7.3 pt
+  \scriptfont\Three \fiveex% 5.32896 pt
+  \scriptscriptfont\Three \fourex% 4.01501 pt
 }%
 %   - small script size
 \def\smallscriptsizemath{%
-  \textfont\Zero\sixrmm% 6.20496 pt
-  \scriptfont\Zero\fourvrmm% 4.52959 pt
-  \scriptscriptfont\Zero\threeivrmm% 3.41273 pt
-  \textfont\One\sixi% 6.20496 pt
-  \scriptfont\One\fourvi% 4.52959 pt
-  \scriptscriptfont\One\threeivi% 3.41273 pt
-  \textfont\Two\sixsy% 6.20496 pt
-  \scriptfont\Two\fourvsy% 4.52959 pt
-  \scriptscriptfont\Two\threeivsy% 3.41273 pt
-  \textfont\Three\sixex% 6.20496 pt
-  \scriptfont\Three\fourvex% 4.52959 pt
-  \scriptscriptfont\Three\threeivex% 3.41273 pt
+  \textfont\Zero \sixrmm% 6.20496 pt
+  \scriptfont\Zero \fourvrmm% 4.52959 pt
+  \scriptscriptfont\Zero \threeivrmm% 3.41273 pt
+  \textfont\One \sixi% 6.20496 pt
+  \scriptfont\One \fourvi% 4.52959 pt
+  \scriptscriptfont\One \threeivi% 3.41273 pt
+  \textfont\Two \sixsy% 6.20496 pt
+  \scriptfont\Two \fourvsy% 4.52959 pt
+  \scriptscriptfont\Two \threeivsy% 3.41273 pt
+  \textfont\Three \sixex% 6.20496 pt
+  \scriptfont\Three \fourvex% 4.52959 pt
+  \scriptscriptfont\Three \threeivex% 3.41273 pt
 }%
 %
 % Setup:
