@@ -72,6 +72,7 @@
 % Invoking macros with arbitrary names:
 \def\applyw #1{\csname #1\endcsname}%
 \def\applycw #1#2{\expandafter#1\csname #2\endcsname}%
+\def\applyccw #1#2#3{\expandafter#1\expandafter#2\csname #3\endcsname}%
 \def\applyww #1#2{\csname #1\expandafter\endcsname\csname #2\endcsname}%
 %
 % Character tests:
@@ -198,12 +199,48 @@
   \global\applycw\advance{c@#1}\One%
   \applyw{c@#1@hooks}%
 }%
+\def\cval #1{\applyww{@c@style@\applyw{c@#1@style}}{c@#1}}%
+\def\arabic #1{\number #1}%
+\namelet{@c@style@1}\arabic%
+\def\roman #1{\romannumeral #1}%
+\let\@c@style@i\roman%
+\def\Roman #1{\expandafter\@Roman\expandafter{\romannumeral #1.}}%
+\def\@Roman #1{\applyw{@Roman@#1}}%
+\def\@Roman@i{I\@Roman}%
+\def\@Roman@v{V\@Roman}%
+\def\@Roman@x{X\@Roman}%
+\def\@Roman@l{L\@Roman}%
+\def\@Roman@c{C\@Roman}%
+\def\@Roman@d{D\@Roman}%
+\def\@Roman@m{M\@Roman}%
+\namedef{@Roman@.}{}%
+\let\@c@style@I\Roman%
+\def\alph #1{%
+  \ifcase #1%
+    \or a\or b\or c\or d\or e\or f\or g\or h\or i\or j\or k\or l\or m\or n%
+    \or o\or p\or q\or r\or s\or t\or u\or v\or w\or x\or y\or z%
+    \else ?%
+  \fi%
+}%
+\let\@c@style@a\alph%
+\def\Alph #1{%
+  \ifcase #1%
+    \or A\or B\or C\or D\or E\or F\or G\or H\or I\or J\or K\or L\or M\or N%
+    \or O\or P\or Q\or R\or S\or T\or U\or V\or W\or X\or Y\or Z%
+    \else ?%
+  \fi%
+}%
+\let\@c@style@A\Alph%
 \let\counta\count@%
 \ensurereg{count}{countb}{0}%
 \ensurereg{count}{countc}{0}%
 \let\dimena\dimen@%
 \let\dimenb\dimen@i%
 \let\dimenc\dimen@ii%
+\let\skipa\skip@%
+\ensurereg{skip}{skipb}{\ZeroSkip}%
+\ensurereg{skip}{skipc}{\ZeroSkip}%
+\newbox\boxa%
 %
 % Codes utilities:
 \def\LoopOverCodes #1{%
@@ -247,7 +284,10 @@
 }%
 \def\wterm{\immediate\write\Sixteen}%
 \newif\ifwarning \warningfalse%
-\def\warning #1{\warningtrue \wterm{l.\the\inputlineno\space WARNING: #1}}%
+\def\warning #1{%
+  \global\warningtrue%
+  \wterm{l.\the\inputlineno\space WARNING: #1}%
+}%
 \def\sinput #1{%
   \openin\@testin=#1%
   \let\next\relax%
@@ -268,8 +308,80 @@
   \dimena #1%
   \kern \strippt\fontdimen1\font\dimena%
 }%
-\def\textbox #1{\setbox#1\hbox}%
+\def\textbox #1{\setbox#1 \hbox}%
 \def\removeparbox{\everypar{{\setbox\Zero \lastbox}\everypar{}}}%
+\def\hangfrom #1{%
+  \setbox\Zero \hbox{#1}%
+  \hangindent \wd\Zero%
+  \noindent \box\Zero%
+}%
+%
+% Vertical list utilities:
+\newif\if@nobreak \@nobreakfalse%
+\def\@can@break@here{%
+  % Test whether the last element of the recent contributions list is a
+  % \penalty greater or equal 10000, possibly followed by one non-zero glue
+  % element. Since the test is not perfect use this macro with caution.
+  \skipa \ZeroSkip%
+  \ifdim\lastskip=\ZeroUnit\else%
+    \skipa \lastskip%
+    \unskip%
+  \fi%
+  \ifnum\lastpenalty<\TenThousands%
+    \@nobreakfalse%
+  \else%
+    \@nobreaktrue%
+  \fi%
+  \ifdim\skipa=\ZeroUnit\else%
+    \vskip \skipa%
+  \fi%
+}%
+\def\ltxaddpenalty #1{%
+  % Mimics LaTeX 2e \addpenalty.
+  \@can@break@here%
+  \if@nobreak\else%
+    \ifdim\lastskip=\ZeroUnit%
+      \penalty #1\relax%
+    \else%
+      \skipb \lastskip%
+      \begingroup%
+        \skipa \skipb%
+        \advance \skipb \ifdim\prevdepth>\maxdepth%
+          \maxdepth%
+        \else\ifdim\prevdepth=-\Thousand\Unit%
+          \ZeroUnit%
+        \else%
+          \prevdepth%
+        \fi\fi%
+        \vskip -\skipb%
+        \penalty #1\relax%
+        \ifdim\skipa=\skipb\else%
+          \advance \skipb -\skipa%
+          \vskip \skipb%
+        \fi%
+        \vskip \skipa%
+      \endgroup%
+    \fi%
+  \fi%
+}%
+\def\ltxaddvspace #1{%
+  % Mimics LaTeX 2e \addvspace.
+  \ifdim\lastskip=\ZeroUnit%
+    \vskip #1\relax%
+  \else%
+    \skipb #1\relax%
+    \ifdim\lastskip<\skipb%
+      \vskip -\lastskip%
+      \vskip \skipb%
+    \else\ifdim\skipb<\ZeroUnit%
+      \ifdim\lastskip<\ZeroUnit\else%
+        \advance \skipb \lastskip%
+        \vskip -\lastskip%
+        \vskip \skipb%
+      \fi%
+    \fi\fi%
+  \fi%
+}%
 %
 % Restore @'s category:
 \restorecat\@%

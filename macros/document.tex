@@ -19,35 +19,22 @@
 %
 \makeatletter%
 %
-% Page layout:
-%   - registers
+% Page layout and parameters:
+%   - registers & layout
+\ensurereg{skip}{@flushglue}{\ZeroUnit plus 1fil}%
 \newbox\strutbox%
-\newdimen\paperwidth%
-\newdimen\paperheight%
-\newdimen\sidemargin%
-\newdimen\headheight%
-\newdimen\headsep%
-\newdimen\footskip%
+\ensurereg{dimen}{paperwidth}{210 true mm}%
+\ensurereg{dimen}{paperheight}{297 true mm}%
+\ensurereg{dimen}{sidemargin}{63\Unit}%
+\ensurereg{dimen}{headheight}{12\Unit}%
+\ensurereg{dimen}{headsep}{12\Unit}%
+\ensurereg{dimen}{footskip}{30\Unit}%
 \newinsert\botins%
-\newskip\floatsep%
-\newskip\textfloatsep%
-\newskip\fptop%
-\newskip\fpsep%
-\newskip\fpbot%
-\newdimen\footnotesep%
-\ensurereg{count}{fncount}{0}%
-%   - layout
-\paperwidth 210 true mm%
-\paperheight 297 true mm%
-\sidemargin 63\Unit%
-\headheight 12\Unit%
-\headsep 12\Unit%
-\footskip 30\Unit%
-\floatsep 12\Unit plus 2\Unit minus 2\Unit%
-\textfloatsep 24\Unit plus 2\Unit minus 4\Unit%
-\fptop \ZeroUnit%
-\fpsep 12\Unit%
-\fpbot \ZeroUnit plus 1fil%
+\ensurereg{skip}{floatsep}{12\Unit plus 2\Unit minus 2\Unit}%
+\ensurereg{skip}{textfloatsep}{24\Unit plus 2\Unit minus 4\Unit}%
+\ensurereg{skip}{fptop}{\ZeroUnit}%
+\ensurereg{skip}{fpsep}{12\Unit}%
+\ensurereg{skip}{fpbot}{\@flushglue}%
 \dimen\Zero \floatsep%
 \skip\Zero \textfloatsep%
 \advance \skip\Zero -\dimen\Zero%
@@ -61,7 +48,32 @@
 \dimen\footins 8in%
 \skip\footins 9\Unit plus 4\Unit minus 2\Unit%
 \interfootnotelinepenalty 100 %
-\footnotesep 9\Unit%
+\ensurereg{dimen}{footnotesep}{9\Unit}%
+\ensurereg{count}{fncount}{0}%
+\ensurereg{dimen}{tocchapternumwidth}{20\Unit}%
+\ensurereg{dimen}{tocsectionnumwidth}{22.5\Unit}%
+\ensurereg{dimen}{tocpagenumwidth}{1.55em}%
+\ensurereg{skip}{tocrmargin}{2.55em}%
+\ensurereg{skip}{@rightskip}{\ZeroSkip}%
+\ensurereg{dimen}{betweenumberspace}{5\Unit}%
+\ensurereg{skip}{topsep}{6\Unit plus 2\Unit minus 2\Unit}%
+\ensurereg{skip}{partopsep}{2\Unit plus 1\Unit minus 1\Unit}%
+\ensurereg{skip}{parsep}{\parskip}%
+\ensurereg{skip}{itemsep}{\ZeroSkip}%
+\ensurereg{dimen}{leftmargin}{17\Unit}%
+\ensurereg{dimen}{itemindent}{\ZeroUnit}%
+\ensurereg{dimen}{labelwidth}{12\Unit}%
+\ensurereg{dimen}{labelsep}{5\Unit}%
+\ensurereg{skip}{@topsep}{\ZeroSkip}%
+\ensurereg{skip}{@topsepadd}{\ZeroSkip}%
+\ensurereg{skip}{@outerparskip}{\ZeroSkip}%
+%   - penalties
+\chardef\LowPenalty=51%
+\chardef\MediumPenalty=151%
+\mathchardef\HighPenalty=301%
+\mathchardef\SectionPenalty=300%
+\ensurereg{count}{BeginParPenalty}{-\LowPenalty}%
+\ensurereg{count}{ItemPenalty}{-\LowPenalty}%
 %
 % Fonts:
 %   - naming convention: <base-size>[<fraction-size>]<suffix>
@@ -92,6 +104,7 @@
 %                                               ex   math extra symbols
 %   - Roman
 \font\xviirm=cmr17%
+\font\xiirm=cmr12%
 \font\tenrm=cmr10%
 \font\eightrm=cmr8%
 \font\sevenrm=cmr7%
@@ -99,6 +112,7 @@
 \font\fiverm=cmr5%
 %   - sans serif
 \font\xviisf=cmss17%
+\font\xiisf=cmss12%
 \font\tensf=cmss10%
 \font\eightsf=cmss8%
 \font\sevensf=cmss8 at 7\Unit%
@@ -107,6 +121,8 @@
 %   - typewriter
 \font\xviitt=cmtt12 at 17.28\Unit%
 \hyphenchar\xviitt \MinusOne%
+\font\xiitt=cmtt12%
+\hyphenchar\xiitt \MinusOne%
 \font\tentt=cmtt10%
 \hyphenchar\tentt \MinusOne%
 \font\eighttt=cmtt8%
@@ -119,6 +135,7 @@
 \hyphenchar\fivett \MinusOne%
 %   - italic
 \font\xviiit=cmti12 at 17.28\Unit%
+\font\xiiit=cmti12%
 \font\tenit=cmti10%
 \font\eightit=cmti8%
 \font\sevenit=cmti7%
@@ -126,6 +143,7 @@
 \font\fiveit=cmti7 at 5\Unit%
 %   - slanted
 \font\xviisl=cmsl12 at 17.28\Unit%
+\font\xiisl=cmsl12%
 \font\tensl=cmsl10%
 \font\eightsl=cmsl8%
 \font\sevensl=cmsl8 at 7\Unit%
@@ -133,6 +151,7 @@
 \font\fivesl=cmsl8 at 5\Unit%
 %   - small caps
 \font\xviisc=cmcsc10 at 17.28\Unit%
+\font\xiisc=cmcsc10 at 12\Unit%
 \font\tensc=cmcsc10%
 \font\eightsc=cmcsc10 at 8\Unit%
 \font\sevensc=cmcsc10 at 7\Unit%
@@ -140,6 +159,7 @@
 \font\fivesc=cmcsc10 at 5\Unit%
 %   - bold-face Roman
 \font\xviibf=cmbx12 at 17.28\Unit%
+\font\xiibf=cmbx12%
 \font\tenbf=cmbx10%
 \font\eightbf=cmbx8%
 \font\sevenbf=cmbx7%
@@ -148,6 +168,8 @@
 %   - italic typewriter
 \font\xviiitt=cmitt10 at 17.28\Unit%
 \hyphenchar\xviiitt \MinusOne%
+\font\xiiitt=cmitt10 at 12\Unit%
+\hyphenchar\xiiitt \MinusOne%
 \font\tenitt=cmitt10%
 \hyphenchar\tenitt \MinusOne%
 \font\eightitt=cmitt10 at 8\Unit%
@@ -160,6 +182,7 @@
 \hyphenchar\fiveitt \MinusOne%
 %   - upright
 \font\xviiu=cmu10 at 17.28\Unit%
+\font\xiiu=cmu10 at 12\Unit%
 \font\tenu=cmu10%
 \font\eightu=cmu10 at 8\Unit%
 \font\sevenu=cmu10 at 7\Unit%
@@ -168,6 +191,8 @@
 %   - TS1 Roman symbols
 \font\xviitsr=tcrm1728%
 \hyphenchar\xviitsr \MinusOne%
+\font\xiitsr=tcrm1200%
+\hyphenchar\xiitsr \MinusOne%
 \font\tentsr=tcrm1000%
 \hyphenchar\tentsr \MinusOne%
 \font\eighttsr=tcrm0800%
@@ -179,6 +204,8 @@
 %   - TS1 sans serif symbols
 \font\xviitsf=tcss1728%
 \hyphenchar\xviitsf \MinusOne%
+\font\xiitsf=tcss1200%
+\hyphenchar\xiitsf \MinusOne%
 \font\tentsf=tcss1000%
 \hyphenchar\tentsf \MinusOne%
 \font\eighttsf=tcss0800%
@@ -190,6 +217,8 @@
 %   - TS1 typewriter symbols
 \font\xviitst=tctt1728%
 \hyphenchar\xviitst \MinusOne%
+\font\xiitst=tctt1200%
+\hyphenchar\xiitst \MinusOne%
 \font\tentst=tctt1000%
 \hyphenchar\tentst \MinusOne%
 \font\eighttst=tctt0800%
@@ -201,6 +230,8 @@
 %   - TS1 italic symbols
 \font\xviitsi=tcti1728%
 \hyphenchar\xviitsi \MinusOne%
+\font\xiitsi=tcti1200%
+\hyphenchar\xiitsi \MinusOne%
 \font\tentsi=tcti1000%
 \hyphenchar\tentsi \MinusOne%
 \font\eighttsi=tcti0800%
@@ -212,6 +243,8 @@
 %   - TS1 slanted symbols
 \font\xviitsl=tcsl1728%
 \hyphenchar\xviitsl \MinusOne%
+\font\xiitsl=tcsl1200%
+\hyphenchar\xiitsl \MinusOne%
 \font\tentsl=tcsl1000%
 \hyphenchar\tentsl \MinusOne%
 \font\eighttsl=tcsl0800%
@@ -223,6 +256,8 @@
 %   - TS1 bold-face Roman symbols
 \font\xviitsb=tcbx1728%
 \hyphenchar\xviitsb \MinusOne%
+\font\xiitsb=tcbx1200%
+\hyphenchar\xiitsb \MinusOne%
 \font\tentsb=tcbx1000%
 \hyphenchar\tentsb \MinusOne%
 \font\eighttsb=tcbx0800%
@@ -233,16 +268,20 @@
 \hyphenchar\sixtsb \MinusOne%
 %   - math Roman
 \font\xviirmm=cmr17%
+\font\xiirmm=cmr12%
 \font\xirmm=cmr10 at 10.95\Unit%
 \font\tenrmm=cmr10%
+\font\ninermm=cmr9%
 \font\eightrmm=cmr8%
 \font\sevenrmm=cmr7%
 \font\sixrmm=cmr6%
 \font\fivermm=cmr5%
 %   - bold-face math Roman
 \font\xviibfm=cmbx12 at 17.28\Unit%
+\font\xiibfm=cmbx12%
 \font\xibfm=cmbx10 at 10.95\Unit%
 \font\tenbfm=cmbx10%
+\font\ninebfm=cmbx9%
 \font\eightbfm=cmbx8%
 \font\sevenbfm=cmbx7%
 \font\sixbfm=cmbx6%
@@ -250,10 +289,14 @@
 %   - math italic
 \font\xviii=cmmi12 at 17.28\Unit%
 \skewchar\xviii 127%
+\font\xiii=cmmi12%
+\skewchar\xiii 127%
 \font\xii=cmmi10 at 10.95\Unit%
 \skewchar\xii 127%
 \font\teni=cmmi10%
 \skewchar\teni 127%
+\font\ninei=cmmi9%
+\skewchar\ninei 127%
 \font\eighti=cmmi8%
 \skewchar\eighti 127%
 \font\seveni=cmmi7%
@@ -265,10 +308,14 @@
 %   - bold face math italic
 \font\xviibi=cmmib10 at 17.28\Unit%
 \skewchar\xviibi 127%
+\font\xiibi=cmmib10 at 12\Unit%
+\skewchar\xiibi 127%
 \font\xibi=cmmib10 at 10.95\Unit%
 \skewchar\xibi 127%
 \font\tenbi=cmmib10%
 \skewchar\tenbi 127%
+\font\ninebi=cmmib9%
+\skewchar\ninebi 127%
 \font\eightbi=cmmib8%
 \skewchar\eightbi 127%
 \font\sevenbi=cmmib7%
@@ -280,10 +327,14 @@
 %   - math symbols
 \font\xviisy=cmsy10 at 17.28\Unit%
 \skewchar\xviisy 48%
+\font\xiisy=cmsy10 at 12\Unit%
+\skewchar\xiisy 48%
 \font\xisy=cmsy10 at 10.95\Unit%
 \skewchar\xisy 48%
 \font\tensy=cmsy10%
 \skewchar\tensy 48%
+\font\ninesy=cmsy9%
+\skewchar\ninesy 48%
 \font\eightsy=cmsy8%
 \skewchar\eightsy 48%
 \font\sevensy=cmsy7%
@@ -295,10 +346,14 @@
 %   - bold-face math symbols
 \font\xviibsy=cmbsy10 at 17.28\Unit%
 \skewchar\xviibsy 48%
+\font\xiibsy=cmbsy10 at 12\Unit%
+\skewchar\xiibsy 48%
 \font\xibsy=cmbsy10 at 10.95\Unit%
 \skewchar\xibsy 48%
 \font\tenbsy=cmbsy10%
 \skewchar\tenbsy 48%
+\font\ninebsy=cmbsy9%
+\skewchar\ninebsy 48%
 \font\eightbsy=cmbsy8%
 \skewchar\eightbsy 48%
 \font\sevenbsy=cmbsy7%
@@ -309,10 +364,13 @@
 \skewchar\fivebsy 48%
 %   - math extra symbols
 \font\xviiex=cmex10 at 17.28\Unit%
+\font\xiiex=cmex10 at 12\Unit%
 \font\xiex=cmex10 at 10.95\Unit%
 \font\tenex=cmex10%
+\font\nineex=cmex9%
 \font\eightex=cmex8%
 \font\sevenex=cmex7%
+\font\sixex@six=cmex7 at 6\Unit%
 \font\sixex=cmex7 at 5.94997\Unit%
 \font\fiveex=cmex7 at 5\Unit%
 \font\fourqex=cmex7 at 4.25\Unit%
@@ -339,7 +397,9 @@
 }%
 %
 % Base lines:
+\def\xviiibaseline{\baselineskip 20\Unit}%
 \def\xviibaseline{\baselineskip 18\Unit}%
+\def\xiibaseline{\baselineskip 14\Unit}%
 \def\tenbaseline{\baselineskip 12\Unit}%
 \def\eightbaseline{\baselineskip 10\Unit}%
 \def\sevenbaseline{\baselineskip 7\Unit}%
@@ -610,10 +670,24 @@
   % Define text switches for the size
   \MakeFontSwitches{#1}%
 }%
+%   - large size (4th level)
+\def\largeiv{%
+  \xviiibaseline%
+  \makestrutbox%
+  \MakeFontSwitches{xvii}%
+  \largeivmath%
+  \rm%
+}%
 %   - large size (3rd level)
 \def\largeiii{%
   \TextSizeSwitchBase{xvii}%
   \largeiiimath%
+  \rm%
+}%
+%   - large size (1st level)
+\def\largei{%
+  \TextSizeSwitchBase{xii}%
+  \largeimath%
   \rm%
 }%
 %   - normal size
@@ -644,6 +718,32 @@
 }%
 %
 % Math font size switches:
+%   - large (4th level)
+\def\largeivmath{%
+  \textfont\Zero \xviirmm% 17 pt
+  \scriptfont\Zero \xiirmm% 12 pt
+  \scriptscriptfont\Zero \ninermm% 9 pt
+  \textfont\One \xviii% 17.28 pt
+  \scriptfont\One \xiii% 12 pt
+  \scriptscriptfont\One \ninei% 9 pt
+  \textfont\Two \xviisy% 17.28 pt
+  \scriptfont\Two \xiisy% 12 pt
+  \scriptscriptfont\Two \ninesy% 9 pt
+  \textfont\Three \xviiex% 17.28 pt
+  \scriptfont\Three \xiiex% 12 pt
+  \scriptscriptfont\Three \nineex% 9 pt
+  \def\boldmath{%
+    \textfont\Zero \xviibfm% 17.28 pt
+    \scriptfont\Zero \xiibfm% 12 pt
+    \scriptscriptfont\Zero \ninebfm% 9 pt
+    \textfont\One \xviibi% 17.28 pt
+    \scriptfont\One \xiibi% 12 pt
+    \scriptscriptfont\One \ninebi% 9 pt
+    \textfont\Two \xviibsy% 17.28 pt
+    \scriptfont\Two \xiibsy% 12 pt
+    \scriptscriptfont\Two \ninebsy% 9 pt
+  }%
+}%
 %   - large (3rd level)
 \def\largeiiimath{%
   \textfont\Zero \xviirmm% 17 pt
@@ -668,6 +768,32 @@
     \textfont\Two \xviibsy% 17.28 pt
     \scriptfont\Two \xibsy% 10.95 pt
     \scriptscriptfont\Two \eightbsy% 8 pt
+  }%
+}%
+%   - large (1st level)
+\def\largeimath{%
+  \textfont\Zero \xiirmm% 12 pt
+  \scriptfont\Zero \eightrmm% 8 pt
+  \scriptscriptfont\Zero \sixrmm% 6pt
+  \textfont\One \xiii% 12 pt
+  \scriptfont\One \eighti% 8 pt
+  \scriptscriptfont\One \sixi% 6pt
+  \textfont\Two \xiisy% 12 pt
+  \scriptfont\Two \eightsy% 8 pt
+  \scriptscriptfont\Two \sixsy% 6pt
+  \textfont\Three \xiiex% 12 pt
+  \scriptfont\Three \eightex% 8 pt
+  \scriptscriptfont\Three \sixex@six% 6pt
+  \def\boldmath{%
+    \textfont\Zero \xiibfm% 12 pt
+    \scriptfont\Zero \eightbfm% 8 pt
+    \scriptscriptfont\Zero \sixbfm% 6pt
+    \textfont\One \xiibi% 12 pt
+    \scriptfont\One \eightbi% 8 pt
+    \scriptscriptfont\One \sixbi% 6pt
+    \textfont\Two \xiibsy% 12 pt
+    \scriptfont\Two \eightbsy% 8 pt
+    \scriptscriptfont\Two \sixbsy% 6pt
   }%
 }%
 %   - normal
@@ -864,25 +990,71 @@
 }%
 \def\@label@id #1{label:#1}%
 \def\@label@seen #1{label-seen:#1}%
-\def\label #1{%
-  \applycw\ifx{\@anchor@name\@anchor@num}\relax%
+\def\deflabel #1#2{%
+  \applycw\ifx{#2}\relax%
     \warning{Label `#1`: Nothing to bind to.}%
   \else%
-    \@full@label@name\@@label{#1}%
-    \applycw\ifx{\@label@seen\@@label}\relax%
-      \pwaux{\nameslet{\@label@id\@@label}{\@anchor@name\@anchor@num}}%
-      \global\namelet{\@label@seen\@@label}\empty%
-    \else%
-      \warning{Label `\@@label`: Already defined.}%
-    \fi%
+    \global\nameslet{\@label@id #1}{#2}%
   \fi%
 }%
+\protect\deflabel%
+\def\label #1{%
+  \@full@label@name\@@label{#1}%
+  \applycw\ifx{\@label@seen\@@label}\relax%
+    \pwaux{\deflabel{\@@label}{\@anchor@name\@anchor@num}}%
+    \global\namelet{\@label@seen\@@label}\empty%
+  \else%
+    \warning{Label `\@@label`: Already defined.}%
+  \fi%
+}%
+%   - links
+\let\Name\One%
+\let\NameTitle\Two%
+\ensurereg{count}{refsecformat}{0}%
+\let\@ref@pageno\empty%
+\let\@ref@realpageno\empty%
+\let\@refsec@stype\empty%
+\let\@refsec@snum\empty%
+\let\@refsec@stitle\empty%
+\def\@refsec@unpack #1#2#3{%
+  \def\@ref@pageno{#1}%
+  \def\@ref@realpageno{#2}%
+  \@refsec@unpack@inner #3%
+}%
+\def\@refsec@unpack@inner #1#2#3{%
+  \def\@refsec@stype{#1}%
+  \def\@refsec@snum{#2}%
+  \def\@refsec@stitle{#3}%
+}%
+\def\refsec #1{{%
+  \edef\@@label{\@label@id/#1}%
+  \applycw\ifx\@@label\relax%
+    \wterm{\applycw\meaning\@@label}%
+    \warning{Undefined reference to `#1`.}%
+    \ifnum\refsecformat>\Zero??? \fi%
+    ??%
+    \ifnum\refsecformat>\Name, \emph{????}\fi%
+  \else%
+    \applyccw\expandafter\@refsec@unpack\@@label%
+    \ifnum\refsecformat>\Zero\applyw{\@refsec@stype name} \fi%
+    \@refsec@snum%
+    \ifnum\refsecformat>\Name, \emph\@refsec@stitle\fi%
+  \fi%
+}}%
 %
 % Paragraphs:
+\def\raggedleft{%
+  \parindent \ZeroUnit%
+  \leftskip \@flushglue%
+  \rightskip \ZeroSkip%
+  \finalhyphendemerits \Zero%
+  \parfillskip \ZeroSkip%
+}%
 \def\raggedright{%
   \parindent \ZeroUnit%
   \leftskip \ZeroSkip%
-  \rightskip \ZeroUnit plus 1fil%
+  \@rightskip \@flushglue%
+  \rightskip \@rightskip%
   \finalhyphendemerits \Zero%
 }%
 \def\sloppy{%
@@ -894,8 +1066,9 @@
 \def\parboxrestore{%
   \parindent \ZeroUnit%
   \leftskip \ZeroUnit%
+  \@rightskip \ZeroSkip%
   \rightskip \ZeroUnit%
-  \parfillskip \ZeroUnit plus 1fil%
+  \parfillskip \@flushglue%
   \lineskiplimit \ZeroUnit%
   \lineskip \Unit%
   \parskip \ZeroUnit%
@@ -1238,11 +1411,6 @@
 \newcounter{section(chapter)}%
 %
 % Page style:
-%   - registers
-\newdimen\betweenumberspace%
-%   - dimensions
-\betweenumberspace 5\Unit%
-%   - styles
 \def\pagestyle #1{\applyw{ps@#1}}%
 \def\ps@headings{%
   \def\chaptermark ##1##2{{%
@@ -1266,29 +1434,156 @@
     \if$#2$\forcetoctrue\fi%
   \fi%
   \ifforcetoc%
-    \pwaux{\tocitem{#1}{\applyw{#1num}}{#3}{\@pageno}}%
+    \pwaux{\tocitem{#1}{\if$#2$\applyw{#1num}\fi}{#3}{\@pageno}}%
   \fi%
   \forcetocfalse%
 }%
-\def\tocline #1#2#3#4{}%
+\def\tocline #1#2#3#4{\applyw{#1tocline}{#2}{#3}{#4}}%
+\def\@tocline@common@params{%
+  \rightskip \tocrmargin%
+  \advance \rightskip \ZeroUnit plus 2cm%
+  \parfillskip -\rightskip%
+  \pretolerance \TenThousands%
+}%
+\def\@tocline@number #1#2{\hbox to \applyw{toc#1numwidth}{#2\hfil}}%
+\def\@tocline@dots{%
+  \leaders \hbox{$\mathsurround \ZeroUnit \mkern 2mu\hbox{.}\mkern 2mu$}%
+  \hfill%
+  \nobreak%
+}%
+\def\@tocline@pageno #1{\hbox to \tocpagenumwidth{\hfil\normal #1}}%
+\def\parttocline #1#2#3{%
+  % Do not insert additional vertical space after \chapter* Contents, but
+  % insert vertical space between contents lines
+  \ifdim\lastskip>\ZeroUnit\else%
+    \penalty \SectionPenalty%
+    \vskip 2em plus \Unit%
+  \fi%
+  \begingroup%
+    \parindent \ZeroUnit%
+    \rightskip \ZeroUnit plus 5em%
+    \hrule%
+    \vskip 5\Unit%
+    \normal\bf\boldmath%
+    \leavevmode%
+    \if$#1$\else\partname\ #1\hskip\betweenumberspace\fi#2%
+    \par%
+    \vskip 5\Unit%
+    \hrule%
+    \vskip \Unit%
+    \nobreak%
+  \endgroup%
+}%
+\def\chaptertocline #1#2#3{%
+  \par%
+  \ifdim\lastskip>\ZeroUnit\else%
+    \penalty -\HighPenalty%
+    \vskip 1em plus \Unit%
+  \fi%
+  \begingroup%
+    \parindent \ZeroUnit%
+    \@tocline@common@params%
+    \leavevmode%
+    \if$#1$\else%
+      \advance \leftskip \tocchapternumwidth%
+    \fi%
+    \hskip -\leftskip%
+    {\normal\bf\boldmath \if$#1$\else\@tocline@number{chapter}{#1}\fi #2}%
+    \nobreak%
+    \@tocline@dots%
+    \@tocline@pageno{#3}%
+    \par%
+    \penalty \HighPenalty%
+  \endgroup%
+}%
+\def\sectiontocline #1#2#3{%
+  \vskip \ZeroUnit plus .2\Unit%
+  \begingroup%
+    \leftskip \tocchapternumwidth%
+    \@tocline@common@params%
+    \parindent \leftskip%
+    \interlinepenalty \TenThousands%
+    \leavevmode%
+    \advance \leftskip \tocsectionnumwidth%
+    \null%
+    \nobreak%
+    \hskip -\leftskip%
+    {\normal \@tocline@number{section}{#1}#2}%
+    \nobreak%
+    \@tocline@dots%
+    \@tocline@pageno{#3}%
+    \par%
+  \endgroup%
+}%
+\def\contents{%
+  \chapter *Contents.
+
+  \ifx\@toclines\empty%
+    \hbox to \hsize{}%
+    \vfill%
+  \else%
+    \@toclines%
+  \fi%
+}%
 %
 % Sections:
 %   - styles
+\def\partfont{\largeiv\bf\boldmath}%
 \def\chapterfont{\largeiii\bf\boldmath}%
+\def\sectionfont{\largei\bf\boldmath}%
+%   - part
+\def\part{\ParseSubject\@part.}%
+\def\parthook{}%
+\def\partname{Part}%
+\def\partnum{\cval{part}}%
+\def\partanchor #1{\anchor{{part}{\partnum}{#1}}}%
+\def\partanchoru #1{\anchor{{part}{*}{#1}}}%
+\def\partmark #1#2{}%
+\def\@part #1#2#3{%
+  \supereject%
+  \if$#1$\stepcounter{part}\fi%
+  \parthook%
+  \begingroup%
+    \raggedleft%
+    \partfont%
+    \if$#1$%
+      \partname\ \partnum\partanchor{#2}\par%
+      \vskip 128.3\Unit%
+    \else%
+      \partanchoru{#2}%
+    \fi%
+    #2\par%
+  \endgroup%
+  \if$#3$\else\label{pt:#3}\fi%
+  \addtotoc{section}{#1}{#2}%
+  \partmark{#1}{#2}%
+  \vfil%
+  \eject%
+}%
 %   - chapter
 \def\chapter{\ParseSubject\@chapter.}%
-\def\chapternum{\the\c@chapter}%
+\def\chapterhook{}%
+\def\chaptername{Chapter}%
+\def\chapternum{\cval{chapter}}%
+\def\chapteranchor #1{\anchor{{chapter}{\chapternum}{#1}}}%
+\def\chapteranchoru #1{\anchor{{chapter}{*}{#1}}}%
 \def\chaptermark #1#2{}%
 \def\@chapter #1#2#3{%
   \supereject%
-  \stepcounter{chapter}%
+  \if$#1$\stepcounter{chapter}\fi%
+  \chapterhook%
   \begingroup%
     \parindent \ZeroUnit%
     \raggedright%
     \hyphenpenalty \TenThousands%
     \interlinepenalty \TenThousands%
     \chapterfont%
-    \ignorespaces\if$#1$\chapternum\ \ \fi#2\par%
+    \ignorespaces%
+    \if$#1$\chapternum\ \ \chapteranchor{#2}\else\chapteranchoru{#2}\fi%
+    #2\par%
+    \if$#3$\else\label{ch:#3}\fi%
+    \addtotoc{chapter}{#1}{#2}%
+    \chaptermark{#1}{#2}%
     \nobreak%
     \ifdim\pagetotal>167\Unit%
       \vskip 11\Unit%
@@ -1298,13 +1593,134 @@
       \vskip\dimena%
     \fi%
   \endgroup%
-  \addtotoc{chapter}{#1}{#2}%
-  \chaptermark{#1}{#2}%
   \removeparbox%
+}%
+%   - section
+\def\section{\ParseSubject\@section.}%
+\def\sectionhook{}%
+\def\sectionname{Section}%
+\def\sectionnum{\chapternum.\cval{section}}%
+\def\sectionanchor #1{\anchor{{section}{\sectionnum}{#1}}}%
+\def\sectionanchoru #1{\anchor{{section}{*}{#1}}}%
+\def\sectionmark #1#2{}%
+\def\@section #1#2#3{%
+  \par%
+  \ifdim\lastskip>\ZeroUnit\else%
+    \penalty -\SectionPenalty%
+    \vskip 30\Unit%
+  \fi%
+  \if$#1$\stepcounter{section}\fi%
+  \sectionhook%
+  \begingroup%
+    \sectionfont%
+    \rightskip \ZeroUnit plus 8em%
+    \pretolerance \TenThousands%
+    \if$#1$%
+      \hangfrom{\sectionnum\hskip\betweenumberspace}\sectionanchor{#2}%
+    \else%
+      \sectionanchoru{#2}%
+    \fi%
+    \raggedright%
+    \hyphenpenalty \TenThousands%
+    \interlinepenalty \TenThousands%
+    #2\par%
+  \endgroup%
+  \if$#3$\else\label{sec:#3}\fi%
+  \addtotoc{section}{#1}{#2}%
+  \sectionmark{#1}{#2}%
+  \nobreak%
+  \vskip 16\Unit%
+  \removeparbox%
+  \ignorespaces%
+}%
+%
+% Lists:
+\let\@itemlabel\empty%
+\def\makelabel #1{#1}%
+\ensurereg{count}{@itemnum}{0}%
+\newbox\@labelbox%
+\def\@trivlist{%
+  \@topsepadd \topsep%
+  \ifvmode%
+    \advance \@topsepadd \partopsep%
+  \else%
+    \par%
+  \fi%
+  \@topsep \@topsepadd%
+  \advance \@topsep \parskip%
+  \leftskip \ZeroSkip%
+  \rightskip \@rightskip%
+  \parfillskip \@flushglue%
+  \@outerparskip \parskip%
+}%
+\def\trivlist{%
+  \parsep \parskip%
+  \@trivlist%
+  \labelwidth \ZeroUnit%
+  \leftmargin \ZeroUnit%
+  \itemindent \ZeroUnit%
+  \let\@itemlabel\empty%
+  \def\makelabel ##1{##1}%
+}%
+\def\@nbitem{%
+  \skipa \@outerparskip%
+  \advance \skipa -\parskip%
+  \ltxaddvspace\skipa%
+}%
+\def\@item #1{%
+  \ifhmode%
+    \par%
+  \fi%
+  \ifnum\@itemnum=\Zero%
+    \@can@break@here%
+    \if@nobreak%
+      \@nbitem%
+    \else%
+      \ltxaddpenalty\BeginParPenalty%
+      \ltxaddvspace\@topsep%
+      \ltxaddvspace{-\parskip}%
+    \fi%
+  \else%
+    \ltxaddpenalty\ItemPenalty%
+    \ltxaddvspace\itemsep%
+  \fi%
+  \everypar{%
+    \begingroup%
+      \setbox\Zero \lastbox%
+      \ifvoid\Zero%
+        \ifdim\itemindent=\ZeroUnit\else%
+          \kern -\itemindent%
+        \fi%
+      \fi%
+    \endgroup%
+    \box\@labelbox%
+    \penalty \Zero%
+    \everypar{}%
+  }%
+  \advance \@itemnum \One%
+  \textbox\boxa{\makelabel{#1}}%
+  \textbox\@labelbox{%
+    \skipa \itemindent%
+    \advance \skipa -\labelwidth%
+    \advance \skipa -\labelsep%
+    \ifdim\skipa=\ZeroUnit\else%
+      \hskip \skipa%
+    \fi%
+    \ifdim\wd\boxa>\labelwidth%
+      \box\boxa%
+    \else%
+      \hbox to \labelwidth{\unhbox\boxa}%
+    \fi%
+    \ifdim\labelsep=\ZeroUnit\else%
+      \hskip \labelsep%
+    \fi%
+  }%
+  \ignorespaces%
 }%
 %
 % End of the document tasks:
 \def\docend{%
+  \supereject%
   \@close@auxfilew%
   \sinput\@auxfilename%
   \@anchors@changed%

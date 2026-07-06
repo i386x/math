@@ -165,8 +165,19 @@
 }%
 %
 % Setup:
+\addtoks\chapterhook{%
+  % In Introduction (should be the first chapter), we prefer
+  % "Chapter N, Chapter Title, ...". In other chapters, we prefer "Chapter N",
+  % eg. "see Chapter 6 for further information"
+  \refsecformat \ifnum\c@chapter=\One \NameTitle\else \Name\fi%
+}%
 \let\@toclines\empty%
-{\let\defanchor\@save@old@anchor \let\tocline\gobblefour \sinput\@auxfilename}%
+\begingroup%
+  \let\defanchor\@save@old@anchor%
+  \let\deflabel\gobbletwo%
+  \let\tocline\gobblefour%
+  \sinput\@auxfilename%
+\endgroup%
 \sinput\@auxfilename%
 \@open@auxfilew%
 \restorecat\@%
