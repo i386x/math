@@ -69,6 +69,10 @@
 \def\firstofthree #1#2#3{#1}%
 \def\secondofthree #1#2#3{#2}%
 \def\thirdofthree #1#2#3{#3}%
+\def\firstoffour #1#2#3#4{#1}%
+\def\secondoffour #1#2#3#4{#2}%
+\def\thirdoffour #1#2#3#4{#3}%
+\def\fourthoffour #1#2#3#4{#4}%
 %
 % Macrobatics (macro acrobatics):
 \def\afterfi #1#2\fi{#2\fi#1}%
@@ -495,6 +499,11 @@
   \textbox\Zero{#1}%
   \hangindent \wd\Zero%
   \noindent \box\Zero%
+}%
+\def\measuretexty #1#2{%
+  \textbox\Zero{#2}%
+  #1\ht\Zero%
+  \advance #1\dp\Zero%
 }%
 %
 % Vertical list utilities:

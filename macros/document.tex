@@ -918,8 +918,8 @@
 %   - anchors (where to jump)
 \ensurereg{count}{@anchornum}{0}%
 \def\@anchor@num{\the\@anchornum}%
-\def\@anchor@name #1{anchor-#1}%
-\def\defanchor #1#2#3#4{\global\namedef{\@anchor@name{#1}}{{#2}{#3}{#4}}}%
+\def\@anchor@name{anchor-}%
+\def\defanchor #1#2#3#4{\global\namedef{\@anchor@name #1}{{#1}{#2}{#3}{#4}}}%
 \protect\defanchor%
 \def\@pageno{\the\pageno}%
 \protectonce\@pageno%
@@ -938,10 +938,10 @@
 \def\@icns{icns:}%
 \let\@@anchor\empty%
 \def\@save@old@anchor #1#2#3#4{%
-  \global\namedef{\@icns\@anchor@name{#1}}{{#2}{#3}{#4}}%
+  \global\namedef{\@icns\@anchor@name #1}{{#1}{#2}{#3}{#4}}%
 }%
 \def\@check@anchor@defs #1{%
-  \applycw\ifx{\@icns#1}\relax%
+  \applycw\ifx{\@icns #1}\relax%
     \@tempswfalse%
   \fi%
   \applycw\ifx{#1}\relax%
@@ -974,11 +974,11 @@
   \@tempswtrue%
   \loop%
     \advance \counta \One%
-    \edef\@@anchor{\@anchor@name{\the\counta}}%
+    \edef\@@anchor{\@anchor@name \the\counta}%
     \@check@anchor@defs\@@anchor%
     \if@tempsw%
-      \@check@anchor@locs\@@anchor\firstofthree{Page}%
-      \@check@anchor@locs\@@anchor\secondofthree{Real page}%
+      \@check@anchor@locs\@@anchor\secondoffour{Page}%
+      \@check@anchor@locs\@@anchor\thirdoffour{Real page}%
     \fi%
     \if@tempsw%
   \repeat%
@@ -987,6 +987,7 @@
 \let\@label@scope@stack\empty%
 \def\@label@scope #1{\addtoks\@label@scope@stack{\do{#1}}}%
 \def\@bib@scope@name{references}%
+\def\@fn@scope@name{footnotes}%
 \let\@@label\empty%
 \def\@full@label@name #1#2{%
   \begingroup%
@@ -995,8 +996,8 @@
     \throwoveras\@tempa#1%
   \endgroup%
 }%
-\def\@label@id #1{label:#1}%
-\def\@label@seen #1{label-seen:#1}%
+\def\@label@id{label:}%
+\def\@label@seen{label-seen:}%
 \def\deflabel #1#2{%
   \applycw\ifx{#2}\relax%
     \warning{Label `#1`: Nothing to bind to.}%
@@ -1007,9 +1008,9 @@
 \protect\deflabel%
 \def\label #1{%
   \@full@label@name\@@label{#1}%
-  \applycw\ifx{\@label@seen\@@label}\relax%
-    \pwaux{\deflabel{\@@label}{\@anchor@name\@anchor@num}}%
-    \global\namelet{\@label@seen\@@label}\empty%
+  \applycw\ifx{\@label@seen \@@label}\relax%
+    \pwaux{\deflabel{\@@label}{\@anchor@name \@anchor@num}}%
+    \global\namelet{\@label@seen \@@label}\empty%
   \else%
     \warning{Label `\@@label`: Already defined.}%
   \fi%
@@ -1018,21 +1019,24 @@
 \let\Name\One%
 \let\NameTitle\Two%
 \ensurereg{count}{refsecformat}{0}%
+\let\@ref@anchorid\empty%
 \let\@ref@pageno\empty%
 \let\@ref@realpageno\empty%
 \let\@refsec@stype\empty%
 \let\@refsec@snum\empty%
 \let\@refsec@stitle\empty%
-\def\@refsec@unpack #1#2#3{%
-  \def\@ref@pageno{#1}%
-  \def\@ref@realpageno{#2}%
-  \@refsec@unpack@inner #3%
+\def\@refsec@unpack #1#2#3#4{%
+  \def\@ref@anchorid{#1}%
+  \def\@ref@pageno{#2}%
+  \def\@ref@realpageno{#3}%
+  \@refsec@unpack@inner #4%
 }%
 \def\@refsec@unpack@inner #1#2#3{%
   \def\@refsec@stype{#1}%
   \def\@refsec@snum{#2}%
   \def\@refsec@stitle{#3}%
 }%
+\let\@crosslink\second%
 \def\refsec #1{{%
   \edef\@@label{\@label@id/#1}%
   \applycw\ifx\@@label\relax%
@@ -1044,7 +1048,7 @@
   \else%
     \applyccw\expandafter\@refsec@unpack\@@label%
     \ifnum\refsecformat>\Zero\applyw{\@refsec@stype name} \fi%
-    \@refsec@snum%
+    \@crosslink{\@anchor@name \@ref@anchorid}\@refsec@snum%
     \applycw\ifx{\@refsec@stype name}\chaptername%
       \ifnum\refsecformat>\Name, \emph\@refsec@stitle\fi%
     \fi%
@@ -1066,13 +1070,25 @@
     \ifx##1\relax%
       \hbox{\normal\bf ?}%
     \else%
-      \hbox{\expandafter\thirdofthree##1}%
+      \hbox{%
+        \@crosslink%
+          {\@anchor@name \expandafter\firstoffour##1}%
+          {\expandafter\fourthoffour##1}%
+      }%
     \fi%
   }%
   \def\elt ##1##2{%
     \@tempb%
     \def\@tempb{,\penalty\Thousand\ }%
-    \hbox{\expandafter\thirdofthree##1--\expandafter\thirdofthree##2}%
+    \hbox{%
+      \@crosslink%
+        {\@anchor@name \expandafter\firstoffour##1}%
+        {\expandafter\fourthoffour##1}%
+      --%
+      \@crosslink%
+        {\@anchor@name \expandafter\firstoffour##2}%
+        {\expandafter\fourthoffour##2}%
+    }%
   }%
   \leavevmode[\@tempa]%
 }}%
@@ -1094,7 +1110,7 @@
     \letrue%
   \else\ifx#2\relax%
     \lefalse%
-  \else\ifnum\expandafter\thirdofthree#1>\expandafter\thirdofthree#2\relax%
+  \else\ifnum\expandafter\fourthoffour#1>\expandafter\fourthoffour#2\relax%
     \lefalse%
   \else%
     \letrue%
@@ -1123,13 +1139,13 @@
   \else\ifnum\counta<\One%
     % First item
     \@cite@compress@newspan #1%
-  \else\ifnum\expandafter\thirdofthree#1<\countb%
+  \else\ifnum\expandafter\fourthoffour#1<\countb%
     % Duplicate item. Since the sequence is ordered, then if the next item is
     % less than expected item, which is previous item plus one, the next item
     % must have the same value as the previous item. Otherwise, the next item
     % would be less than the previous item which contradicts with the fact that
     % the sequence is ordered. Therefore, the next item is a duplicate.
-  \else\ifnum\expandafter\thirdofthree#1=\countb%
+  \else\ifnum\expandafter\fourthoffour#1=\countb%
     % Expected item
     \@cite@compress@incspan #1%
   \else%
@@ -1143,7 +1159,7 @@
   \def\@tempb{#1}%
   \let\@tempc\@tempb%
   \counta \One%
-  \countb \expandafter\thirdofthree#1\relax%
+  \countb \expandafter\fourthoffour#1\relax%
   \advance \countb \One%
 }%
 \def\@cite@compress@incspan #1{%
@@ -1236,7 +1252,19 @@
 \def\makefntext #1{%
   \parindent 12\Unit%
   \noindent%
-  \leavevmode\hbox{\makefnmark} #1%
+  \leavevmode\hbox{\makefnmark}\anchor{}%
+  {\def\@label@scope@stack{\do{\@fn@scope@name}}\label\thefncount} #1%
+}%
+\def\@fn@crosslink{%
+  \edef\@@label{\@label@id/\@fn@scope@name/\thefncount}%
+  \applycw\ifx\@@label\relax%
+    \wterm{\applycw\meaning\@@label}%
+    \warning{Footnote no. \thefncount\space has no label.}%
+  \else%
+    \afterfi{%
+      \@crosslink{\@anchor@name \applyccw\expandafter\firstoffour\@@label}%
+    }%
+  \fi%
 }%
 \def\footnote #1{%
   \global\advance \fncount \One%
@@ -1244,7 +1272,7 @@
   \leavevmode%
   \edef\@tempsf{\the\spacefactor}%
   \nobreak%
-  {\textfnmarkfont\makefnmark}%
+  {\textfnmarkfont\@fn@crosslink\makefnmark}%
   \spacefactor \@tempsf%
   \insert\footins{%
     \small%
@@ -1591,18 +1619,18 @@
 % Table of contents:
 \newif\ifforcetoc \forcetocfalse%
 \def\@toclines{}%
-\def\tocitem #1#2#3#4{\addtoks\@toclines{\tocline{#1}{#2}{#3}{#4}}}%
+\def\tocitem #1#2#3#4#5{\addtoks\@toclines{\tocline{#1}{#2}{#3}{#4}{#5}}}%
 \protect\tocitem%
 \def\addtotoc #1#2#3{%
   \ifforcetoc\else%
     \if$#2$\forcetoctrue\fi%
   \fi%
   \ifforcetoc%
-    \pwaux{\tocitem{#1}{\if$#2$\applyw{#1num}\fi}{#3}{\@pageno}}%
+    \pwaux{\tocitem{#1}{\if$#2$\applyw{#1num}\fi}{#3}{\@pageno}{\@anchor@num}}%
   \fi%
   \forcetocfalse%
 }%
-\def\tocline #1#2#3#4{\applyw{#1tocline}{#2}{#3}{#4}}%
+\def\tocline #1#2#3#4#5{\applyw{#1tocline}{#2}{#3}{#4}{#5}}%
 \def\@tocline@common@params{%
   \rightskip \tocrmargin%
   \advance \rightskip \ZeroUnit plus 2cm%
@@ -1616,7 +1644,7 @@
   \nobreak%
 }%
 \def\@tocline@pageno #1{\hbox to \tocpagenumwidth{\hfil\normal #1}}%
-\def\parttocline #1#2#3{%
+\def\parttocline #1#2#3#4{%
   % Do not insert additional vertical space after \chapter* Contents, but
   % insert vertical space between contents lines
   \ifdim\lastskip>\ZeroUnit\else%
@@ -1630,7 +1658,9 @@
     \vskip 5\Unit%
     \normal\bf\boldmath%
     \leavevmode%
-    \if$#1$\else\partname\ #1\hskip\betweenumberspace\fi#2%
+    \@crosslink%
+      {\@anchor@name #4}%
+      {\if$#1$\else\partname\ #1\hskip\betweenumberspace\fi#2}%
     \par%
     \vskip 5\Unit%
     \hrule%
@@ -1638,7 +1668,7 @@
     \nobreak%
   \endgroup%
 }%
-\def\chaptertocline #1#2#3{%
+\def\chaptertocline #1#2#3#4{%
   \par%
   \ifdim\lastskip>\ZeroUnit\else%
     \penalty -\HighPenalty%
@@ -1652,7 +1682,12 @@
       \advance \leftskip \tocchapternumwidth%
     \fi%
     \hskip -\leftskip%
-    {\normal\bf\boldmath \if$#1$\else\@tocline@number{chapter}{#1}\fi #2}%
+    {%
+      \normal\bf\boldmath%
+      \@crosslink%
+        {\@anchor@name #4}%
+        {\if$#1$\else\@tocline@number{chapter}{#1}\fi #2}%
+    }%
     \nobreak%
     \@tocline@dots%
     \@tocline@pageno{#3}%
@@ -1660,7 +1695,7 @@
     \penalty \HighPenalty%
   \endgroup%
 }%
-\def\sectiontocline #1#2#3{%
+\def\sectiontocline #1#2#3#4{%
   \vskip \ZeroUnit plus .2\Unit%
   \begingroup%
     \leftskip \tocchapternumwidth%
@@ -1672,7 +1707,7 @@
     \null%
     \nobreak%
     \hskip -\leftskip%
-    {\normal \@tocline@number{section}{#1}#2}%
+    {\normal \@crosslink{\@anchor@name #4}{\@tocline@number{section}{#1}#2}}%
     \nobreak%
     \@tocline@dots%
     \@tocline@pageno{#3}%

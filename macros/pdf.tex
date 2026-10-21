@@ -12,9 +12,6 @@
 \else%
   \expandafter\endinput%
 \fi%
-\ifx\pdfliteral\undefined%
-  \expandafter\endinput%
-\fi%
 %
 \input macros/utils%
 %
@@ -43,9 +40,45 @@
 \setparam\pdfimagegamma{2200}%
 %
 % Implement drawing driver API for PDF:
-\def\@setcolor@gray #1{\pdfliteral{#1 g #1 G}}%
-\def\@setcolor@rgb #1#2#3{\pdfliteral{#1 #2 #3 rg #1 #2 #3 RG}}%
-\def\@setcolor@cmyk #1#2#3#4{\pdfliteral{#1 #2 #3 #4 k #1 #2 #3 #4 K}}%
+\ifx\pdfliteral\undefined\else%
+  \def\@setcolor@gray #1{\pdfliteral{#1 g #1 G}}%
+  \def\@setcolor@rgb #1#2#3{\pdfliteral{#1 #2 #3 rg #1 #2 #3 RG}}%
+  \def\@setcolor@cmyk #1#2#3#4{\pdfliteral{#1 #2 #3 #4 k #1 #2 #3 #4 K}}%
+\fi%
+%
+% Implement placing anchors into PDF:
+\ifx\pdfdest\undefined\else%
+  \def\@pdfdest@offset{.8em}%
+  \def\@place@anchor{%
+    \leavevmode%
+    \vbox to \ZeroUnit{%
+      \measuretexty\dimena{X}%
+      \advance \dimena \@pdfdest@offset%
+      \kern -\dimena%
+      \pdfdest name {\@anchor@name \@anchor@num} xyz\relax%
+      \vss%
+    }%
+  }%
+\fi%
+%
+% Implement hyper links:
+\ifx\pdfstartlink\undefined\else\ifx\pdfliteral\undefined\else%
+  \def\@crosslink #1#2{%
+    \applycw\ifx{#1}\relax%
+      \warning{Undefined anchor `#1`.}%
+    \else%
+      \leavevmode%
+      \pdfstartlink
+        height .9em depth .3em
+        attr {/Border [0 0 0] /H /N}
+        goto name {#1}%
+        \pdfliteral{0 0 1 rg}%
+        #2%
+        \pdfliteral{0 g}%
+      \pdfendlink%
+    \fi%
+  }%
+\fi\fi%
 %
 % Restore @'s category:
 \restorecat\@%
