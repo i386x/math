@@ -1323,6 +1323,7 @@
 \def\rightmark{\expandafter\second\firstmark\empty\empty}%
 %
 % Pages:
+\newif\iftwoside \twosidefalse%
 \let\@the@head\empty%
 \let\@the@foot\empty%
 \let\@ragged@bottom\empty%
@@ -1337,7 +1338,24 @@
   \vfill%
   \penalty -\TwentyThousands%
 }%
-\def\startoddpage{\supereject \ifodd\pageno\else\blankpage\fi}%
+\let\@page@labels\empty%
+\def\@page@label@type@name{name}%
+\def\@page@label@type@roman{roman}%
+\def\@page@label@type@decimal{decimal}%
+\let\@emit@page@label\gobblethree%
+\def\pagelabel #1#2{{%
+  \let\@emit@page@label\relax%
+  \counta \realpageno%
+  \advance \counta \MinusOne%
+  \edef\@tempa{\@emit@page@label{\the\counta}{#1}{#2}}%
+  \global\applycctx\addtoks\@page@labels{\@tempa}%
+}}%
+\def\thispagelabel #1{\pagelabel\@page@label@type@name{#1}}%
+\def\startproperpage{%
+  \supereject%
+  \iftwoside\ifodd\pageno\else\blankpage\fi\fi%
+  \global\blankpagelabelfalse%
+}%
 \ensurereg{count}{realpageno}{1}%
 \let\@plain@advancepageno\advancepageno%
 \def\advancepageno{%
@@ -1345,8 +1363,14 @@
   \global\advance \realpageno \One%
 }%
 \def\thepage{\ifnum\pageno<\Zero\roman-\pageno\else\arabic\pageno\fi}%
-\def\frontmatter{\global\pageno \MinusOne \ignorespaces}%
-\def\mainmatter{\startoddpage \global\pageno \One \ignorespaces}%
+\def\matter #1{\startproperpage \global\pageno #1\relax}%
+\def\covermatter{\matter\MinusOne \ignorespaces}%
+\def\frontmatter{%
+  \matter\MinusOne \pagelabel\@page@label@type@roman\empty \ignorespaces%
+}%
+\def\mainmatter{%
+  \matter\One \pagelabel\@page@label@type@decimal\empty \ignorespaces%
+}%
 \let\atoutputbeginonce\empty%
 \def\normaloutput{%
   \atoutputbeginonce%
@@ -1559,12 +1583,20 @@
 }%
 %
 % Blank page:
+\newif\ifpureblank \pureblankfalse%
+\newif\ifblankpagelabel \blankpagelabelfalse%
 \def\blankpage{%
   \thispagestyle{empty}%
+  \ifblankpagelabel\thispagelabel{blank}\fi%
+  \global\blankpagelabelfalse%
   \vbox to \vsize{%
     \parindent \ZeroUnit%
     \vss%
-    \centerline{\it This page is intentionally left blank.}%
+    \ifpureblank%
+      \null%
+    \else%
+      \centerline{\it This page is intentionally left blank.}%
+    \fi%
     \vss%
   }%
   \eject%
@@ -1608,17 +1640,21 @@
   \def\@the@head{%
     \small\rm%
     \ifodd\pageno%
-      \rightmark\hfil\llap{\thepage}%
+      \afterfifi\first%
+    \else\iftwoside%
+      \afterfifi\second%
     \else%
-      \rlap{\thepage}\hfil\leftmark%
-    \fi%
+      \afterfifi\first%
+    \fi\fi%
+    {\rightmark\hfil\llap{\thepage}}%
+    {\rlap{\thepage}\hfil\leftmark}%
   }%
   \let\@the@foot\empty%
 }%
 %
 % Table of contents:
 \newif\ifforcetoc \forcetocfalse%
-\def\@toclines{}%
+\let\@toclines\empty%
 \def\tocitem #1#2#3#4#5{\addtoks\@toclines{\tocline{#1}{#2}{#3}{#4}{#5}}}%
 \protect\tocitem%
 \def\addtotoc #1#2#3{%
@@ -1739,7 +1775,7 @@
 \def\partanchoru #1{\anchor{{part}{*}{#1}}}%
 \def\partmark #1#2{}%
 \def\@part #1#2#3{%
-  \startoddpage%
+  \startproperpage%
   \if$#1$\stepcounter{part}\fi%
   \parthook%
   \begingroup%
@@ -1768,7 +1804,7 @@
 \def\chapteranchoru #1{\anchor{{chapter}{*}{#1}}}%
 \def\chaptermark #1#2{}%
 \def\@chapter #1#2#3{%
-  \startoddpage%
+  \startproperpage%
   \if$#1$\stepcounter{chapter}\fi%
   \thispagestyle{bchap}%
   \chapterhook%
@@ -1980,17 +2016,23 @@
 }%
 %
 % End of the document tasks:
+\let\atdocend\empty%
 \def\docend{%
   \supereject%
   \@close@auxfilew%
-  \sinput\@auxfilename%
-  \@anchors@changed%
+  \begingroup%
+    \let\deflabel\gobbletwo%
+    \let\tocitem\gobblefive%
+    \sinput\@auxfilename%
+    \@anchors@changed%
+  \endgroup%
   \ifwarning%
     \wterm{%
       CAUTION: Some warnings were issued. Please check the log file or the%
       \space terminal output.%
     }%
   \fi%
+  \atdocend%
   \expandafter\end\endinput%
 }%
 %

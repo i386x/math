@@ -53,7 +53,7 @@
 }%
 \def\carx{\@cxrx\car}%
 \def\cdrx{\@cxrx\cdr}%
-\def\@protected{}%
+\let\@protected\empty%
 \def\protect #1{\addtoks\@protected{\protect#1}}%
 \def\protectonce #1{\addtoks\@protected{\protectonce#1}}%
 %
@@ -62,6 +62,7 @@
 \def\gobbletwo #1#2{}%
 \def\gobblethree #1#2#3{}%
 \def\gobblefour #1#2#3#4{}%
+\def\gobblefive #1#2#3#4#5{}%
 %
 % Unpacking tuples:
 \def\first #1#2{#1}%
@@ -121,6 +122,7 @@
 \def\islower #1#2{\ifnum#1>96 \ifnum#1<123 \afterfifi{#2}\fi\fi}%
 %
 % Stripping:
+\def\cschars{\expandafter\gobble\string}%
 \def\strip #1{\futurelet\@tempa\@strip@left #1\relax}%
 \def\@strip@left{%
   \ifx\@tempa\spacetok%
@@ -146,7 +148,7 @@
   }%
 \endgroup%
 \def\@strip@done #1\\#2\relax#3{\def#3{#1}}%
-\edef\@pt{\expandafter\gobble\string\pt}%
+\edef\@pt{\cschars\pt}%
 {\edef\next{\gdef\noexpand\@rem@pt ##1\@pt{##1}}\next}%
 \def\strippt{\expandafter\@rem@pt\the}%
 %
@@ -462,7 +464,7 @@
     \def\protect ##1{\def##1{\string##1}}%
     \def\protectonce ##1{\def##1{\noexpand##1}}%
     \@protected%
-    \edef\next{\waux{#1}}%
+    \edef\next{\waux{#1\cschars\%}}%
     \expandafter%
   \endgroup%
   \next%

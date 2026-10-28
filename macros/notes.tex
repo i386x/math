@@ -49,7 +49,9 @@
 \newif\ifcover \coverfalse%
 %   - cover/title page
 \def\CoverOrTitle{%
-  \startoddpage%
+  \ifcover\covermatter\fi%
+  \startproperpage%
+  \ifcover\thispagelabel{cover}\fi%
   \begingroup%
     \fullpage%
     \textbox\Zero{\lxiisf\@title}%
@@ -99,21 +101,18 @@
     }%
     \eject%
   \endgroup%
+  \ifcover\global\blankpagelabeltrue\fi%
 }%
 %   - front cover
-\def\frontcover{%
-  \begingroup%
-    \covertrue%
-    \CoverOrTitle%
-  \endgroup%
-}%
+\def\frontcover{{%
+  \covertrue%
+  \CoverOrTitle%
+}}%
 %   - title page
-\def\titlepage{%
-  \begingroup%
-    \coverfalse%
-    \CoverOrTitle%
-  \endgroup%
-}%
+\def\titlepage{{%
+  \coverfalse%
+  \CoverOrTitle%
+}}%
 %   - info page
 \def\infopage{%
   \thispagestyle{empty}%
@@ -165,6 +164,24 @@
   mathematics rather than matter experts which may found some parts of
   contributions trivial and explained in too much detail.%
 }%
+%   - back cover page
+\def\backcover{%
+  \startproperpage%
+  \iftwoside%
+    \global\blankpagelabeltrue%
+    \blankpage%
+  \fi%
+  \begingroup%
+    \fullpage%
+    \thispagelabel{back}%
+    \vbox to \vsize{%
+      \setcolor cmyk(.5, .5, 0, 0);%
+      \rlap{\vrule width \hsize height \vsize depth \ZeroUnit}%
+      \resetcolor%
+    }%
+    \eject%
+  \endgroup%
+}%
 %
 % Setup:
 \pagestyle{headings}%
@@ -179,7 +196,7 @@
 \begingroup%
   \let\defanchor\@save@old@anchor%
   \let\deflabel\gobbletwo%
-  \let\tocline\gobblefour%
+  \let\tocitem\gobblefive%
   \sinput\@auxfilename%
 \endgroup%
 \sinput\@auxfilename%
