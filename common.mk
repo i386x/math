@@ -12,9 +12,18 @@ RM = rm -f
 PDFTEX = pdftex -8bit -halt-on-error
 export TEXINPUTS = .:../..:
 
+MACROS := macros/constants.tex macros/document.tex macros/drawing.tex \
+          macros/notes.tex macros/params.tex macros/pdf.tex macros/t1.tex \
+          macros/utils.tex
+ARTIFACTS := *.log *.tmp
+
+ifeq ($(D),1)
+    MACROS := $(MACROS) macros/debug.tex
+endif
+
 .PHONY: all clean
 
 %.pdf: %.tex
 	$(RM) $(<:.tex=.tmp)
-	$(PDFTEX) $<
+	-$(PDFTEX) -draftmode $<
 	$(PDFTEX) $<

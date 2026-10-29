@@ -11,10 +11,11 @@
 include ../../common.mk
 
 TARGETS := notes.pdf
+NOTES_DEPS := notes.tex ch01-intro.tex ch02-pcalc.tex ch03-folog.tex
 
 all: $(TARGETS)
 
 clean:
-	$(RM) *.log $(TARGETS)
+	$(RM) $(ARTIFACTS) $(TARGETS)
 
-notes.pdf: notes.tex ../../macros/notes.tex
+notes.pdf: $(NOTES_DEPS) $(addprefix ../../,$(MACROS))
