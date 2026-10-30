@@ -20,9 +20,9 @@
 %
 % Extra fonts:
 %   - title page and cover
-\font\lxiisf=NotoSans-Bold-tlf-t1 at 62\Unit%
-\font\xxvit=ntx-Italic-tlf-t1 at 25\Unit%
-\font\xxiiiit=ntx-Italic-tlf-t1 at 23\Unit%
+\cmap T1\font\lxiisf=NotoSans-Bold-tlf-t1 at 62\Unit%
+\cmap T1\font\xxvit=ntx-Italic-tlf-t1 at 25\Unit%
+\cmap T1\font\xxiiiit=ntx-Italic-tlf-t1 at 23\Unit%
 %
 % Text font size switches:
 \let\@orig@normal\normal%
@@ -54,7 +54,10 @@
   \ifcover\thispagelabel{cover}\fi%
   \begingroup%
     \fullpage%
-    \textbox\Zero{\lxiisf\@title}%
+    \textbox\Zero{%
+      \input macros/t1%
+      \lxiisf\@title%
+    }%
     \dimen\Zero \hsize%
     \advance \dimen\Zero -\wd\Zero%
     \dimen\One \FontQuadWidth\lxiisf%
@@ -80,7 +83,10 @@
         \kern 5.6\Unit%
         \hrule width \wd\Zero height 1.6\Unit depth \ZeroUnit%
         \kern .125\dimen\One%
-        \hbox to \wd\Zero{\hss\xxvit from \@subject}%
+        \hbox to \wd\Zero{%
+          \input macros/t1%
+          \hss\xxvit from \@subject%
+        }%
         \ifcover\resetcolor\fi%
       }%
       \vfill%
@@ -185,12 +191,6 @@
 %
 % Setup:
 \pagestyle{headings}%
-\addtoks\chapterhook{%
-  % In Introduction (should be the first chapter), we prefer
-  % "Chapter N, Chapter Title, ...". In other chapters, we prefer "Chapter N",
-  % eg. "see Chapter 6 for further information"
-  \refsecformat \ifnum\c@chapter=\One \NameTitle\else \Name\fi%
-}%
 \let\@toclines\empty%
 \widestbiblabel{99.}%
 \begingroup%

@@ -14,7 +14,9 @@ export TEXINPUTS = .:../..:
 
 MACROS := macros/constants.tex macros/document.tex macros/drawing.tex \
           macros/notes.tex macros/params.tex macros/pdf.tex macros/t1.tex \
-          macros/utils.tex
+          macros/utils.tex macros/cmaps/oml.cmap macros/cmaps/oms.cmap \
+          macros/cmaps/omx.cmap macros/cmaps/ot1.cmap macros/cmaps/ot1tt.cmap \
+          macros/cmaps/t1.cmap
 ARTIFACTS := *.log *.tmp
 
 ifeq ($(D),1)

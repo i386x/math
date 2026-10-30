@@ -97,6 +97,7 @@
 }%
 \def\namedef #1{\expandafter\def\csname #1\endcsname}%
 \def\nameedef #1{\expandafter\edef\csname #1\endcsname}%
+\def\namexdef #1{\expandafter\xdef\csname #1\endcsname}%
 %
 % Invoking macros:
 %   - suffixes: `w` means word, `c` control sequence, `t` an arbitrary token,
@@ -116,13 +117,16 @@
 \protect\namedef%
 \protect\nameedef%
 %
-% Character tests:
+% Character tests and conversions:
 \def\isdigit #1#2{\ifnum#1>47 \ifnum#1<58 \afterfifi{#2}\fi\fi}%
 \def\isupper #1#2{\ifnum#1>64 \ifnum#1<91 \afterfifi{#2}\fi\fi}%
 \def\islower #1#2{\ifnum#1>96 \ifnum#1<123 \afterfifi{#2}\fi\fi}%
+\def\@toanycase #1#2#3{\edef#2{#1{\def\noexpand#2{#3}}}#2}%
+\def\toupper{\@toanycase\uppercase}%
+\def\tolower{\@toanycase\lowercase}%
+\def\cschars{\expandafter\gobble\string}%
 %
 % Stripping:
-\def\cschars{\expandafter\gobble\string}%
 \def\strip #1{\futurelet\@tempa\@strip@left #1\relax}%
 \def\@strip@left{%
   \ifx\@tempa\spacetok%
@@ -470,21 +474,29 @@
   \next%
 }%
 \def\wterm{\immediate\write\Sixteen}%
+\def\inform #1{\wterm{l.\the\inputlineno\space INFO: #1}}%
 \newif\ifwarning \warningfalse%
 \def\warning #1{%
   \global\warningtrue%
   \wterm{l.\the\inputlineno\space WARNING: #1}%
 }%
-\def\sinput #1{%
-  \openin\@testin=#1%
-  \let\next\relax%
+\newif\iffile \filefalse%
+\def\testfile #1{%
+  \openin\@testin=#1\relax%
   \ifeof\@testin%
-    \warning{The file `#1` does not exist.}%
+    \filefalse%
   \else%
     \closein\@testin%
-    \def\next{\input #1 }%
+    \filetrue%
   \fi%
-  \next%
+}%
+\def\sinput #1{%
+  \testfile{#1}%
+  \iffile%
+    \afterfi{\input #1 }%
+  \else%
+    \afterfi{\warning{The file `#1` does not exist.}}%
+  \fi%
 }%
 %
 % Font utilities:

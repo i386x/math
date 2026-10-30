@@ -109,280 +109,284 @@
 %                                               sy   math symbols
 %                                               bsy  bold-face math symbols
 %                                               ex   math extra symbols
+%   - character maps
+\let\@deferred@cmaps\empty%
+\let\setcmap\gobbletwo%
+\def\defercmap #1\font#2{\addtoks\@deferred@cmaps{\setcmap{#1}#2}\font#2}%
 %   - Roman
-\font\xviirm=cmr17%
-\font\xiirm=cmr12%
-\font\tenrm=cmr10%
-\font\eightrm=cmr8%
-\font\sevenrm=cmr7%
-\font\sixrm=cmr6%
-\font\fiverm=cmr5%
+\defercmap OT1\font\xviirm=cmr17%
+\defercmap OT1\font\xiirm=cmr12%
+\defercmap OT1\font\tenrm=cmr10%
+\defercmap OT1\font\eightrm=cmr8%
+\defercmap OT1\font\sevenrm=cmr7%
+\defercmap OT1\font\sixrm=cmr6%
+\defercmap OT1\font\fiverm=cmr5%
 %   - sans serif
-\font\xviisf=cmss17%
-\font\xiisf=cmss12%
-\font\tensf=cmss10%
-\font\eightsf=cmss8%
-\font\sevensf=cmss8 at 7\Unit%
-\font\sixsf=cmss8 at 6\Unit%
-\font\fivesf=cmss8 at 5\Unit%
+\defercmap OT1\font\xviisf=cmss17%
+\defercmap OT1\font\xiisf=cmss12%
+\defercmap OT1\font\tensf=cmss10%
+\defercmap OT1\font\eightsf=cmss8%
+\defercmap OT1\font\sevensf=cmss8 at 7\Unit%
+\defercmap OT1\font\sixsf=cmss8 at 6\Unit%
+\defercmap OT1\font\fivesf=cmss8 at 5\Unit%
 %   - typewriter
-\font\xviitt=cmtt12 at 17.28\Unit%
+\defercmap OT1tt\font\xviitt=cmtt12 at 17.28\Unit%
 \hyphenchar\xviitt \MinusOne%
-\font\xiitt=cmtt12%
+\defercmap OT1tt\font\xiitt=cmtt12%
 \hyphenchar\xiitt \MinusOne%
-\font\tentt=cmtt10%
+\defercmap OT1tt\font\tentt=cmtt10%
 \hyphenchar\tentt \MinusOne%
-\font\eighttt=cmtt8%
+\defercmap OT1tt\font\eighttt=cmtt8%
 \hyphenchar\eighttt \MinusOne%
-\font\seventt=cmtt8 at 7\Unit%
+\defercmap OT1tt\font\seventt=cmtt8 at 7\Unit%
 \hyphenchar\seventt \MinusOne%
-\font\sixtt=cmtt8 at 6\Unit%
+\defercmap OT1tt\font\sixtt=cmtt8 at 6\Unit%
 \hyphenchar\sixtt \MinusOne%
-\font\fivett=cmtt8 at 5\Unit%
+\defercmap OT1tt\font\fivett=cmtt8 at 5\Unit%
 \hyphenchar\fivett \MinusOne%
 %   - italic
-\font\xviiit=cmti12 at 17.28\Unit%
-\font\xiiit=cmti12%
-\font\tenit=cmti10%
-\font\eightit=cmti8%
-\font\sevenit=cmti7%
-\font\sixit=cmti7 at 6\Unit%
-\font\fiveit=cmti7 at 5\Unit%
+\defercmap OT1\font\xviiit=cmti12 at 17.28\Unit%
+\defercmap OT1\font\xiiit=cmti12%
+\defercmap OT1\font\tenit=cmti10%
+\defercmap OT1\font\eightit=cmti8%
+\defercmap OT1\font\sevenit=cmti7%
+\defercmap OT1\font\sixit=cmti7 at 6\Unit%
+\defercmap OT1\font\fiveit=cmti7 at 5\Unit%
 %   - slanted
-\font\xviisl=cmsl12 at 17.28\Unit%
-\font\xiisl=cmsl12%
-\font\tensl=cmsl10%
-\font\eightsl=cmsl8%
-\font\sevensl=cmsl8 at 7\Unit%
-\font\sixsl=cmsl8 at 6\Unit%
-\font\fivesl=cmsl8 at 5\Unit%
+\defercmap OT1\font\xviisl=cmsl12 at 17.28\Unit%
+\defercmap OT1\font\xiisl=cmsl12%
+\defercmap OT1\font\tensl=cmsl10%
+\defercmap OT1\font\eightsl=cmsl8%
+\defercmap OT1\font\sevensl=cmsl8 at 7\Unit%
+\defercmap OT1\font\sixsl=cmsl8 at 6\Unit%
+\defercmap OT1\font\fivesl=cmsl8 at 5\Unit%
 %   - small caps
-\font\xviisc=cmcsc10 at 17.28\Unit%
-\font\xiisc=cmcsc10 at 12\Unit%
-\font\tensc=cmcsc10%
-\font\eightsc=cmcsc10 at 8\Unit%
-\font\sevensc=cmcsc10 at 7\Unit%
-\font\sixsc=cmcsc10 at 6\Unit%
-\font\fivesc=cmcsc10 at 5\Unit%
+\defercmap OT1\font\xviisc=cmcsc10 at 17.28\Unit%
+\defercmap OT1\font\xiisc=cmcsc10 at 12\Unit%
+\defercmap OT1\font\tensc=cmcsc10%
+\defercmap OT1\font\eightsc=cmcsc10 at 8\Unit%
+\defercmap OT1\font\sevensc=cmcsc10 at 7\Unit%
+\defercmap OT1\font\sixsc=cmcsc10 at 6\Unit%
+\defercmap OT1\font\fivesc=cmcsc10 at 5\Unit%
 %   - bold-face Roman
-\font\xviibf=cmbx12 at 17.28\Unit%
-\font\xiibf=cmbx12%
-\font\tenbf=cmbx10%
-\font\eightbf=cmbx8%
-\font\sevenbf=cmbx7%
-\font\sixbf=cmbx6%
-\font\fivebf=cmbx5%
+\defercmap OT1\font\xviibf=cmbx12 at 17.28\Unit%
+\defercmap OT1\font\xiibf=cmbx12%
+\defercmap OT1\font\tenbf=cmbx10%
+\defercmap OT1\font\eightbf=cmbx8%
+\defercmap OT1\font\sevenbf=cmbx7%
+\defercmap OT1\font\sixbf=cmbx6%
+\defercmap OT1\font\fivebf=cmbx5%
 %   - italic typewriter
-\font\xviiitt=cmitt10 at 17.28\Unit%
+\defercmap OT1tt\font\xviiitt=cmitt10 at 17.28\Unit%
 \hyphenchar\xviiitt \MinusOne%
-\font\xiiitt=cmitt10 at 12\Unit%
+\defercmap OT1tt\font\xiiitt=cmitt10 at 12\Unit%
 \hyphenchar\xiiitt \MinusOne%
-\font\tenitt=cmitt10%
+\defercmap OT1tt\font\tenitt=cmitt10%
 \hyphenchar\tenitt \MinusOne%
-\font\eightitt=cmitt10 at 8\Unit%
+\defercmap OT1tt\font\eightitt=cmitt10 at 8\Unit%
 \hyphenchar\eightitt \MinusOne%
-\font\sevenitt=cmitt10 at 7\Unit%
+\defercmap OT1tt\font\sevenitt=cmitt10 at 7\Unit%
 \hyphenchar\sevenitt \MinusOne%
-\font\sixitt=cmitt10 at 6\Unit%
+\defercmap OT1tt\font\sixitt=cmitt10 at 6\Unit%
 \hyphenchar\sixitt \MinusOne%
-\font\fiveitt=cmitt10 at 5\Unit%
+\defercmap OT1tt\font\fiveitt=cmitt10 at 5\Unit%
 \hyphenchar\fiveitt \MinusOne%
 %   - upright
-\font\xviiu=cmu10 at 17.28\Unit%
-\font\xiiu=cmu10 at 12\Unit%
-\font\tenu=cmu10%
-\font\eightu=cmu10 at 8\Unit%
-\font\sevenu=cmu10 at 7\Unit%
-\font\sixu=cmu10 at 6\Unit%
-\font\fiveu=cmu10 at 5\Unit%
+\defercmap OT1\font\xviiu=cmu10 at 17.28\Unit%
+\defercmap OT1\font\xiiu=cmu10 at 12\Unit%
+\defercmap OT1\font\tenu=cmu10%
+\defercmap OT1\font\eightu=cmu10 at 8\Unit%
+\defercmap OT1\font\sevenu=cmu10 at 7\Unit%
+\defercmap OT1\font\sixu=cmu10 at 6\Unit%
+\defercmap OT1\font\fiveu=cmu10 at 5\Unit%
 %   - TS1 Roman symbols
-\font\xviitsr=tcrm1728%
+\defercmap TS1\font\xviitsr=tcrm1728%
 \hyphenchar\xviitsr \MinusOne%
-\font\xiitsr=tcrm1200%
+\defercmap TS1\font\xiitsr=tcrm1200%
 \hyphenchar\xiitsr \MinusOne%
-\font\tentsr=tcrm1000%
+\defercmap TS1\font\tentsr=tcrm1000%
 \hyphenchar\tentsr \MinusOne%
-\font\eighttsr=tcrm0800%
+\defercmap TS1\font\eighttsr=tcrm0800%
 \hyphenchar\eighttsr \MinusOne%
-\font\seventsr=tcrm0700%
+\defercmap TS1\font\seventsr=tcrm0700%
 \hyphenchar\seventsr \MinusOne%
-\font\sixtsr=tcrm0600%
+\defercmap TS1\font\sixtsr=tcrm0600%
 \hyphenchar\sixtsr \MinusOne%
 %   - TS1 sans serif symbols
-\font\xviitsf=tcss1728%
+\defercmap TS1\font\xviitsf=tcss1728%
 \hyphenchar\xviitsf \MinusOne%
-\font\xiitsf=tcss1200%
+\defercmap TS1\font\xiitsf=tcss1200%
 \hyphenchar\xiitsf \MinusOne%
-\font\tentsf=tcss1000%
+\defercmap TS1\font\tentsf=tcss1000%
 \hyphenchar\tentsf \MinusOne%
-\font\eighttsf=tcss0800%
+\defercmap TS1\font\eighttsf=tcss0800%
 \hyphenchar\eighttsf \MinusOne%
-\font\seventsf=tcss0700%
+\defercmap TS1\font\seventsf=tcss0700%
 \hyphenchar\seventsf \MinusOne%
-\font\sixtsf=tcss0600%
+\defercmap TS1\font\sixtsf=tcss0600%
 \hyphenchar\sixtsf \MinusOne%
 %   - TS1 typewriter symbols
-\font\xviitst=tctt1728%
+\defercmap TS1tt\font\xviitst=tctt1728%
 \hyphenchar\xviitst \MinusOne%
-\font\xiitst=tctt1200%
+\defercmap TS1tt\font\xiitst=tctt1200%
 \hyphenchar\xiitst \MinusOne%
-\font\tentst=tctt1000%
+\defercmap TS1tt\font\tentst=tctt1000%
 \hyphenchar\tentst \MinusOne%
-\font\eighttst=tctt0800%
+\defercmap TS1tt\font\eighttst=tctt0800%
 \hyphenchar\eighttst \MinusOne%
-\font\seventst=tctt0800 at 7\Unit%
+\defercmap TS1tt\font\seventst=tctt0800 at 7\Unit%
 \hyphenchar\seventst \MinusOne%
-\font\sixtst=tctt0800 at 6\Unit%
+\defercmap TS1tt\font\sixtst=tctt0800 at 6\Unit%
 \hyphenchar\sixtst \MinusOne%
 %   - TS1 italic symbols
-\font\xviitsi=tcti1728%
+\defercmap TS1\font\xviitsi=tcti1728%
 \hyphenchar\xviitsi \MinusOne%
-\font\xiitsi=tcti1200%
+\defercmap TS1\font\xiitsi=tcti1200%
 \hyphenchar\xiitsi \MinusOne%
-\font\tentsi=tcti1000%
+\defercmap TS1\font\tentsi=tcti1000%
 \hyphenchar\tentsi \MinusOne%
-\font\eighttsi=tcti0800%
+\defercmap TS1\font\eighttsi=tcti0800%
 \hyphenchar\eighttsi \MinusOne%
-\font\seventsi=tcti0700%
+\defercmap TS1\font\seventsi=tcti0700%
 \hyphenchar\seventsi \MinusOne%
-\font\sixtsi=tcti0600%
+\defercmap TS1\font\sixtsi=tcti0600%
 \hyphenchar\sixtsi \MinusOne%
 %   - TS1 slanted symbols
-\font\xviitsl=tcsl1728%
+\defercmap TS1\font\xviitsl=tcsl1728%
 \hyphenchar\xviitsl \MinusOne%
-\font\xiitsl=tcsl1200%
+\defercmap TS1\font\xiitsl=tcsl1200%
 \hyphenchar\xiitsl \MinusOne%
-\font\tentsl=tcsl1000%
+\defercmap TS1\font\tentsl=tcsl1000%
 \hyphenchar\tentsl \MinusOne%
-\font\eighttsl=tcsl0800%
+\defercmap TS1\font\eighttsl=tcsl0800%
 \hyphenchar\eighttsl \MinusOne%
-\font\seventsl=tcsl0700%
+\defercmap TS1\font\seventsl=tcsl0700%
 \hyphenchar\seventsl \MinusOne%
-\font\sixtsl=tcsl0600%
+\defercmap TS1\font\sixtsl=tcsl0600%
 \hyphenchar\sixtsl \MinusOne%
 %   - TS1 bold-face Roman symbols
-\font\xviitsb=tcbx1728%
+\defercmap TS1\font\xviitsb=tcbx1728%
 \hyphenchar\xviitsb \MinusOne%
-\font\xiitsb=tcbx1200%
+\defercmap TS1\font\xiitsb=tcbx1200%
 \hyphenchar\xiitsb \MinusOne%
-\font\tentsb=tcbx1000%
+\defercmap TS1\font\tentsb=tcbx1000%
 \hyphenchar\tentsb \MinusOne%
-\font\eighttsb=tcbx0800%
+\defercmap TS1\font\eighttsb=tcbx0800%
 \hyphenchar\eighttsb \MinusOne%
-\font\seventsb=tcbx0700%
+\defercmap TS1\font\seventsb=tcbx0700%
 \hyphenchar\seventsb \MinusOne%
-\font\sixtsb=tcbx0600%
+\defercmap TS1\font\sixtsb=tcbx0600%
 \hyphenchar\sixtsb \MinusOne%
 %   - math Roman
-\font\xviirmm=cmr17%
-\font\xiirmm=cmr12%
-\font\xirmm=cmr10 at 10.95\Unit%
-\font\tenrmm=cmr10%
-\font\ninermm=cmr9%
-\font\eightrmm=cmr8%
-\font\sevenrmm=cmr7%
-\font\sixrmm=cmr6%
-\font\fivermm=cmr5%
+\defercmap OT1\font\xviirmm=cmr17%
+\defercmap OT1\font\xiirmm=cmr12%
+\defercmap OT1\font\xirmm=cmr10 at 10.95\Unit%
+\defercmap OT1\font\tenrmm=cmr10%
+\defercmap OT1\font\ninermm=cmr9%
+\defercmap OT1\font\eightrmm=cmr8%
+\defercmap OT1\font\sevenrmm=cmr7%
+\defercmap OT1\font\sixrmm=cmr6%
+\defercmap OT1\font\fivermm=cmr5%
 %   - bold-face math Roman
-\font\xviibfm=cmbx12 at 17.28\Unit%
-\font\xiibfm=cmbx12%
-\font\xibfm=cmbx10 at 10.95\Unit%
-\font\tenbfm=cmbx10%
-\font\ninebfm=cmbx9%
-\font\eightbfm=cmbx8%
-\font\sevenbfm=cmbx7%
-\font\sixbfm=cmbx6%
-\font\fivebfm=cmbx5%
+\defercmap OT1\font\xviibfm=cmbx12 at 17.28\Unit%
+\defercmap OT1\font\xiibfm=cmbx12%
+\defercmap OT1\font\xibfm=cmbx10 at 10.95\Unit%
+\defercmap OT1\font\tenbfm=cmbx10%
+\defercmap OT1\font\ninebfm=cmbx9%
+\defercmap OT1\font\eightbfm=cmbx8%
+\defercmap OT1\font\sevenbfm=cmbx7%
+\defercmap OT1\font\sixbfm=cmbx6%
+\defercmap OT1\font\fivebfm=cmbx5%
 %   - math italic
-\font\xviii=cmmi12 at 17.28\Unit%
+\defercmap OML\font\xviii=cmmi12 at 17.28\Unit%
 \skewchar\xviii 127%
-\font\xiii=cmmi12%
+\defercmap OML\font\xiii=cmmi12%
 \skewchar\xiii 127%
-\font\xii=cmmi10 at 10.95\Unit%
+\defercmap OML\font\xii=cmmi10 at 10.95\Unit%
 \skewchar\xii 127%
-\font\teni=cmmi10%
+\defercmap OML\font\teni=cmmi10%
 \skewchar\teni 127%
-\font\ninei=cmmi9%
+\defercmap OML\font\ninei=cmmi9%
 \skewchar\ninei 127%
-\font\eighti=cmmi8%
+\defercmap OML\font\eighti=cmmi8%
 \skewchar\eighti 127%
-\font\seveni=cmmi7%
+\defercmap OML\font\seveni=cmmi7%
 \skewchar\seveni 127%
-\font\sixi=cmmi6%
+\defercmap OML\font\sixi=cmmi6%
 \skewchar\sixi 127%
-\font\fivei=cmmi5%
+\defercmap OML\font\fivei=cmmi5%
 \skewchar\fivei 127%
 %   - bold face math italic
-\font\xviibi=cmmib10 at 17.28\Unit%
+\defercmap OML\font\xviibi=cmmib10 at 17.28\Unit%
 \skewchar\xviibi 127%
-\font\xiibi=cmmib10 at 12\Unit%
+\defercmap OML\font\xiibi=cmmib10 at 12\Unit%
 \skewchar\xiibi 127%
-\font\xibi=cmmib10 at 10.95\Unit%
+\defercmap OML\font\xibi=cmmib10 at 10.95\Unit%
 \skewchar\xibi 127%
-\font\tenbi=cmmib10%
+\defercmap OML\font\tenbi=cmmib10%
 \skewchar\tenbi 127%
-\font\ninebi=cmmib9%
+\defercmap OML\font\ninebi=cmmib9%
 \skewchar\ninebi 127%
-\font\eightbi=cmmib8%
+\defercmap OML\font\eightbi=cmmib8%
 \skewchar\eightbi 127%
-\font\sevenbi=cmmib7%
+\defercmap OML\font\sevenbi=cmmib7%
 \skewchar\sevenbi 127%
-\font\sixbi=cmmib6%
+\defercmap OML\font\sixbi=cmmib6%
 \skewchar\sixbi 127%
-\font\fivebi=cmmib5%
+\defercmap OML\font\fivebi=cmmib5%
 \skewchar\fivebi 127%
 %   - math symbols
-\font\xviisy=cmsy10 at 17.28\Unit%
+\defercmap OMS\font\xviisy=cmsy10 at 17.28\Unit%
 \skewchar\xviisy 48%
-\font\xiisy=cmsy10 at 12\Unit%
+\defercmap OMS\font\xiisy=cmsy10 at 12\Unit%
 \skewchar\xiisy 48%
-\font\xisy=cmsy10 at 10.95\Unit%
+\defercmap OMS\font\xisy=cmsy10 at 10.95\Unit%
 \skewchar\xisy 48%
-\font\tensy=cmsy10%
+\defercmap OMS\font\tensy=cmsy10%
 \skewchar\tensy 48%
-\font\ninesy=cmsy9%
+\defercmap OMS\font\ninesy=cmsy9%
 \skewchar\ninesy 48%
-\font\eightsy=cmsy8%
+\defercmap OMS\font\eightsy=cmsy8%
 \skewchar\eightsy 48%
-\font\sevensy=cmsy7%
+\defercmap OMS\font\sevensy=cmsy7%
 \skewchar\sevensy 48%
-\font\sixsy=cmsy6%
+\defercmap OMS\font\sixsy=cmsy6%
 \skewchar\sixsy 48%
-\font\fivesy=cmsy5%
+\defercmap OMS\font\fivesy=cmsy5%
 \skewchar\fivesy 48%
 %   - bold-face math symbols
-\font\xviibsy=cmbsy10 at 17.28\Unit%
+\defercmap OMS\font\xviibsy=cmbsy10 at 17.28\Unit%
 \skewchar\xviibsy 48%
-\font\xiibsy=cmbsy10 at 12\Unit%
+\defercmap OMS\font\xiibsy=cmbsy10 at 12\Unit%
 \skewchar\xiibsy 48%
-\font\xibsy=cmbsy10 at 10.95\Unit%
+\defercmap OMS\font\xibsy=cmbsy10 at 10.95\Unit%
 \skewchar\xibsy 48%
-\font\tenbsy=cmbsy10%
+\defercmap OMS\font\tenbsy=cmbsy10%
 \skewchar\tenbsy 48%
-\font\ninebsy=cmbsy9%
+\defercmap OMS\font\ninebsy=cmbsy9%
 \skewchar\ninebsy 48%
-\font\eightbsy=cmbsy8%
+\defercmap OMS\font\eightbsy=cmbsy8%
 \skewchar\eightbsy 48%
-\font\sevenbsy=cmbsy7%
+\defercmap OMS\font\sevenbsy=cmbsy7%
 \skewchar\sevenbsy 48%
-\font\sixbsy=cmbsy6%
+\defercmap OMS\font\sixbsy=cmbsy6%
 \skewchar\sixbsy 48%
-\font\fivebsy=cmbsy5%
+\defercmap OMS\font\fivebsy=cmbsy5%
 \skewchar\fivebsy 48%
 %   - math extra symbols
-\font\xviiex=cmex10 at 17.28\Unit%
-\font\xiiex=cmex10 at 12\Unit%
-\font\xiex=cmex10 at 10.95\Unit%
-\font\tenex=cmex10%
-\font\nineex=cmex9%
-\font\eightex=cmex8%
-\font\sevenex=cmex7%
-\font\sixex@six=cmex7 at 6\Unit%
-\font\sixex=cmex7 at 5.94997\Unit%
-\font\fiveex=cmex7 at 5\Unit%
-\font\fourqex=cmex7 at 4.25\Unit%
-\font\fouriex=cmex7 at 4.16495\Unit%
-\font\threeex=cmex7 at 2.97498\Unit%
+\defercmap OMX\font\xviiex=cmex10 at 17.28\Unit%
+\defercmap OMX\font\xiiex=cmex10 at 12\Unit%
+\defercmap OMX\font\xiex=cmex10 at 10.95\Unit%
+\defercmap OMX\font\tenex=cmex10%
+\defercmap OMX\font\nineex=cmex9%
+\defercmap OMX\font\eightex=cmex8%
+\defercmap OMX\font\sevenex=cmex7%
+\defercmap OMX\font\sixex@six=cmex7 at 6\Unit%
+\defercmap OMX\font\sixex=cmex7 at 5.94997\Unit%
+\defercmap OMX\font\fiveex=cmex7 at 5\Unit%
+\defercmap OMX\font\fourqex=cmex7 at 4.25\Unit%
+\defercmap OMX\font\fouriex=cmex7 at 4.16495\Unit%
+\defercmap OMX\font\threeex=cmex7 at 2.97498\Unit%
 %
 % Math codes:
 \def\setmathcodes{%

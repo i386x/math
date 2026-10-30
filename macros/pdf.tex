@@ -38,6 +38,48 @@
 \setparam\pdfimageapplygamma{1}%
 \setparam\pdfgamma{1000}%
 \setparam\pdfimagegamma{2200}%
+\setparam\pdfgentounicode{0}%
+%
+% Character maps:
+\ifx\pdfnobuiltintounicode\undefined%
+  \def\@pdfnobuiltintounicode #1\relax{}%
+\else%
+  \let\@pdfnobuiltintounicode\pdfnobuiltintounicode%
+\fi%
+\ifnum\ifx\pdfobj\undefined\Zero%
+  \else\ifx\pdflastobj\undefined\Zero%
+  \else\ifx\pdffontattr\undefined\Zero%
+  \else\One\fi\fi\fi%
+=\Zero%
+  \def\@pdfobj #1\relax{}%
+  \let\@pdflastobj\empty%
+  \def\@pdffontattr #1\relax{}%
+\else%
+  \def\@pdfobj{\immediate\pdfobj}%
+  \def\@pdflastobj{\the\pdflastobj\space 0 R}%
+  \let\@pdffontattr\pdffontattr%
+\fi%
+\def\@setcmap{@setcmap@}%
+\def\setcmap #1#2{{%
+  \tolower\@tempa{\@setcmap #1}%
+  \applycw\ifx\@tempa\relax%
+    \tolower\@tempb{macros/cmaps/#1.cmap}%
+    \testfile\@tempb%
+    \iffile%
+      \@pdfobj stream file {\@tempb}\relax%
+      \namexdef\@tempa ##1{%
+        \@pdfnobuiltintounicode ##1\relax%
+        \@pdffontattr ##1 {/ToUnicode \@pdflastobj}\relax%
+      }%
+    \fi%
+  \fi%
+  \applyw\@tempa #2%
+}}%
+\def\cmap #1\font#2{\def\next{\setcmap{#1}#2}\afterassignment\next\font#2}%
+\def\@process@deferred@cmaps{%
+  \@deferred@cmaps%
+  \let\@deferred@cmaps\empty%
+}%
 %
 % Implement drawing driver API for PDF:
 \ifx\pdfliteral\undefined\else%
@@ -143,6 +185,9 @@
 \ifx\pdfcatalog\undefined\else%
   \addtoks\atdocend{\@emit@catalog}%
 \fi%
+%
+% Execute deferred actions:
+\@process@deferred@cmaps%
 %
 % Restore @'s category:
 \restorecat\@%
