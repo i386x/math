@@ -944,20 +944,41 @@
 \def\@save@old@anchor #1#2#3#4{%
   \global\namedef{\@icns\@anchor@name #1}{{#1}{#2}{#3}{#4}}%
 }%
+\def\@warn@check@anchor@early@stop{%
+  % Stop on the first suspicious item
+  \warning{%
+    Anchors integrity checking stopped here. Please correct reported
+    inconsistencies and rerun the job.%
+  }%
+}%
 \def\@check@anchor@defs #1{%
+  \let\next\relax%
   \applycw\ifx{\@icns #1}\relax%
+    % Anchor not present in *.tmp file produced by the previous run (covers
+    % also situations when the previous run is the first one and *.tmp file
+    % has not been created yet)
     \@tempswfalse%
+    \let\next\@warn@check@anchor@early@stop%
   \fi%
   \applycw\ifx{#1}\relax%
+    % Anchor not defined in this run
     \if@tempsw%
+      % But defined in the previous run
       \warning{Anchor `#1` disappeared.}%
       \@tempswfalse%
+      \let\next\@warn@check@anchor@early@stop%
+    \else%
+      % Do not report early stop when we reached the end
+      \let\next\relax%
     \fi%
   \else%
+    % Anchor defined in this run
     \if@tempsw\else%
+      % But not found in *.tmp file from the previous run
       \warning{Anchor `#1` defined but not saved.}%
     \fi%
   \fi%
+  \next%
 }%
 \def\@get@anchor@loc #1#2#3{%
   \begingroup%
@@ -984,6 +1005,7 @@
       \@check@anchor@locs\@@anchor\secondoffour{Page}%
       \@check@anchor@locs\@@anchor\thirdoffour{Real page}%
     \fi%
+    % Stops on the first suspicious item
     \if@tempsw%
   \repeat%
 }}%
@@ -2022,6 +2044,10 @@
 \def\publication #1:{%
   \@item\relax\anchor{\arabic\@itemnum}\label{#1}\ignorespaces%
 }%
+%
+% Index:
+\def\@term #1 #2\relax{\emph{#1}}%
+\def\term #1{\@term #1\relax}%
 %
 % End of the document tasks:
 \let\atdocend\empty%
