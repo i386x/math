@@ -32,6 +32,7 @@
 \let\@tempc\relax%
 \let\@tempd\relax%
 \let\@tempe\relax%
+\let\@tempf\relax%
 \newif\if@tempsw \@tempswfalse%
 %
 % Tokens:
@@ -231,7 +232,7 @@
     \@mergesort@init #1#2%
     \@mergesort@run #1#2%
     \ifnum\counta<\One%
-      \wraning{\string\mergesort\space is broken.}%
+      \warning{\string\mergesort\space is broken.}%
     \fi%
     \throwover #2%
   \endgroup%

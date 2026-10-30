@@ -1081,10 +1081,13 @@
     \fi%
   \fi%
 }}%
+\def\@cited{cited:}%
 \def\cite #1{{%
   \let\@tempa\empty%
   \csviter\@cite@collect{#1}%
-  \mergesort\@cite@compare\@tempa%
+  \let\@tempf\@tempa%
+  \mergesort\@cite@compare\@tempf%
+  \applyctx\def\@tempa\@tempf%
   \@cite@compress@reset%
   \unwrapt\@cite@compress\@tempa\sentinel\\%
   \ifx\@tempa\empty%
@@ -1124,6 +1127,7 @@
     \strip{#1}\@tempb%
     \throwover\@tempb%
   \endgroup%
+  \global\namelet{\@cited/\@bib@scope@name/\@tempb}\empty%
   \edef\@@label{\@label@id/\@bib@scope@name/\@tempb}%
   \applycw\ifx\@@label\relax%
     \wterm{\applycw\meaning\@@label}%
@@ -2018,12 +2022,16 @@
 }%
 %
 % Bibliography:
+\newif\if@hide@pub \@hide@pubfalse%
+\def\@endgroups{\egroup\endgroup}%
+\def\@end@hide@pub{\if@hide@pub\expandafter\@endgroups\fi \@hide@pubfalse}%
 \def\@widest@biblabel{99.}%
 \def\widestbiblabel #1{\def\@widest@biblabel{#1}}%
-\def\thereferenceshook{\@endlist}%
+\def\thereferenceshook{\@end@hide@pub \@endlist}%
 \def\references #1:{%
   \forcetoctrue\chapter *#1.%
   \@begin@env\@bib@scope@name%
+    \@hide@pubfalse%
     \small%
     \@list{%
       \setbox\Zero \hbox{\@widest@biblabel}%
@@ -2042,7 +2050,12 @@
 }%
 \def\newblock{\hskip .11em plus .33em minus .07em\relax}%
 \def\publication #1:{%
-  \@item\relax\anchor{\arabic\@itemnum}\label{#1}\ignorespaces%
+  \@end@hide@pub%
+  \applycw\ifx{\@cited/\@bib@scope@name/#1}\relax%
+    \afterfi{\@hide@pubtrue \begingroup \setbox\Zero \hbox\bgroup}%
+  \else%
+    \afterfi{\@item\relax\anchor{\arabic\@itemnum}\label{#1}\ignorespaces}%
+  \fi%
 }%
 %
 % Index:
