@@ -1023,6 +1023,7 @@
 \let\Name\One%
 \let\NameTitle\Two%
 \ensurereg{count}{refsecformat}{0}%
+\ensurereg{count}{defaultrefsecformat}{\Name}%
 \let\@ref@anchorid\empty%
 \let\@ref@pageno\empty%
 \let\@ref@realpageno\empty%
@@ -1781,6 +1782,7 @@
 \def\@part #1#2#3{%
   \startproperpage%
   \if$#1$\stepcounter{part}\fi%
+  \global\refsecformat \defaultrefsecformat%
   \parthook%
   \begingroup%
     \raggedleft%
@@ -1811,6 +1813,7 @@
   \startproperpage%
   \if$#1$\stepcounter{chapter}\fi%
   \thispagestyle{bchap}%
+  \global\refsecformat \defaultrefsecformat%
   \chapterhook%
   \begingroup%
     \parindent \ZeroUnit%
@@ -1851,6 +1854,7 @@
     \vskip 30\Unit%
   \fi%
   \if$#1$\stepcounter{section}\fi%
+  \global\refsecformat \defaultrefsecformat%
   \sectionhook%
   \begingroup%
     \sectionfont%
