@@ -28,4 +28,5 @@ endif
 %.pdf: %.tex
 	$(RM) $(<:.tex=.tmp)
 	-$(PDFTEX) -draftmode $<
+	-$(PDFTEX) -draftmode $<
 	$(PDFTEX) $<

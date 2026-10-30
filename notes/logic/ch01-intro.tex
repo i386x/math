@@ -12,24 +12,37 @@
 
 \refsecformat \NameTitle
 
-This document serves as a collection of notes taken from various sources about
-mathematical logic, mostly from \cite{Men15}. The content of this document is
-organized into three\footnote{A simple foot note.} chapters.
+Mathematical logic has developed throughout the centuries as an answer to the
+need to formalize logical reasoning. The main contributions to this field were
+done by George Boole, Augustus De Morgan, Charles Sanders Peirce, Gottlob
+Frege, Bertrand Russel, Leopold L\"owenheim, Thoralf Skolem, and Kurt G\"odel.
+Today, mathematical logic is fundamental for many areas, mostly for computer
+science, but also for set theory, calculus, and number theory. In a nutshell,
+the core principle of mathematical logic is to provide a set of axioms and
+rules of inference from which theorems can be proved. The good textbook about
+mathematical logic is \cite{Men15}.
 
-\refsec{ch:intro}, first outlines the structure of this document and then, in
-\refsec{sec:funterm}, it gives a fundamental terminology and notation used in
-the following chapters.
+The organization of this document is as follows: after the short introduction
+and starting with \refsec{sec:funterm}, this chapter gives an overview of a
+fundamental terminology and notation used further in this document, so this
+document is self-contained.
 
-\refsec{ch:pcalc}, is dedicated to the propositional calculus.
+The next chapter, \refsec{ch:pcalc}, gives a survey of propositional calculus.
 
-Finally, \refsec{ch:folog}, is dedicated to the first-order logic.
+Finally, \refsec{ch:folog}, is dedicated to first-order logic.
 
 \section Fundamental Terminology (funterm).
 
-Mathematical logic is not a small area. Actually, it spans across many other
-fields of mathematics, like the computer science theory or set theory. To
-demonstrate it, lets take a look on axiomatic set theory. Axiomatic set theory
-precisely defines a set via axioms written in mathematical logic. On the other
-hand, mathematical logic uses notions of set and function to describe its core
-concepts, as it will be shown later. Thus, these two areas of mathematics are
-tightly interconnected.
+First, let start with the notion of \term{set\/ (naive)}: a set is a collection
+of objects, called \term{elements [element (of a set)]} of the set. This
+description is a bit vague because it provides a space for paradoxes\footnote{%
+Like Russel's paradox.}, but it is sufficient for building up a formal basis of
+mathematical logic, like language, evaluation, and truth function, as it will
+be shown later.
+
+If $S$ is a set and $p$ is an object, then $p \in S$ denotes that $p$ is a
+\term{member (of a set)} of $S$. The opposite, that is that $p$ is not a member
+of $S$, is denoted $p \notin S$. A set can have no elements, a finite number of
+elements, or an\footnote{There are more than just one infinity, see
+\cite{Jec03}.} infinite number of elements. The set with no elements is called
+the \term{{empty set} [set (empty)]} and it is denoted $\emptyset$.
