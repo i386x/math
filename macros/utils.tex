@@ -38,8 +38,15 @@
 % Tokens:
 \def\spacetok:{\let\spacetok= }\spacetok: % the space after : is important
 \let\asterisktok=*%
+\let\questionmarktok=?%
+\let\exclamationmarktok=!%
+\let\backquotetok=`%
+\let\dashtok=-%
+\let\colontok=:%
+\let\semicolontok=;%
 \let\toksa\toks@%
 \def\addtoks #1#2{\applycctx\def#1{#1#2}}%
+\def\eatngo #1{\afterassignment#1\let\@tempa=}%
 \def\car #1#2\\{#1}%
 \def\cdr #1#2\\{#2}%
 \def\rem #1\\{}%
@@ -79,8 +86,8 @@
 % Macrobatics (macro acrobatics):
 \def\afterfi #1#2\fi{#2\fi#1}%
 \def\afterfifi #1#2\fi\fi{#2\fi\fi#1}%
-\def\throwoveras #1#2\endgroup{\applyccctx\endgroup\def#2{#1}}%
-\def\throwover #1{\throwoveras#1#1}%
+\def\promoteas #1#2\endgroup{\applyccctx\endgroup\def#2{#1}}%
+\def\promote #1{\promoteas#1#1}%
 %   - `t` suffix stands for an arbitrary token
 \def\@unwrap #1{\edef#1{\expandafter}}%
 \def\unwrap #1{\@unwrap#1#1}%
@@ -206,6 +213,38 @@
   \@parse@counter@spec@final{#1}{#2}%
 }%
 \def\@parse@counter@spec@final #1#2#3#4#5{#5{#1}{#2}{#3}{#4}}%
+\def\ParseIndexTerm #1#2{\@parse@index@term@try@bracket #2[\relax#1}%
+\def\@parse@index@term@try@bracket #1[#2\relax{%
+  \if&#2&%
+    \afterfi{\@parse@index@term@try@paren #1(\relax}%
+  \else%
+    \afterfi{\@parse@index@term@eat@bracket #1[#2\relax}%
+  \fi%
+}%
+\def\@parse@index@term@try@paren #1(#2\relax{%
+  \if&#2&%
+    \afterfi{\@parse@index@term@final{}{}{#1}}%
+  \else%
+    \afterfi{\@parse@index@term@eat@paren #1(#2\relax}%
+  \fi%
+}%
+\def\@parse@index@term@eat@paren #1(#2)(\relax{%
+  \@parse@index@term@final{#2}{}{#1}%
+}%
+\def\@parse@index@term@eat@bracket #1[#2][\relax{%
+  \@parse@index@term@try@inner@paren #2(\relax{#1}%
+}%
+\def\@parse@index@term@try@inner@paren #1(#2\relax{%
+  \if&#2&%
+    \afterfi{\@parse@index@term@final{}{#1}}%
+  \else%
+    \afterfi{\@parse@index@term@eat@inner@paren #1(#2\relax}%
+  \fi%
+}%
+\def\@parse@index@term@eat@inner@paren #1(#2)(\relax{%
+  \@parse@index@term@final{#2}{#1}%
+}%
+\def\@parse@index@term@final #1#2#3#4{#4{#3}{#2}{#1}}%
 %
 % CSV list:
 \def\csviter #1#2{%
@@ -225,6 +264,576 @@
 %
 % Sorting:
 \newif\ifle \lefalse%
+%   - code and translation tables
+\def\@code{@code:}%
+\def\@codename{\@code\string}%
+\def\@tr{@tr:}%
+\def\@trname{\@tr\meaning}%
+\def\@def@code #1#2{\applycw\chardef{\@codename#1}=#2\relax}%
+\def\@def@tr #1#2{\applycw\def{\@trname#1}{#2}}%
+\def\@tt@space{\noexpand\@tt@space}%
+\def\@tt@punct{\noexpand\@tt@punct}%
+\def\@def@code@table #1#2{%
+  \ifx#1\sentinel\else%
+    \@def@code{#1}{#2}%
+    \expandafter\@def@code@table%
+  \fi%
+}%
+\def\@def@tr@table #1#2{%
+  \ifx#1\sentinel\else%
+    \@def@tr{#1}{\addtoks\@tempb{#2}}%
+    \expandafter\@def@tr@table%
+  \fi%
+}%
+\let\@ml@f\relax%
+\@def@code@table%
+  % Spaces
+  {\ }{0}%
+  {\textvisiblespace}{1}%
+  {-}{2}%
+  {\slash}{3}%
+  {\textbar}{4}%
+  {\textbackslash}{5}%
+  {\textendash}{6}%
+  {\textemdash}{7}%
+  {\_}{8}%
+  {\textunderscore}{8}%
+  % Symbols
+  {\Orb}{10}%
+  {@}{11}%
+  {\copyright}{12}%
+  {\textasciicircum}{13}%
+  {+}{14}%
+  {*}{15}%
+  {\textasciitilde}{16}%
+  {\#}{17}%
+  {\$}{18}%
+  {\textdollar}{18}%
+  {\textsterling}{19}%
+  {\%}{20}%
+  {\textperthousand}{21}%
+  {\textpertenthousand}{22}%
+  {\&}{23}%
+  {\S}{24}%
+  {\textsection}{24}%
+  {\dag}{25}%
+  {\ddag}{26}%
+  {\P}{27}%
+  % Digits
+  {0}{30}{1}{31}{2}{32}{3}{33}{4}{34}%
+  {5}{35}{6}{36}{7}{37}{8}{38}{9}{39}%
+  % Letters
+  {a}{41}{A}{42}{b}{43}{B}{44}{c}{45}{C}{46}%
+  {d}{47}{D}{48}{e}{49}{E}{50}{f}{51}{F}{52}%
+  {g}{53}{G}{54}{h}{55}{H}{56}{i}{57}{I}{58}%
+  {j}{59}{J}{60}{k}{61}{K}{62}{l}{63}{L}{64}%
+  {m}{65}{M}{66}{n}{67}{N}{68}{o}{69}{O}{70}%
+  {p}{71}{P}{72}{q}{73}{Q}{74}{r}{75}{R}{76}%
+  {s}{77}{S}{78}{t}{79}{T}{80}{u}{81}{U}{82}%
+  {v}{83}{V}{84}{w}{85}{W}{86}{x}{87}{X}{88}%
+  {y}{89}{Y}{90}{z}{91}{Z}{92}{\\}{99}%
+  % Punctuation
+  {\quotesinglbase}{100}%
+  {\quotedblbase}{101}%
+  {\guilsinglleft}{102}%
+  {\guillemetleft}{103}%
+  {\guillemotleft}{103}%
+  {\textquoteleft}{104}%
+  {\textquotedblleft}{105}%
+  {\textquoteright}{106}%
+  {\textquotedblright}{107}%
+  {\guilsinglright}{108}%
+  {\guillemetright}{109}%
+  {\guillemotright}{109}%
+  {\textquotedbl}{110}%
+  {,}{111}%
+  {.}{112}%
+  {\dots}{113}%
+  {:}{114}%
+  {;}{115}%
+  {!}{116}%
+  {?}{117}%
+  {\textexclamdown}{118}%
+  {\textquestiondown}{119}%
+  {(}{120}%
+  {)}{121}%
+  {<}{122}%
+  {>}{123}%
+  {[}{124}%
+  {]}{125}%
+  {\{}{126}%
+  {\}}{127}%
+  % Accents
+  {\`}{100}%
+  {\textcommaabove}{101}%
+  {\'}{102}%
+  {\^}{103}%
+  {\~}{104}%
+  {\"}{105}%
+  {\H}{106}%
+  {\r}{107}%
+  {\v}{108}%
+  {\u}{109}%
+  {\=}{110}%
+  {\.}{111}%
+  {\textcommabelow}{112}%
+  {\c}{113}%
+  {\textogonekcentered}{114}%
+  {\k}{115}%
+  {\b}{116}%
+  {\d}{117}%
+  {\t}{118}%
+  %   - modified letter flag
+  {\@ml@f}{119}%
+  %   - accents over modified letters
+  {\@ml@f\string\`}{120}%
+  {\@ml@f\string\textcommaabove}{121}%
+  {\@ml@f\string\'}{122}%
+  {\@ml@f\string\^}{123}%
+  {\@ml@f\string\~}{124}%
+  {\@ml@f\string\"}{125}%
+  {\@ml@f\string\H}{126}%
+  {\@ml@f\string\r}{127}%
+  {\@ml@f\string\v}{128}%
+  {\@ml@f\string\u}{129}%
+  {\@ml@f\string\=}{130}%
+  {\@ml@f\string\.}{131}%
+  {\@ml@f\string\textcommabelow}{132}%
+  {\@ml@f\string\c}{133}%
+  {\@ml@f\string\textogonekcentered}{134}%
+  {\@ml@f\string\k}{135}%
+  {\@ml@f\string\b}{136}%
+  {\@ml@f\string\d}{137}%
+  {\@ml@f\string\t}{138}%
+  % End of the table
+  \sentinel\sentinel%
+\@def@tr@table%
+  % Spaces
+  \spacetok{\ }%
+  {-}{\@tt@space-}%
+  {/}{\slash}%
+  {|}{\textbar}%
+  % Symbols
+  {@}{@}%
+  {^}{\textasciicircum}%
+  {+}{+}%
+  {*}{*}%
+  {~}{\textasciitilde}%
+  % Digits
+  00112233445566778899%
+  % Letters
+  aaAAbbBBccCCddDDeeEEffFFggGGhhHHiiIIjjJJkkKKllLLmmMMnnNNooOOppPPqqQQrrRRssSS%
+  ttTTuuUUvvVVwwWWxxXXyyYYzzZZ%
+  % Punctuation
+  {`}{\textquoteleft}%
+  {'}{\textquoteright}%
+  {"}{\textquotedblright}%
+  {,}{\@tt@punct,}%
+  {.}{\@tt@punct.}%
+  {:}{\@tt@punct:}%
+  {;}{\@tt@punct;}%
+  {!}{\@tt@punct!}%
+  {?}{\@tt@punct?}%
+  {(}{\@tt@punct(}%
+  {)}{\@tt@punct)}%
+  {<}{\@tt@punct<}%
+  {>}{\@tt@punct>}%
+  {[}{\@tt@punct[}%
+  {]}{\@tt@punct]}%
+  % End of the table
+  \sentinel\sentinel%
+%   - text commands/macros handling
+\def\@do@spaces{%
+  % Spaces are ordered using T1 scheme, except en-dash and em-dash which are
+  % placed after slash because they optically occupy more space:
+  %   blank < visible < dash < slash < bar < back slash < en-dash < em-dash
+  %   < underscore
+  \do\ \do\textvisiblespace\do\slash\do\textbar\do\textbackslash\do\textendash%
+  \do\textemdash\do\_\do\textunderscore%
+}%
+\def\@do@text@symbols{%
+  % Text symbols are ordered using their names, encoding schemes (OT1, OMS),
+  % and "complexity" (roughly how much space they occupy and how much "ink"
+  % has been used on them):
+  %   orb (circle) < @ < copyright < ^ < + < * < ~ [name, complexity]
+  %   # < $ < pound < % < per thousand < per ten thousand < & [OT1, complexity]
+  %   section < dagger < double dagger < \P [OMS]
+  \do\Orb\do\copyright\do\textasciicircum\do\textasciitilde%
+  \do\#\do\$\do\textdollar\do\textsterling\do\%\do\textperthousand%
+    \do\textpertenthousand\do\&%
+  \do\S\do\textsection\do\dag\do\ddag\do\P%
+}%
+\def\@do@logos{%
+  % Logos
+  \do\TeX%
+}%
+\def\@do@accents{%
+  % Accents are ordered using T1 scheme (the order of accents that are not
+  % included in the scheme is deduced):
+  %   \` < \textcommaabove < \' < \^ < \~ < \" < \H < \r < \v < \u < \= < \.
+  %      < \textcommabelow < \c < \textogonekcentered < \k < \b < \d < \t
+  \do\`\do\textcommaabove\do\'\do\^\do\~\do\"\do\H\do\r\do\v\do\u\do\=\do\.%
+  \do\textcommabelow\do\c\do\textogonekcentered\do\k\do\b\do\d\do\t%
+}%
+\def\@do@modified@letters{%
+  % Modified letters go after accents
+  \do\aa\do\AA\do\ae\do\AE\do\dj\do\DJ\do\DH\do\dh\do\hwithstroke%
+  \do\Hwithstroke\do\i\do\ij\do\IJ\do\j\do\l\do\L\do\ng\do\NG\do\o\do\O\do\oe%
+  \do\OE\do\ss\do\SS\do\th\do\TH%
+}%
+\def\@translate@modified@letters{%
+  \def\aa{a}%
+  \def\AA{A}%
+  \def\ae{ae}%
+  \def\AE{AE}%
+  \def\dj{d}%
+  \def\DJ{D}%
+  \def\DH{D}%
+  \def\dh{d}%
+  \def\hwithstroke{h}%
+  \def\Hwithstroke{H}%
+  \def\i{i}%
+  \def\ij{ij}%
+  \def\IJ{IJ}%
+  \def\j{j}%
+  \def\l{l}%
+  \def\L{L}%
+  \def\ng{n}%
+  \def\NG{N}%
+  \def\o{o}%
+  \def\O{O}%
+  \def\oe{oe}%
+  \def\OE{OE}%
+  \def\ss{ss}%
+  \def\SS{SS}%
+  \def\TeX{TeX}%
+  \def\th{th}%
+  \def\TH{TH}%
+}%
+\def\@translate@modified@letters@ii{%
+  \def\aa{\r a}%
+  \def\AA{\r A}%
+  \def\ae{\@ml@f e}%
+  \def\AE{\@ml@f E}%
+  \def\dj{\@ml@f}%
+  \def\DJ{\@ml@f}%
+  \def\DH{\@ml@f}%
+  \def\dh{\@ml@f}%
+  \def\hwithstroke{\@ml@f}%
+  \def\Hwithstroke{\@ml@f}%
+  \def\i{\@ml@f}%
+  \def\ij{\@ml@f j}%
+  \def\IJ{\@ml@f J}%
+  \def\j{\@ml@f}%
+  \def\l{\@ml@f}%
+  \def\L{\@ml@f}%
+  \def\ng{\@ml@f}%
+  \def\NG{\@ml@f}%
+  \def\o{\@ml@f}%
+  \def\O{\@ml@f}%
+  \def\oe{\@ml@f e}%
+  \def\OE{\@ml@f E}%
+  \def\ss{\@ml@f s}%
+  \def\SS{\@ml@f S}%
+  \def\TeX{TeX}%
+  \def\th{\@ml@f h}%
+  \def\TH{\@ml@f H}%
+}%
+\def\@do@punctuation{%
+  % Punctuation characters are ordered using T1 scheme and their complexity
+  % (how much space they occupy):
+  %   quotes: \quotesinglbase < \quotedblbase < \guilsinglleft < \guillemetleft
+  %     = \guillemotleft < ` = \textquoteleft < \textquotedblleft
+  %     < ' = \textquoteright < " = \textquotedblright < \guilsinglright
+  %     < \guillemetright = \guillemotright < \textquotedbl
+  %   punctuation: , < . < \dots < : < ; < ! < ? < !` = \textexclamdown
+  %     < ?` = \textquestiondown
+  %   parenthesis: ( < ) < `<` < `>` < [ < ] < { < }
+  \do\quotesinglbase\do\quotedblbase\do\guilsinglleft\do\guillemetleft%
+    \do\guillemotleft\do\textquoteleft\do\textquotedblleft\do\textquoteright%
+    \do\textquotedblright\do\guilsinglright\do\guillemetright%
+    \do\guillemotright\do\textquotedbl%
+  \do\dots\do\textexclamdown\do\textquestiondown%
+  \do\{\do\}%
+}%
+\def\dotextmacroshook{}%
+\def\@do@text@macros{%
+  \@do@spaces \@do@text@symbols \@do@logos \@do@accents \@do@modified@letters%
+    \@do@punctuation%
+  \dotextmacroshook%
+}%
+\def\@protect@text@macros{%
+  \def\do ##1{\def##1{\noexpand##1}}%
+  \@do@text@macros%
+}%
+%   - symbol translation
+\begingroup%
+  \@protect@text@macros%
+  \def\do #1{\global\@def@tr{#1}{\addtoks\@tempb{#1}}}%
+  \@do@text@macros%
+\endgroup%
+\def\@translate@symbols{\futurelet\@tempa\@translate@symbols@cont}%
+\def\@translate@symbols@cont{%
+  \ifcase\ifx\@tempa\sentinel 0%
+    \else\ifx\@tempa\bgroup 1%
+    \else\ifx\@tempa\egroup 1%
+    \else\ifx\@tempa\dashtok 2%
+    \else\ifx\@tempa\exclamationmarktok 3%
+    \else\ifx\@tempa\questionmarktok 4%
+    \else\applycw\ifx{\@trname\@tempa}\relax 5%
+    \else 6%
+    \fi\fi\fi\fi\fi\fi\fi\space%
+    \afterfi{\rem}% 0
+  \or%
+    \afterfi{\eatngo\@translate@symbols@group}% 1
+  \or%
+    \afterfi{\eatngo\@translate@symbols@dash}% 2
+  \or%
+    \afterfi{\eatngo\@translate@symbols@exclamdown}% 3
+  \or%
+    \afterfi{\eatngo\@translate@symbols@questiondown}% 4
+  \or%
+    \afterfi{\eatngo\@translate@symbols@unknown}% 5
+  \or%
+    \afterfi{\eatngo\@translate@symbols@known}% 6
+  \else%
+    \afterfi{\eatngo\@translate@symbols@uncovered}% 7, 8, ...
+  \fi%
+}%
+\def\@translate@symbols@group{%
+  \warning{Group characters are going to be removed.}%
+  \@translate@symbols%
+}%
+\def\@translate@symbols@dash{\futurelet\@tempa\@translate@symbols@dash@cont}%
+\def\@translate@symbols@dash@cont{%
+  \ifx\@tempa\dashtok%
+    \afterfi{\eatngo\@translate@symbols@endash}%
+  \else%
+    \afterfi{\addtoks\@tempb{\@tt@space-}\@translate@symbols@cont}%
+  \fi%
+}%
+\def\@translate@symbols@endash{%
+  \futurelet\@tempa\@translate@symbols@endash@cont%
+}%
+\def\@translate@symbols@endash@cont{%
+  \ifx\@tempa\dashtok%
+    \afterfi{\addtoks\@tempb{\textemdash}\eatngo\@translate@symbols}%
+  \else%
+    \afterfi{\addtoks\@tempb{\textendash}\@translate@symbols@cont}%
+  \fi%
+}%
+\def\@translate@symbols@exclamdown{%
+  \futurelet\@tempa\@translate@symbols@exclamdown@cont%
+}%
+\def\@translate@symbols@exclamdown@cont{%
+  \ifx\@tempa\backquotetok%
+    \afterfi{\addtoks\@tempb{\textexclamdown}\eatngo\@translate@symbols}%
+  \else%
+    \afterfi{\addtoks\@tempb{\@tt@punct!}\@translate@symbols@cont}%
+  \fi%
+}%
+\def\@translate@symbols@questiondown{%
+  \futurelet\@tempa\@translate@symbols@questiondown@cont%
+}%
+\def\@translate@symbols@questiondown@cont{%
+  \ifx\@tempa\backquotetok%
+    \afterfi{\addtoks\@tempb{\textquestiondown}\eatngo\@translate@symbols}%
+  \else%
+    \afterfi{\addtoks\@tempb{\@tt@punct?}\@translate@symbols@cont}%
+  \fi%
+}%
+\def\@translate@symbols@unknown{%
+  \warning{Unable to translate `\meaning\@tempa`.}%
+}%
+\def\@translate@symbols@known{\applyw{\@trname\@tempa}}%
+\def\@translate@symbols@uncovered{%
+  \warning{\string\@translate@symbols: Uncovered branch detected.}%
+}%
+%   - symbols sorting preparation
+\def\@prepare@symbol@sorting@preprocess #1{%
+  \begingroup%
+    % Protect text macros against expansion
+    \@protect@text@macros%
+    % Expand the rest
+    \edef\@tempb{#1}%
+    % Translate
+    \let\@tempa\empty%
+    \unwrapt\@translate@symbols\@tempb\sentinel\\%
+    % Store translated result to #1
+    \promoteas\@tempb#1%
+  \endgroup%
+}%
+\def\@@normalize@spaces{%
+  \def\@tt@space ##1{\ }%
+  \def\do ##1{\ifx##1\ \else\let##1\ \fi}%
+  \@do@spaces%
+}%
+\def\@@care@about@spaces{\let\@tt@space\empty}%
+\def\@@remove@accents{%
+  \def\do ##1{\let##1\empty}%
+  \@do@accents%
+}%
+\def\@@remove@punctuation{%
+  \let\@tt@punct\gobble%
+  \def\do ##1{\let##1\empty}%
+  \@do@punctuation%
+}%
+\def\@@remove@accents@and@punctuation{%
+  \@@remove@punctuation%
+  \@do@accents%
+}%
+\def\@@care@about@punctuation{\let\@tt@punct\empty}%
+\def\@prepare@symbol@sorting@stage@i #1#2{%
+  % Stage I:
+  %   - normalize spaces
+  %   - remove accents and punctuation
+  %   - do not care about capitals
+  \@protect@text@macros%
+  \@@normalize@spaces%
+  \@@remove@accents@and@punctuation%
+  \@translate@modified@letters%
+  % Do not care about capitals
+  \tolower#1#1%
+  \tolower#2#2%
+}%
+\def\@prepare@symbol@sorting@stage@ii #1#2{%
+  % Stage II:
+  %   - letters, symbols, and normalized spaces are same
+  %   - normalize spaces
+  %   - care about accents and modified letters
+  %   - remove punctuation
+  %   - do not care about capitals
+  \@protect@text@macros%
+  \@@normalize@spaces%
+  \@@remove@punctuation%
+  \@translate@modified@letters@ii%
+  % Apply changes before processing accents
+  \edef#1{#1}%
+  \edef#2{#2}%
+  % Process accents
+  \def\do ##1{%
+    % Define for every accent macro
+    \def##1####1{%
+      \applycw\ifx{\@codename####1}\relax%
+        % A token with no code -> pass it without expansion
+        \noexpand####1%
+      \else%
+        \ifnum\applyw{\@codename####1}>\applyw{\@codename\\}%
+          \ifnum\applyw{\@codename####1}<\applyw{\@codename\@ml@f}%
+            % A token is an accent command (accent applied on accent, which is
+            % probably a mistake) -> consume it and go to the next token
+            \afterfifi{##1}%
+          \else%
+            % A token is \@ml@f (accent applied on a modified letter, the codes
+            % after \@ml@f do not appear in the token stream) -> emit accent
+            % for the modified letter
+            \applyw{\@codename\@ml@f\string##1}%
+          \fi%
+        \else%
+          % A token is not an accent -> emit the accent macro code
+          \applyw{\@codename##1}%
+        \fi%
+      \fi%
+    }%
+  }%
+  \@do@accents%
+  % Do not care about capitals
+  \tolower#1#1%
+  \tolower#2#2%
+}%
+\def\@prepare@symbol@sorting@stage@iii #1#2{%
+  % Stage III:
+  %   - letters (even accented and modified), symbols, and normalized spaces
+  %     are same
+  %   - normalize spaces
+  %   - remove accents and punctuation
+  %   - care about capitals
+  \@protect@text@macros%
+  \@@normalize@spaces%
+  \@@remove@accents@and@punctuation%
+  \@translate@modified@letters%
+  \edef#1{#1}%
+  \edef#2{#2}%
+}%
+\def\@prepare@symbol@sorting@stage@iv #1#2{%
+  % Stage IV:
+  %   - all symbols, letters (including accents and capitals), and normalized
+  %     spaces are same
+  %   - normalize spaces
+  %   - remove accents
+  %   - care about punctuation
+  \@protect@text@macros%
+  \@@normalize@spaces%
+  \@@remove@accents%
+  \@@care@about@punctuation%
+  \@translate@modified@letters%
+  \edef#1{#1}%
+  \edef#2{#2}%
+}%
+\def\@prepare@symbol@sorting@stage@v #1#2{%
+  % Stage V:
+  %   - all symbols, letters (including accents and capitals), punctuation, and
+  %     normalized spaces are same
+  %   - care about spaces
+  %   - remove accents and punctuation
+  \@protect@text@macros%
+  \@@care@about@spaces%
+  \@@remove@accents@and@punctuation%
+  \@translate@modified@letters%
+  \edef#1{#1}%
+  \edef#2{#2}%
+}%
+%   - symbol comparison
+\def\comparetext #1#2{%
+  \begingroup%
+    \@prepare@symbol@sorting@preprocess #1%
+    \@prepare@symbol@sorting@preprocess #2%
+    \compare@text{i}#1#2%
+    \ifnum\counta=\Zero\compare@text{ii}#1#2\fi%
+    \ifnum\counta=\Zero\compare@text{iii}#1#2\fi%
+    \ifnum\counta=\Zero\compare@text{iv}#1#2\fi%
+    \ifnum\counta=\Zero\compare@text{v}#1#2\fi%
+    \expandafter%
+  \endgroup%
+  \ifnum\counta>\Zero\lefalse\else\letrue\fi%
+}%
+\def\@compare@text #1#2#3{%
+  \applyw{@prepare@symbol@sorting@stage@#1}#2#3%
+  \edef\next{\noexpand\@compare@symbols{#2}{#3}}\next%
+}%
+\def\@compare@symbols #1#2{%
+  \counta \Zero%
+  \@compare@symbols@cont #1\sentinel #2\sentinel%
+}%
+\def\@compare@symbols@cont #1#2\sentinel#3#4\sentinel{%
+  \let\next\relax%
+  \if&#1#3&%
+    % Both empty => left == right
+  \else\if&#1&%
+    % Left empty, right not => left < right
+    \counta \MinusOne%
+  \else\if&#3&%
+    % Right empty, left not => left > right
+    \counta \One%
+  \else%
+    \@compare@symbols@getcode\counta#1%
+    \@compare@symbols@getcode\countb#2%
+    \advance \counta -\countb%
+    \ifnum\counta=\Zero%
+      \def\next{\@compare@symbols@cont #2\sentinel#4\sentinel}%
+    \fi%
+  \fi\fi\fi%
+  \next%
+}%
+\def\@compare@symbols@getcode #1#2{%
+  \applycw\ifx{\@codename#2}\relax%
+    \warning{\string\@compare@symbols: No code for `\string#2`.}%
+    #1=\Cclv%
+  \else%
+    #1=\applyw{\@codename#2}%
+  \fi%
+}%
+%   - sorting
 \def\mergesort #1#2{%
   % #1: a comparison macro
   % #2: a macro containing a sequence of control sequences
@@ -234,7 +843,7 @@
     \ifnum\counta<\One%
       \warning{\string\mergesort\space is broken.}%
     \fi%
-    \throwover #2%
+    \promote #2%
   \endgroup%
 }%
 \def\@mergesort@init #1#2{%

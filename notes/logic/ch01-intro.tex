@@ -33,7 +33,7 @@ Finally, \refsec{ch:folog}, is dedicated to first-order logic.
 
 \section Fundamental Terminology (funterm).
 
-First, let start with the notion of \term{set\/ (naive)}: a set is a collection
+First, let start with the notion of \term{set (naive)}: a set is a collection
 of objects, called \term{elements [element (of a set)]} of the set. This
 description is a bit vague because it provides a space for paradoxes\footnote{%
 Like Russel's paradox.}, but it is sufficient for building up a formal basis of
@@ -45,4 +45,13 @@ If $S$ is a set and $p$ is an object, then $p \in S$ denotes that $p$ is a
 of $S$, is denoted $p \notin S$. A set can have no elements, a finite number of
 elements, or an\footnote{There are more than just one infinity, see
 \cite{Jec03, Rom08}.} infinite number of elements. The set with no elements is
-called the \term{{empty set} [set (empty)]} and it is denoted $\emptyset$.
+called the \term{empty set [set (empty)]} and it is denoted $\emptyset$.
+
+A finite set with considerably small number of elements can be specified by
+enumerating its elements between curly braces. For instance, a set containing
+only three elements, $a$, $b$, and $c$, can be written down as $\{a, b, c\}$.
+An infinite set or a finite set with a large number of elements can be
+specified by the set-builder notation, e.g. $S = \{x \where \pi(x) \}$, which
+characterizes $S$ as the set of all those elements $x$ for which the property
+$\pi$ is satisfied. For example, $\{x \where \hbox{$x$ is odd}\}$ characterizes
+the set of all odd numbers.

@@ -913,9 +913,17 @@
 }%
 %
 % Text effects:
-\def\emph #1{{%
+\def\@emph #1{{%
   \ifdim\fontdimen1\font>\ZeroUnit\expandafter\rm\else\expandafter\it\fi #1%
+  \ifnum\ifx\@tempb\questionmarktok\One%
+    \else\ifx\@tempb\exclamationmarktok\One%
+    \else\ifx\@tempb\colontok\One%
+    \else\ifx\@tempb\semicolontok\One%
+    \else\Zero%
+    \fi\fi\fi\fi%
+  >\Zero\afterfi{\ifdim\fontdimen1\font>\ZeroUnit\expandafter\/\fi}\fi%
 }}%
+\def\emph #1{\def\@tempa{\@emph{#1}}\futurelet\@tempb\@tempa}%
 \protect\emph%
 %
 % Cross referencing:
@@ -932,12 +940,14 @@
 \def\@write@anchor #1{%
   \pwaux{\defanchor{\@anchor@num}{\@pageno}{\@realpageno}{#1}}%
 }%
-\def\@place@anchor{}%
+\def\@noop@place@anchor{}%
+\let\@place@anchor\@noop@place@anchor%
 \def\anchor #1{%
   \global\advance \@anchornum \One%
   \@write@anchor{#1}%
   \@place@anchor%
 }%
+\def\stickanchor{\ifx\@place@anchor\@noop@place@anchor\else\nobreak\fi}%
 %  - integrity checks for anchors
 \def\@icns{icns:}%
 \let\@@anchor\empty%
@@ -1019,7 +1029,7 @@
   \begingroup%
     \def\do ##1{/##1}%
     \edef\@tempa{\@label@scope@stack/#2}%
-    \throwoveras\@tempa#1%
+    \promoteas\@tempa#1%
   \endgroup%
 }%
 \def\@label@id{label:}%
@@ -1125,7 +1135,7 @@
 \def\@cite@collect #1{%
   \begingroup%
     \strip{#1}\@tempb%
-    \throwover\@tempb%
+    \promote\@tempb%
   \endgroup%
   \global\namelet{\@cited/\@bib@scope@name/\@tempb}\empty%
   \edef\@@label{\@label@id/\@bib@scope@name/\@tempb}%
@@ -2059,8 +2069,42 @@
 }%
 %
 % Index:
-\def\@term #1 #2\relax{\emph{#1}}%
-\def\term #1{\@term #1\relax}%
+\def\@index@scope@name{index}%
+\ensurereg{count}{@index@term@cnt}{0}%
+\def\term{\ParseIndexTerm\@term}%
+\def\@idx{idx:}%
+\def\@the@term{\@idx \the\@index@term@cnt}%
+\def\@term #1#2#3{%
+  \begingroup%
+    \let\@label@scope@stack\empty%
+    \@label@scope\@index@scope@name%
+    % In-index term subitem
+    \strip{#3}\@tempc%
+    % In-index term
+    \strip{#2}\@tempb%
+    % In-text term
+    \strip{#1}\@tempa%
+    \ifx\@tempb\empty \let\@tempb\@tempa \fi%
+    \global\advance \@index@term@cnt \One%
+    \anchor{{\@tempb}{\@tempc}}%
+    \label{\@the@term}%
+    \stickanchor%
+    \applycctx%
+  \endgroup%
+  \emph{\@tempa}%
+}%
+\let\@index@items\empty%
+\def\makeindex{%
+  \forcetoctrue\chapter *\indexname.%
+  \begingroup%
+    \@collect@index@items%
+    \mergesort\@compare@index@items\@index@items%
+  \endgroup%
+}%
+\def\@collect@index@items{%
+}%
+\def\@compare@index@items #1#2{%
+}%
 %
 % End of the document tasks:
 \let\atdocend\empty%
